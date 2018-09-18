@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.recognition.idiom.IdiomRecognitionActivity">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvInstructions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/idiom_recognition_instruction"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ToggleButton
+        android:id="@+id/btChar"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="24dp"
+        android:textOff="1"
+        android:textOn="1"
+        android:background="@drawable/char_button_selector"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toStartOf="@+id/btChar1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btAnsChar" />
+
+    <ToggleButton
+        android:id="@+id/btChar1"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:textOff="2"
+        android:textOn="2"
+        android:background="@drawable/char_button_selector"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toStartOf="@+id/btChar2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btChar"
+        app:layout_constraintTop_toBottomOf="@+id/btAnsChar" />
+
+    <ToggleButton
+        android:id="@+id/btChar2"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:textOff="3"
+        android:textOn="3"
+        android:background="@drawable/char_button_selector"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btChar1"
+        app:layout_constraintTop_toBottomOf="@+id/btAnsChar" />
+
+    <ToggleButton
+        android:id="@+id/btChar3"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:textOff="4"
+        android:textOn="4"
+        android:background="@drawable/char_button_selector"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toStartOf="@+id/btChar4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btChar" />
+
+    <ToggleButton
+        android:id="@+id/btChar4"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textOff="5"
+        android:textOn="5"
+        android:background="@drawable/char_button_selector"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toStartOf="@+id/btChar5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btChar3"
+        app:layout_constraintTop_toBottomOf="@+id/btChar1" />
+
+    <ToggleButton
+        android:id="@+id/btChar5"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textOff="6"
+        android:textOn="6"
+        android:background="@drawable/char_button_selector"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btChar4"
+        app:layout_constraintTop_toBottomOf="@+id/btChar1" />
+
+    <ToggleButton
+        android:id="@+id/btChar6"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:textOff="7"
+        android:textOn="7"
+        android:background="@drawable/char_button_selector"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toStartOf="@+id/btChar7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btChar3" />
+
+    <ToggleButton
+        android:id="@+id/btChar7"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textOff="8"
+        android:textOn="8"
+        android:background="@drawable/char_button_selector"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toStartOf="@+id/btChar8"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btChar6"
+        app:layout_constraintTop_toBottomOf="@+id/btChar3" />
+
+    <ToggleButton
+        android:id="@+id/btChar8"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textOff="9"
+        android:textOn="9"
+        android:background="@drawable/char_button_selector"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btChar7"
+        app:layout_constraintTop_toBottomOf="@+id/btChar3" />
+
+    <Button
+        android:id="@+id/btAnsChar"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/darker_gray"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toStartOf="@+id/btAnsChar1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvInstructions" />
+
+    <Button
+        android:id="@+id/btAnsChar1"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/darker_gray"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toStartOf="@+id/btAnsChar2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btAnsChar"
+        app:layout_constraintTop_toBottomOf="@+id/tvInstructions" />
+
+    <Button
+        android:id="@+id/btAnsChar2"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/darker_gray"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toStartOf="@+id/btAnsChar3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btAnsChar1"
+        app:layout_constraintTop_toBottomOf="@+id/tvInstructions" />
+
+    <Button
+        android:id="@+id/btAnsChar3"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/darker_gray"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btAnsChar2"
+        app:layout_constraintTop_toBottomOf="@+id/tvInstructions" />
+
+    <Button
+        android:id="@+id/btNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="48dp"
+        android:text="@string/next"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</android.support.constraint.ConstraintLayout>
