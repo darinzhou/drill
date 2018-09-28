@@ -26,7 +26,7 @@ public class ActivityModule {
 
     @Provides
     @PerActivity
-    PoemLibLoader providePoemLibLoader(Context context) {
-        return new PoemLibAssetLoader(context);
+    PoemLibLoader providePoemLibLoader(Context context, LocalStorage sharedPrefStorage) {
+        return new PoemLibAssetLoader(context, sharedPrefStorage);
     }
 }

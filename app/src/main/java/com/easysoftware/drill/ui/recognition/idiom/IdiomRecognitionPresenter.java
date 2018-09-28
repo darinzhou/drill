@@ -25,4 +25,9 @@ public class IdiomRecognitionPresenter extends RecognitionBasePresenter {
     protected int initObfuscationLength() {
         return OBSF_LENGTH;
     }
+
+    @Override
+    public void setLevel(int level) {
+
+    }
 }

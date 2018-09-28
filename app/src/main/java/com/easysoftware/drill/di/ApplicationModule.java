@@ -9,7 +9,10 @@ import com.easysoftware.drill.data.cflib.asset.IdiomLibAssetLoader;
 import com.easysoftware.drill.data.cflib.asset.PoemLibAssetLoader;
 import com.easysoftware.drill.data.localstorage.LocalStorage;
 import com.easysoftware.drill.data.localstorage.SharedPrefStorage;
+import com.easysoftware.drill.data.poem.PoemDbHelper;
+import com.easysoftware.drill.data.poem.PoemDbHelperFactory;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -40,5 +43,19 @@ public class ApplicationModule {
     @Singleton
     LocalStorage provideLocalStorage(Context context) {
         return new SharedPrefStorage(context);
+    }
+
+    @Provides
+    @Singleton
+    @Named("forceToOverwriteDb")
+    boolean provideForceToOverwriteDb() {
+        return true;
+    }
+
+    @Provides
+    @Singleton
+    PoemDbHelper providePoemDbHelper(Context context, LocalStorage localStorage,
+                                          @Named("forceToOverwriteDb") boolean forceToOverwrite) {
+        return PoemDbHelperFactory.getPoemDbHelper(context, localStorage, forceToOverwrite);
     }
 }

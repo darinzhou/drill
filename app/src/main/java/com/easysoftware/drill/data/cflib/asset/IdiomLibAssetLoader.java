@@ -12,14 +12,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 public class IdiomLibAssetLoader implements IdiomLibLoader {
     public static final String LIB_FILE_NAME = "idioms.txt";
 
     private Context mContext;
     private InputStream mIS;
 
-    @Inject
     public IdiomLibAssetLoader(Context context) {
         mContext = context;
     }
