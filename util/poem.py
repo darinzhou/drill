@@ -32,7 +32,7 @@ class Poem:
         content2 = remove_punctuations(other.content)
         verses2 = content2.split('\n')
 
-        return verses1[0] == verses2[0] # and verses1[1] == verses2[1]
+        return verses1[0] == verses2[0]  # and verses1[1] == verses2[1]
 
     def to_string(self):
         s = self.title + '  ' + self.subtitle + '\n'

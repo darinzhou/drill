@@ -196,7 +196,7 @@ def read_poem_with_sentence_and_author(conn, sentence, sn, author):
 # =======================================================================
 
 def build_basic():
-    poems = load_formatted_poem_json('data/result/zongxiaoxue_gushici_complete.json')
+    poems = load_formatted_poem_json('data/result/basic.json')
     conn = create_db('data/result/basic.db')
     save_poems_to_db(poems, conn)
     conn.close()
@@ -206,9 +206,21 @@ def build_basic():
 # build intermediate.db
 # =======================================================================
 
+def build_intermediate():
+    poems = load_formatted_poem_json('data/result/intermediate.json')
+    conn = create_db('data/result/intermediate.db')
+    save_poems_to_db(poems, conn)
+    conn.close()
+
+
+# =======================================================================
+# build advanced.db
+# =======================================================================
+
 def add_period(poems):
-    conn = sqlite3.connect('data/result/advanced.db')
+    conn = sqlite3.connect('data/result/poem_lib.db')
     for p in poems:
+        sys.stdout.write('.')
         if not p.period:
 
             ps = read_poem(conn, p.title, '', p.author)
@@ -233,20 +245,21 @@ def add_period(poems):
     conn.close()
 
 
-def build_intermediate():
-    poems = load_formatted_poem_json('data/result/gushici600.json')
+def build_advanced():
+    poems = load_formatted_poem_json('data/result/advanced.json')
     add_period(poems)
-    conn = create_db('data/result/intermediate.db')
+    write_poems_json_file('data/result/advanced.json', poems)
+    conn = create_db('data/result/advanced.db')
     save_poems_to_db(poems, conn)
     conn.close()
 
 
 # =======================================================================
-# build advanced.db
+# build poem_lib.db
 # =======================================================================
 
-def build_advanced():
-    conn = create_db('data/result/advanced.db')
+def build_poem_lib():
+    conn = create_db('data/result/poem_lib.db')
     count = 0
     for fn in os.listdir('data/csv'):
         if fn.endswith(".csv"):
@@ -262,9 +275,10 @@ def build_advanced():
 # test
 # =======================================================================
 def test():
-    conn = sqlite3.connect('data/result/intermediate.db')
+    conn = sqlite3.connect('data/result/advanced.db')
 
     pn = count_poems(conn)
+    print(str(pn) + " poems in database")
 
     poems = read_poem(conn, '', '', '')
     for p in poems:
@@ -282,9 +296,10 @@ def main():
     reload(sys)
     sys.setdefaultencoding("utf-8")
 
-    build_basic()
+    # build_poem_lib()
+    # build_basic()
     # build_intermediate()
-    # build_advanced()
+    build_advanced()
 
     test()
 

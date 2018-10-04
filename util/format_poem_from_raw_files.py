@@ -614,6 +614,14 @@ def is_title_line(line):
     j = line.find(TITLE_END)
     return i != -1 and j != -1 and i < j
 
+def get_prologue(text):
+    if '(' in text or '（' in text:
+        text = text.replace('(', '')
+        text = text.replace('（', '')
+        text = text.replace(')', '')
+        text = text.replace('）', '')
+        return text
+    return ''
 
 def get_title(line):
     title = ''
@@ -673,6 +681,11 @@ def parse_zhongxiaoxue_gu_shi_ci_116(txtfile):
                 # end passed poem
                 if title and content:
                     # end of one poem, build the poem object and add to list
+                    prologue = get_prologue(subtitle)
+                    if prologue:
+                        subtitle = ''
+                    if author in KNOWN_AUTHOR_PERIOD:
+                        period = KNOWN_AUTHOR_PERIOD[author]
                     poem = Poem(title, subtitle, style, author, prologue, format_ci_content(content), period,
                                 note, explanation)
                     poems.append(poem)
@@ -702,6 +715,11 @@ def parse_zhongxiaoxue_gu_shi_ci_116(txtfile):
         # last poem
         if title and content:
             # end of one poem, build the poem object and add to list
+            prologue = get_prologue(subtitle)
+            if prologue:
+                subtitle = ''
+            if author in KNOWN_AUTHOR_PERIOD:
+                period = KNOWN_AUTHOR_PERIOD[author]
             poem = Poem(title, subtitle, style, author, prologue, format_ci_content(content), period, note, explanation)
             poems.append(poem)
 
@@ -899,6 +917,8 @@ def main():
     reload(sys)
     sys.setdefaultencoding("utf-8")
 
+    # basic -->
+
     poems = parse_zhongxiaoxue_gu_shi_ci_75('data/中小学古诗词75.txt')
     write_poems_json_file('data/result/zongxiaoxue_gushici_75.json', poems)
 
@@ -906,7 +926,7 @@ def main():
     write_poems_json_file('data/result/zongxiaoxue_gushici_116.json', poems1)
 
     # build complete zhong xiao xue gu shi ci
-    print('\nbuilding zongxiaoxue_gushici_complete.json')
+    print('\nbuilding basic.json...')
     # diff zhong xiao xue gu shi ci 75 with 116
     count = 0
     for p in poems:
@@ -920,11 +940,37 @@ def main():
     print(str(len(poems1)) + ' poems were merged. ' + str(count) + ' poems were added.')
     write_poems_json_file('data/result/zongxiaoxue_gushici_complete.json', poems1)
 
-    poems = parse_500_gu_shi_ci('data/古诗词五百首.txt')
-    write_poems_json_file('data/result/gushici500.json', poems)
+    # basic
+    write_poems_json_file('data/result/basic.json', poems1)
+    print('\n' + str(len(poems1)) + ' poems were written to basic.json. \n')
+
+    # intermediate -->
+
+    poems = parse_zhongxiaoxue_gu_shi_ci_116('data/中级增补.txt')
+    write_poems_json_file('data/result/zhong_jie_zeng_bu.json', poems)
+    print('\n' + str(len(poems)) + ' poems were written to zhong_jie_zeng_bu.json. \n')
+
+    print('\nbuilding intermediate.json...')
+    count = 0
+    for p in poems1:
+        found = False
+        for p1 in poems:
+            if p.equals(p1):
+                found = True
+        if not found:
+            poems.append(p)
+            count += 1
+    print(str(len(poems)) + ' poems were merged. ' + str(count) + ' poems were added.')
+    write_poems_json_file('data/result/intermediate.json', poems)
+    print('\n' + str(len(poems)) + ' poems were written to intermediate.json. \n')
+
+    # advanced -->
+
+    poems1 = parse_500_gu_shi_ci('data/古诗词五百首.txt')
+    write_poems_json_file('data/result/gushici500.json', poems1)
 
     # build complete zhong xiao xue gu shi ci
-    print('\nbuilding gushici500_complete.json')
+    print('\nbuilding advanced.json...')
     # diff gushici500 with zhong xiao xue gu shi ci
     count = 0;
     for p1 in poems1:
@@ -935,40 +981,41 @@ def main():
         if not found:
             poems.append(p1)
             count += 1
-    print(str(len(poems)) + ' poems were merged from zhongxiaoxue gushici. ' + str(count) + ' poems were added.')
-    # write_poems_json_file('data/result/gushici500_complete.json', poems)
+    print(str(len(poems)) + ' poems were merged. ' + str(count) + ' poems were added.')
+    write_poems_json_file('data/result/advanced.json', poems)
+    print('\n' + str(len(poems)) + ' poems were written to advanced.json. \n')
 
 
-    poems1 = parse_poems_of_1000_writers('data/千家诗.txt')
-    write_poems_json_file('data/result/qianjiashi.json', poems1)
-    # write_poems_text_file('data/result/shiju.txt', poems)
-
-    # merge qianjiashi into gushici 600
-    qianjiashi_to_be_merged_into_gushici_600 = (
-    '春日偶成,程颢',
-    '春宵,苏轼',
-    '海棠,苏轼',
-    '赠刘景文,苏轼',
-    '绝句,僧志南',
-    '书湖阴先生壁,王安石',
-    '乌衣巷,刘禹锡',
-    '霜月,李商隐',
-    '雪梅 其一,卢梅坡',
-    '寓意,晏殊',
-    '秋风引,刘禹锡',
-    '秋日湖上,薛莹',
-    '秋登宣城谢北楼,李白',
-    '春夜,王安石',
-    '客中行,李白')
-    count = 0;
-    for p1 in poems1:
-        pid1 = p1.title + ',' + p1.author
-        for pid in qianjiashi_to_be_merged_into_gushici_600:
-            if pid == pid1:
-                poems.append(p1)
-                count += 1
-    print(str(len(poems)) + ' poems were merged from qinajiashi. ' + str(count) + ' poems were added.')
-    write_poems_json_file('data/result/gushici600.json', poems)
+    # poems1 = parse_poems_of_1000_writers('data/千家诗.txt')
+    # write_poems_json_file('data/result/qianjiashi.json', poems1)
+    # # write_poems_text_file('data/result/shiju.txt', poems)
+    #
+    # # merge qianjiashi into gushici 600
+    # qianjiashi_to_be_merged_into_gushici_600 = (
+    # '春日偶成,程颢',
+    # '春宵,苏轼',
+    # '海棠,苏轼',
+    # '赠刘景文,苏轼',
+    # '绝句,僧志南',
+    # '书湖阴先生壁,王安石',
+    # '乌衣巷,刘禹锡',
+    # '霜月,李商隐',
+    # '雪梅 其一,卢梅坡',
+    # '寓意,晏殊',
+    # '秋风引,刘禹锡',
+    # '秋日湖上,薛莹',
+    # '秋登宣城谢北楼,李白',
+    # '春夜,王安石',
+    # '客中行,李白')
+    # count = 0;
+    # for p1 in poems1:
+    #     pid1 = p1.title + ',' + p1.author
+    #     for pid in qianjiashi_to_be_merged_into_gushici_600:
+    #         if pid == pid1:
+    #             poems.append(p1)
+    #             count += 1
+    # print(str(len(poems)) + ' poems were merged from qinajiashi. ' + str(count) + ' poems were added.')
+    # write_poems_json_file('data/result/gushici600.json', poems)
 
 
 
@@ -986,8 +1033,9 @@ def main():
 
     # build_poem_fragment_lib('data/result/cf_lib_tangshi300_songci300.txt')
 
-    build_poem_fragment_lib_from_formatted_json('data/result/zongxiaoxue_gushici_complete.json', 'data/result/cf_lib_zhongxiaoxue_gushici.txt')
-    build_poem_fragment_lib_from_formatted_json('data/result/gushici600.json', 'data/result/cf_lib_gushici600.txt')
+    build_poem_fragment_lib_from_formatted_json('data/result/basic.json', 'data/result/cf_lib_basic.txt')
+    build_poem_fragment_lib_from_formatted_json('data/result/intermediate.json', 'data/result/cf_lib_intermediate.txt')
+    build_poem_fragment_lib_from_formatted_json('data/result/advanced.json', 'data/result/cf_lib_advanced.txt')
 
 
 if __name__ == "__main__":
