@@ -26,12 +26,15 @@ def create_db(dbfile):
     conn = sqlite3.connect(dbfile, isolation_level=None)
 
     # create table
-    sql = 'CREATE TABLE poem_sentence_table (' \
-          'id INTEGER PRIMARY KEY AUTOINCREMENT,' \
+    sql = 'CREATE TABLE poem_table (' \
+          '_id INTEGER PRIMARY KEY AUTOINCREMENT,' \
+          'poemid INTEGER,' \
+          'level INTEGER,' \
           'title BLOB,' \
           'subtitle BLOB,' \
           'author BLOB,' \
           'period BLOB,' \
+          'prologue BLOB,' \
           'sn INTEGER,' \
           'wordcount INTEGER,' \
           'sentence BLOB)'
@@ -56,25 +59,29 @@ def word_count_in_sentence(s):
     return word_count
 
 
-def save_poems_to_db(poems, conn):
+def save_poems_to_db(poems, conn, last_poemid):
     conn.text_factory = lambda x: unicode(x, 'utf-8', 'ignore')
-    sql = 'INSERT INTO poem_sentence_table (title, subtitle, author, period, sn, wordcount, sentence) ' \
-          'VALUES (?,?,?,?,?,?,?)'
+    sql = 'INSERT INTO poem_table (poemid, level, title, subtitle, author, period, prologue, sn, wordcount, sentence) ' \
+          'VALUES (?,?,?,?,?,?,?,?,?,?)'
 
     # start
     conn.execute('BEGIN')
 
     # insert
+    poemid = last_poemid
     for p in poems:
         sn = 1
+        poemid += 1
+        level = p.level
         title = p.title
         subtitle = p.subtitle
         author = p.author
         period = p.period
+        prologue = p.prologue
         sentences = poem_content_to_sentence(p.content)
         for s in sentences:
             word_count = word_count_in_sentence(s)
-            conn.execute(sql, (title, subtitle, author, period, sn, word_count, s))
+            conn.execute(sql, (poemid, level, title, subtitle, author, period, prologue, sn, word_count, s))
             sn += 1
     conn.commit()
 
@@ -83,7 +90,7 @@ def save_poems_to_db(poems, conn):
 
 
 def count_poems(conn):
-    sql = 'SELECT COUNT(*) FROM poem_sentence_table WHERE sn=1'
+    sql = 'SELECT COUNT(*) FROM poem_table WHERE sn=1'
     cursor = conn.execute(sql)
     for row in cursor:
         return row[0]
@@ -97,14 +104,15 @@ def build_poems(cursor, title_in):
     subtitle = ''
     author = ''
     period = ''
+    prologue = ''
     content = ''
     skip = False
     for row in cursor:
         # start a new poem
-        if row[5] == 1:
+        if row[6] == 1:
             # end previous poem if exists
             if content:
-                poems.append(Poem(title, subtitle, '', author, '', content, period, '', ''))
+                poems.append(Poem(title, subtitle, '', author, prologue, content, period, '', ''))
                 content = ''
 
             title = row[0]
@@ -116,17 +124,18 @@ def build_poems(cursor, title_in):
             subtitle = row[1]
             author = row[2]
             period = row[3]
+            prologue = row[4]
 
         if skip:
             continue
 
         if content:
             content += '\n'
-        content += row[4]
+        content += row[5]
 
     # last poem
     if content:
-        poems.append(Poem(title, subtitle, '', author, '', content, period, '', ''))
+        poems.append(Poem(title, subtitle, '', author, prologue, content, period, '', ''))
 
     return poems
 
@@ -134,7 +143,7 @@ def build_poems(cursor, title_in):
 def read_poem(conn, title, subtitle, author):
     conn.text_factory = lambda x: unicode(x, 'utf-8', 'ignore')
 
-    sql = 'SELECT title, subtitle, author, period, sentence, sn FROM poem_sentence_table'
+    sql = 'SELECT title, subtitle, author, period, prologue, sentence, sn FROM poem_table'
 
     if title:
         title1 = "title='" + title + "'"
@@ -182,7 +191,7 @@ def read_poem(conn, title, subtitle, author):
 def read_poem_with_sentence_and_author(conn, sentence, sn, author):
     conn.text_factory = lambda x: unicode(x, 'utf-8', 'ignore')
 
-    sql = 'SELECT title, subtitle, author, period, sentence, sn FROM poem_sentence_table WHERE ' \
+    sql = 'SELECT title, subtitle, author, period, prologue, sentence, sn FROM poem_table WHERE ' \
           'sn=? AND sentence=? AND author=?'
 
     cursor = conn.execute(sql, (sn, sentence, author))
@@ -198,7 +207,7 @@ def read_poem_with_sentence_and_author(conn, sentence, sn, author):
 def build_basic():
     poems = load_formatted_poem_json('data/result/basic.json')
     conn = create_db('data/result/basic.db')
-    save_poems_to_db(poems, conn)
+    save_poems_to_db(poems, conn, 0)
     conn.close()
 
 
@@ -209,7 +218,7 @@ def build_basic():
 def build_intermediate():
     poems = load_formatted_poem_json('data/result/intermediate.json')
     conn = create_db('data/result/intermediate.db')
-    save_poems_to_db(poems, conn)
+    save_poems_to_db(poems, conn, 0)
     conn.close()
 
 
@@ -219,8 +228,13 @@ def build_intermediate():
 
 def add_period(poems):
     conn = sqlite3.connect('data/result/poem_lib.db')
+    i = 0
     for p in poems:
+        i += 1
         sys.stdout.write('.')
+        if i % 16 == 0:
+            print('')
+
         if not p.period:
 
             ps = read_poem(conn, p.title, '', p.author)
@@ -250,7 +264,7 @@ def build_advanced():
     add_period(poems)
     write_poems_json_file('data/result/advanced.json', poems)
     conn = create_db('data/result/advanced.db')
-    save_poems_to_db(poems, conn)
+    save_poems_to_db(poems, conn, 0)
     conn.close()
 
 
@@ -265,8 +279,8 @@ def build_poem_lib():
         if fn.endswith(".csv"):
             filename = 'data/csv/' + fn
             poems = parse_csv_file(filename)
+            save_poems_to_db(poems, conn, count)
             count += len(poems)
-            save_poems_to_db(poems, conn)
     conn.close()
     print('Total poem count: ' + str(count))
 
@@ -301,7 +315,7 @@ def main():
     # build_intermediate()
     build_advanced()
 
-    test()
+    # test()
 
 
 if __name__ == "__main__":

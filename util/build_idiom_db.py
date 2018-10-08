@@ -26,7 +26,7 @@ def create_db(dbfile):
 
     # create table
     sql = 'CREATE TABLE idiom_table (' \
-          'id INTEGER PRIMARY KEY AUTOINCREMENT,' \
+          '_id INTEGER PRIMARY KEY AUTOINCREMENT,' \
           'content BLOB,' \
           'pinyin BLOB,' \
           'explanation BLOB,' \

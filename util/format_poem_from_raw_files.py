@@ -909,6 +909,31 @@ def build_poem_fragment_lib(txtfile):
 
 
 # =======================================================================
+# merge poems1 into poems, set all poems level
+# return (total poem count, added poem count)
+# =======================================================================
+def merge(poems, poems1, level):
+    count = 0
+    for p1 in poems1:
+        found = False
+
+        for p in poems:
+            if p1.equals(p):
+                found = True
+                break
+
+        if not found:
+            poems.append(p1)
+            count += 1
+
+    for p in poems:
+        if p.level == 0:
+            p.level = level
+
+    return len(poems), count
+
+
+# =======================================================================
 # main()
 # =======================================================================
 
@@ -925,24 +950,15 @@ def main():
     poems1 = parse_zhongxiaoxue_gu_shi_ci_116('data/中小学古诗词116.txt')
     write_poems_json_file('data/result/zongxiaoxue_gushici_116.json', poems1)
 
-    # build complete zhong xiao xue gu shi ci
+    # build basic.json
     print('\nbuilding basic.json...')
-    # diff zhong xiao xue gu shi ci 75 with 116
-    count = 0
-    for p in poems:
-        found = False
-        for p1 in poems1:
-            if p.equals(p1):
-                found = True
-        if not found:
-            poems1.append(p)
-            count += 1
-    print(str(len(poems1)) + ' poems were merged. ' + str(count) + ' poems were added.')
+    total, count = merge(poems1, poems, 1)
+    print(str(total) + ' poems were merged. ' + str(count) + ' poems were added.')
     write_poems_json_file('data/result/zongxiaoxue_gushici_complete.json', poems1)
 
     # basic
     write_poems_json_file('data/result/basic.json', poems1)
-    print('\n' + str(len(poems1)) + ' poems were written to basic.json. \n')
+    print('\n' + str(total) + ' poems were written to basic.json. \n')
 
     # intermediate -->
 
@@ -950,40 +966,24 @@ def main():
     write_poems_json_file('data/result/zhong_jie_zeng_bu.json', poems)
     print('\n' + str(len(poems)) + ' poems were written to zhong_jie_zeng_bu.json. \n')
 
+    # build intermediate.json
     print('\nbuilding intermediate.json...')
-    count = 0
-    for p in poems1:
-        found = False
-        for p1 in poems:
-            if p.equals(p1):
-                found = True
-        if not found:
-            poems.append(p)
-            count += 1
-    print(str(len(poems)) + ' poems were merged. ' + str(count) + ' poems were added.')
+    total, count = merge(poems, poems1, 2)
+    print(str(total) + ' poems were merged. ' + str(count) + ' poems were added.')
     write_poems_json_file('data/result/intermediate.json', poems)
-    print('\n' + str(len(poems)) + ' poems were written to intermediate.json. \n')
+    print('\n' + str(total) + ' poems were written to intermediate.json. \n')
 
     # advanced -->
 
     poems1 = parse_500_gu_shi_ci('data/古诗词五百首.txt')
     write_poems_json_file('data/result/gushici500.json', poems1)
 
-    # build complete zhong xiao xue gu shi ci
+    # build advanced.json
     print('\nbuilding advanced.json...')
-    # diff gushici500 with zhong xiao xue gu shi ci
-    count = 0;
-    for p1 in poems1:
-        found = False
-        for p in poems:
-            if p.equals(p1):
-                found = True
-        if not found:
-            poems.append(p1)
-            count += 1
-    print(str(len(poems)) + ' poems were merged. ' + str(count) + ' poems were added.')
-    write_poems_json_file('data/result/advanced.json', poems)
-    print('\n' + str(len(poems)) + ' poems were written to advanced.json. \n')
+    total, count = merge(poems1, poems, 3)
+    print(str(total) + ' poems were merged. ' + str(count) + ' poems were added.')
+    write_poems_json_file('data/result/advanced.json', poems1)
+    print('\n' + str(total) + ' poems were written to advanced.json. \n')
 
 
     # poems1 = parse_poems_of_1000_writers('data/千家诗.txt')

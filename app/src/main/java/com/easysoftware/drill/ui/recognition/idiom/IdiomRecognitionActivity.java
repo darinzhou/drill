@@ -6,14 +6,10 @@ import android.widget.ToggleButton;
 
 import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
-import com.easysoftware.drill.data.poem.PoemDbHelper;
+import com.easysoftware.drill.data.database.PoemDbHelper;
 import com.easysoftware.drill.ui.recognition.RecognitionBaseActivity;
 
 import javax.inject.Inject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class IdiomRecognitionActivity extends RecognitionBaseActivity {
 
@@ -67,25 +63,6 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
         mCharButtons[i++] = findViewById(R.id.btChar7);
         mCharButtons[i++] = findViewById(R.id.btChar8);
 
-        mPoemDbHelper.getPoemObservable("送杜少府之任蜀州", "", "王勃")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<String>() {
-                    @Override
-                    public void onNext(String s) {
-                        showError(s);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
     }
 
     @Override

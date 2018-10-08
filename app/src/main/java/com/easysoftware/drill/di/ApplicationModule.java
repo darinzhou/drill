@@ -3,14 +3,10 @@ package com.easysoftware.drill.di;
 import android.app.Application;
 import android.content.Context;
 
-import com.easysoftware.drill.data.cflib.IdiomLibLoader;
-import com.easysoftware.drill.data.cflib.PoemLibLoader;
-import com.easysoftware.drill.data.cflib.asset.IdiomLibAssetLoader;
-import com.easysoftware.drill.data.cflib.asset.PoemLibAssetLoader;
+import com.easysoftware.drill.data.database.IdiomDbHelper;
 import com.easysoftware.drill.data.localstorage.LocalStorage;
 import com.easysoftware.drill.data.localstorage.SharedPrefStorage;
-import com.easysoftware.drill.data.poem.PoemDbHelper;
-import com.easysoftware.drill.data.poem.PoemDbHelperFactory;
+import com.easysoftware.drill.data.database.PoemDbHelper;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -52,10 +48,24 @@ public class ApplicationModule {
         return true;
     }
 
+//    @Provides
+//    @Singleton
+//    PoemDbHelper providePoemDbHelper(Context context, LocalStorage localStorage,
+//                                          @Named("forceToOverwriteDb") boolean forceToOverwrite) {
+//        return PoemDbHelperFactory.getPoemDbHelper(context, localStorage, forceToOverwrite);
+//    }
+
     @Provides
     @Singleton
-    PoemDbHelper providePoemDbHelper(Context context, LocalStorage localStorage,
-                                          @Named("forceToOverwriteDb") boolean forceToOverwrite) {
-        return PoemDbHelperFactory.getPoemDbHelper(context, localStorage, forceToOverwrite);
+    PoemDbHelper providePoemDbHelper(Context context,
+                                     @Named("forceToOverwriteDb") boolean forceToOverwrite) {
+        return PoemDbHelper.getInstance(context, forceToOverwrite);
+    }
+
+    @Provides
+    @Singleton
+    IdiomDbHelper provideIdiomDbHelper(Context context,
+                                       @Named("forceToOverwriteDb") boolean forceToOverwrite) {
+        return IdiomDbHelper.getInstance(context, forceToOverwrite);
     }
 }

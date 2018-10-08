@@ -24,6 +24,10 @@ class Poem:
         self.period = period
         self.note = note
         self.explanation = explanation
+        self.level = 0
+
+    def set_level(self, level):
+        self.level = level
 
     def equals(self, other):
         content1 = remove_punctuations(self.content)
@@ -96,6 +100,7 @@ def load_formatted_poem_json(jsonfile):
         for p in data:
             poem = Poem(p['title'], p['subtitle'], p['style'], p['author'], p['prologue'], p['content'], p['period'],
                         p['note'], p['explanation'])
+            poem.set_level(p['level'])
             poems.append(poem)
 
     print(str(len(poems)) + " poems were loaded.")
