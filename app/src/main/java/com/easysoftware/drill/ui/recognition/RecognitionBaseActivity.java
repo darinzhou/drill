@@ -27,6 +27,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
 
     protected ToggleButton[] mCharButtons;
     protected Button[] mAnsButtons;
+    protected Button mHelp;
     protected Button mNext;
     protected ProgressBar mProgressBar;
 
@@ -49,6 +50,15 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
 
         // bring progress bar in front of buttons
         ViewCompat.setTranslationZ(mProgressBar, 8);
+
+        // Help button behavior
+        mHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.onHelp();
+                clearAnswer();
+            }
+        });
 
         // Next button behavior
         mNext.setOnClickListener(new View.OnClickListener() {

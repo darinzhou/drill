@@ -8,6 +8,8 @@ import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
 import com.easysoftware.drill.ui.recognition.RecognitionBaseActivity;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 public class Poem5RecognitionActivity extends RecognitionBaseActivity {
@@ -80,4 +82,10 @@ public class Poem5RecognitionActivity extends RecognitionBaseActivity {
     protected void cleanInjection() {
         ((DrillApp) getApplication()).releaseActivityComponent();
     }
+
+    @Override
+    public void displayHelp(List<String> texts) {
+
+    }
+
 }

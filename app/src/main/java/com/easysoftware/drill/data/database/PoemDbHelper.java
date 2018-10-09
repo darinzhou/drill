@@ -241,10 +241,6 @@ public class PoemDbHelper extends DbHelper {
         });
     }
 
-    protected String buildWhereLikeClause(String columnName, String keyword) {
-        return columnName + " like '%" + keyword + "%'";
-    }
-
     protected List<Integer> getPoemIds(List<String> keywords) {
         List<Integer> poemIds = new ArrayList<>();
         if (keywords == null || keywords.size() == 0) {

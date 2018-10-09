@@ -94,7 +94,7 @@ public class IdiomDbHelper extends DbHelper {
 
         return idioms;
     }
-    public Observable<List<Idiom>> getPoemsObservable(String content) {
+    public Observable<List<Idiom>> getIdiomsObservable(String content) {
         return Observable.fromCallable(new Callable<List<Idiom>>() {
             @Override
             public List<Idiom> call() throws Exception {

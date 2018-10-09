@@ -8,6 +8,7 @@
 
     <string name="correct">正确</string>
     <string name="wrong">错误</string>
+    <string name="help">帮助</string>
     <string name="next">下一题</string>
 
     <string name="correct_answer">正确答案: %1$s</string>

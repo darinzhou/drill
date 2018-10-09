@@ -9,6 +9,8 @@ import com.easysoftware.drill.app.DrillApp;
 import com.easysoftware.drill.data.database.PoemDbHelper;
 import com.easysoftware.drill.ui.recognition.RecognitionBaseActivity;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 public class IdiomRecognitionActivity extends RecognitionBaseActivity {
@@ -44,6 +46,7 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
         mCharButtons = new ToggleButton[IdiomRecognitionPresenter.OBSF_LENGTH];
         mAnsButtons = new Button[IdiomRecognitionPresenter.CF_LENGTH];
 
+        mHelp = findViewById(R.id.btHelp);
         mNext = findViewById(R.id.btNext);
 
         int i = 0;
@@ -83,5 +86,10 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
     @Override
     protected void cleanInjection() {
         ((DrillApp) getApplication()).releaseActivityComponent();
+    }
+
+    @Override
+    public void displayHelp(List<String> texts) {
+
     }
 }
