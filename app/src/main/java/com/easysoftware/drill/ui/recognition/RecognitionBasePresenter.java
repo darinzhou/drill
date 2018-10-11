@@ -30,6 +30,8 @@ public abstract class RecognitionBasePresenter implements RecognitionContract.Pr
     protected int mCountTotal;
     protected int mCountCorrect;
 
+    protected boolean mHelpCalled;
+
     public RecognitionBasePresenter() {
         mCFLength = initCFLength();
         mObfuscationLength = initObfuscationLength();
@@ -42,6 +44,7 @@ public abstract class RecognitionBasePresenter implements RecognitionContract.Pr
     }
 
     protected abstract int initCFLength();
+
     protected abstract int initObfuscationLength();
 
     @Override
@@ -56,6 +59,7 @@ public abstract class RecognitionBasePresenter implements RecognitionContract.Pr
                 mCfri = cfri;
                 mView.displayChallenge(cfri.getObfuscation());
                 mCountTotal++;
+                mHelpCalled = false;
             }
 
             @Override
@@ -106,12 +110,35 @@ public abstract class RecognitionBasePresenter implements RecognitionContract.Pr
 
     @Override
     public void onNext(String result) {
+        if (mHelpCalled) {
+            generateNext();
+            return;
+        }
+
         if (mCfri.checkResult(result)) {
             mCountCorrect++;
             mView.displayNotificationForCorrectAnswer(mCountTotal, mCountCorrect);
         } else {
             mView.displayNotificationForWrongAnswer(mCountTotal, mCountCorrect, mCfri.getChineseFragment().toString());
         }
+    }
+
+    @Override
+    public void setLevel(int level) {
+    }
+
+    protected abstract void help();
+
+    @Override
+    public void onHelp() {
+        mHelpCalled = true;
+        mView.displayCorrectAnswer(mCfri.getChineseFragment().toString());
+        help();
+    }
+
+    @Override
+    public boolean isHelpCalled() {
+        return mHelpCalled;
     }
 
     public int getCFLength() {

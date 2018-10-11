@@ -34,4 +34,5 @@ public class Idiom {
     public String getExample() {
         return mExample;
     }
+
 }

@@ -11,6 +11,7 @@ public interface RecognitionContract {
         void displayNotificationForCorrectAnswer(int countTotal, int countCorrect);
         void displayNotificationForWrongAnswer(int countTotal, int countCorrect, String answer);
         void displayHelp(List<String> texts);
+        void displayCorrectAnswer(String answer);
     }
 
     interface Presenter extends MvpContract.MvpPresenter<View> {
@@ -19,5 +20,6 @@ public interface RecognitionContract {
         void generateNext();
         void onNext(String result);
         void onHelp();
+        boolean isHelpCalled();
     }
 }

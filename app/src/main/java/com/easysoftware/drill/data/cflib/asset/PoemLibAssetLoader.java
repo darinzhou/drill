@@ -1,11 +1,9 @@
 package com.easysoftware.drill.data.cflib.asset;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.easysoftware.drill.data.cflib.PoemLibLoader;
 import com.easysoftware.drill.data.localstorage.LocalStorage;
-import com.easysoftware.drill.data.localstorage.SharedPrefStorage;
 import com.easysoftware.drill.data.model.ChineseFragment;
 
 import java.io.IOException;

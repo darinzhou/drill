@@ -17,6 +17,7 @@ import com.easysoftware.drill.ui.recognition.idiom.IdiomRecognitionPresenter;
 import com.easysoftware.drill.util.UIUtil;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -56,7 +57,6 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
             @Override
             public void onClick(View v) {
                 mPresenter.onHelp();
-                clearAnswer();
             }
         });
 
@@ -66,6 +66,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
             public void onClick(View v) {
                 mPresenter.onNext(getAnswer());
                 clearAnswer();
+                lockButtons(false);
             }
         });
 
@@ -95,17 +96,28 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
             });
         }
 
+        // select level
+        selectLevel();
+
         // connect presenter
         initPresenter();
 
     }
 
     protected abstract void initContentView();
+
     protected abstract void initTitle();
+
     protected abstract void initProgressBar();
+
     protected abstract void initButtons();
+
+    protected abstract void selectLevel();
+
     protected abstract void initPresenter();
+
     protected abstract void initInjection();
+
     protected abstract void cleanInjection();
 
     @Override
@@ -115,7 +127,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
         cleanInjection();
     }
 
-    private Button getFirstEmptyAnsButton() {
+    protected Button getFirstEmptyAnsButton() {
         if (mAnsMap.size() == mPresenter.getCFLength()) {
             return null;
         }
@@ -128,7 +140,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
         return null;
     }
 
-    private String getAnswer() {
+    protected String getAnswer() {
         String s = "";
         for (Button bt : mAnsButtons) {
             s += bt.getText().toString();
@@ -136,11 +148,17 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
         return s;
     }
 
-    private void clearAnswer() {
+    protected void clearAnswer() {
         mAnsMap.clear();
         for (Button bt : mAnsButtons) {
             bt.setBackgroundColor(COLOR_EMPTY);
             bt.setText("");
+        }
+    }
+
+    protected void lockButtons(boolean lock) {
+        for (ToggleButton tb : mCharButtons) {
+            tb.setClickable(!lock);
         }
     }
 
@@ -150,7 +168,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
 
     @Override
     public void displayChallenge(String obfuscation) {
-        for (int i=0; i<obfuscation.length(); ++i) {
+        for (int i = 0; i < obfuscation.length(); ++i) {
             mCharButtons[i].setChecked(false);
             String c = Character.toString(obfuscation.charAt(i));
             mCharButtons[i].setText(c);
@@ -179,8 +197,8 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
         String title = getResources().getString(R.string.correct);
         String message = getResources().getString(R.string.count_total, countTotal) + "\n" +
                 getResources().getString(R.string.count_correct, countCorrect) + "\n" +
-                getResources().getString(R.string.count_wrong, countTotal-countCorrect) + "\n" +
-                getResources().getString(R.string.correct_rate, (countCorrect*100)/countTotal) + "\n";
+                getResources().getString(R.string.count_wrong, countTotal - countCorrect) + "\n" +
+                getResources().getString(R.string.correct_rate, (countCorrect * 100) / countTotal) + "\n";
         UIUtil.showAutoDismissAlertDialog(this, title, message, NOTIFICATION_DURATION,
                 new UIUtil.AutoDismissAlertDialogCallback() {
 
@@ -197,8 +215,8 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
         String message = getResources().getString(R.string.correct_answer, answer) + "\n\n" +
                 getResources().getString(R.string.count_total, countTotal) + "\n" +
                 getResources().getString(R.string.count_correct, countCorrect) + "\n" +
-                getResources().getString(R.string.count_wrong, countTotal-countCorrect) + "\n" +
-                getResources().getString(R.string.correct_rate, (countCorrect*100)/countTotal) + "\n";
+                getResources().getString(R.string.count_wrong, countTotal - countCorrect) + "\n" +
+                getResources().getString(R.string.correct_rate, (countCorrect * 100) / countTotal) + "\n";
         UIUtil.showAutoDismissAlertDialog(this, title, message, NOTIFICATION_DURATION,
                 new UIUtil.AutoDismissAlertDialogCallback() {
 
@@ -207,5 +225,27 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
                         mPresenter.generateNext();
                     }
                 });
+    }
+
+    protected abstract void showHelp(List<String> texts);
+
+    @Override
+    public void displayHelp(List<String> texts) {
+        showHelp(texts);
+    }
+
+    @Override
+    public void displayCorrectAnswer(String answer) {
+        clearAnswer();
+        for (int i = 0; i < answer.length(); ++i) {
+            for (ToggleButton tb : mCharButtons) {
+                if (!tb.isChecked()) {
+                    if (answer.charAt(i) == tb.getText().charAt(0)) {
+                        tb.performClick();
+                    }
+                }
+            }
+        }
+        lockButtons(true);
     }
 }

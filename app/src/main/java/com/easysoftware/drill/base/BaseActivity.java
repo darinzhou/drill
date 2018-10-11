@@ -2,6 +2,7 @@ package com.easysoftware.drill.base;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Make the activity only in portrait mode
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

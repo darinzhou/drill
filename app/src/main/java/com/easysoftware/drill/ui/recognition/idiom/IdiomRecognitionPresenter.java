@@ -6,6 +6,7 @@ import com.easysoftware.drill.data.model.Idiom;
 import com.easysoftware.drill.di.PerActivity;
 import com.easysoftware.drill.ui.recognition.RecognitionBasePresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,6 +20,7 @@ import io.reactivex.schedulers.Schedulers;
 public class IdiomRecognitionPresenter extends RecognitionBasePresenter {
     public static final int CF_LENGTH = 4;
     public static final int OBSF_LENGTH = 9;
+    public static final String IDIOM_OTHER_FORMAT = "【解释】\n%s\n\n【出处】\n%s\n\n【例子】\n%s";
 
     private IdiomDbHelper mDbHelper;
 
@@ -44,7 +46,7 @@ public class IdiomRecognitionPresenter extends RecognitionBasePresenter {
     }
 
     @Override
-    public void onHelp() {
+    public void help() {
         mView.showProgress();
         mCompositeDisposable.add(mDbHelper.getIdiomsObservable(mCfri.getChineseFragment().toString())
                 .subscribeOn(Schedulers.io())
@@ -52,7 +54,24 @@ public class IdiomRecognitionPresenter extends RecognitionBasePresenter {
                 .subscribeWith(new DisposableObserver<List<Idiom>>() {
                     @Override
                     public void onNext(List<Idiom> idioms) {
+                        // find the best matched idiom
+                        Idiom idiom = idioms.get(0);
+                        for (Idiom i : idioms) {
+                            if (i.getContent().length() == CF_LENGTH) {
+                                idiom = i;
+                                break;
+                            }
+                        }
 
+                        List<String> texts = new ArrayList<>();
+                        texts.add(idiom.getContent());
+                        texts.add(idiom.getPinyin());
+
+                        String other = String.format(IDIOM_OTHER_FORMAT, idiom.getExplanation(),
+                                idiom.getDerivation(), idiom.getExample());
+                        texts.add(other);
+
+                        mView.displayHelp(texts);
                     }
 
                     @Override

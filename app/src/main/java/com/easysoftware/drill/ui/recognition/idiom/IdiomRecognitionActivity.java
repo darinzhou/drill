@@ -8,10 +8,14 @@ import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
 import com.easysoftware.drill.data.database.PoemDbHelper;
 import com.easysoftware.drill.ui.recognition.RecognitionBaseActivity;
+import com.easysoftware.drill.ui.recognition.help.HelpFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import static com.easysoftware.drill.util.Constants.TYPE.IDIOM;
 
 public class IdiomRecognitionActivity extends RecognitionBaseActivity {
 
@@ -69,6 +73,11 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
     }
 
     @Override
+    protected void selectLevel() {
+
+    }
+
+    @Override
     protected void initPresenter() {
         // presenter, was injected
         mIRPresenter.start(this);
@@ -89,7 +98,8 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
     }
 
     @Override
-    public void displayHelp(List<String> texts) {
-
+    public void showHelp(List<String> texts) {
+        HelpFragment ihf  = HelpFragment.newInstance(IDIOM, (ArrayList<String>) texts);
+        ihf.show(getSupportFragmentManager(), "Idiom Help");
     }
 }

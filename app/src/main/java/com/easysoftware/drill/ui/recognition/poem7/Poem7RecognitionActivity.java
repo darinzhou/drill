@@ -7,10 +7,14 @@ import android.widget.ToggleButton;
 import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
 import com.easysoftware.drill.ui.recognition.RecognitionBaseActivity;
+import com.easysoftware.drill.ui.recognition.help.HelpFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import static com.easysoftware.drill.util.Constants.TYPE.POEM;
 
 public class Poem7RecognitionActivity extends RecognitionBaseActivity {
 
@@ -42,6 +46,7 @@ public class Poem7RecognitionActivity extends RecognitionBaseActivity {
         mCharButtons = new ToggleButton[Poem7RecognitionPresenter.OBSF_LENGTH];
         mAnsButtons = new Button[Poem7RecognitionPresenter.CF_LENGTH];
 
+        mHelp = findViewById(R.id.btHelp);
         mNext = findViewById(R.id.btNext);
 
         int i = 0;
@@ -69,6 +74,11 @@ public class Poem7RecognitionActivity extends RecognitionBaseActivity {
     }
 
     @Override
+    protected void selectLevel() {
+
+    }
+
+    @Override
     protected void initPresenter() {
         // presenter, was injected
         mP7RPresenter.start(this);
@@ -89,8 +99,9 @@ public class Poem7RecognitionActivity extends RecognitionBaseActivity {
     }
 
     @Override
-    public void displayHelp(List<String> texts) {
-
+    public void showHelp(List<String> texts) {
+        HelpFragment ihf  = HelpFragment.newInstance(POEM, (ArrayList<String>) texts);
+        ihf.show(getSupportFragmentManager(), "Poem Help");
     }
 
 }
