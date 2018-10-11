@@ -22,6 +22,6 @@ public class PoemLibDbLoader implements PoemLibLoader {
     @Override
     public List<ChineseFragment> load() {
         int level = mLocalStorage.read(LEVEL_KEY, 0);
-        return mPoemDbHelper.getChineseFragments(level+1);
+        return mPoemDbHelper.getChineseFragments(level);
     }
 }

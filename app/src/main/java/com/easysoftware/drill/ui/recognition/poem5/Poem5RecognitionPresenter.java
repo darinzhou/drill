@@ -2,7 +2,7 @@ package com.easysoftware.drill.ui.recognition.poem5;
 
 import com.easysoftware.drill.data.cflib.PoemLibLoader;
 import com.easysoftware.drill.data.database.PoemDbHelper;
-import com.easysoftware.drill.data.model.Idiom;
+import com.easysoftware.drill.data.localstorage.LocalStorage;
 import com.easysoftware.drill.data.model.Poem;
 import com.easysoftware.drill.di.PerActivity;
 import com.easysoftware.drill.ui.recognition.RecognitionBasePresenter;
@@ -16,6 +16,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.easysoftware.drill.util.Constants.Level.LEVEL_KEY;
+
 @PerActivity
 public class Poem5RecognitionPresenter extends RecognitionBasePresenter {
     public static final int CF_LENGTH = 5;
@@ -23,11 +25,14 @@ public class Poem5RecognitionPresenter extends RecognitionBasePresenter {
     public static final String POEM_ANSWER_FORMAT = "\n  【答案】%s\n  【出处】";
 
     private PoemDbHelper mDbHelper;
+    private LocalStorage mLocalStorage;
 
     @Inject
-    public Poem5RecognitionPresenter(PoemLibLoader cfLibLoader, PoemDbHelper dbHelper) {
+    public Poem5RecognitionPresenter(PoemLibLoader cfLibLoader, PoemDbHelper dbHelper,
+                                     LocalStorage localStorage) {
         super(cfLibLoader);
         mDbHelper = dbHelper;
+        mLocalStorage = localStorage;
     }
 
     @Override
@@ -42,7 +47,7 @@ public class Poem5RecognitionPresenter extends RecognitionBasePresenter {
 
     @Override
     public void setLevel(int level) {
-
+        mLocalStorage.write(LEVEL_KEY, level + 1);
     }
 
     @Override

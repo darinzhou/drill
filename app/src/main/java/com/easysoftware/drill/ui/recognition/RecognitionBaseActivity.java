@@ -13,13 +13,10 @@ import android.widget.ToggleButton;
 import com.easysoftware.drill.R;
 
 import com.easysoftware.drill.base.BaseActivity;
-import com.easysoftware.drill.ui.recognition.idiom.IdiomRecognitionPresenter;
-import com.easysoftware.drill.util.UIUtil;
+import com.easysoftware.drill.ui.util.AutoDismissDlgFragment;
 
 import java.util.HashMap;
 import java.util.List;
-
-import javax.inject.Inject;
 
 public abstract class RecognitionBaseActivity extends BaseActivity implements RecognitionContract.View {
     public static final int COLOR_EMPTY = Color.argb(0xff, 0xaa, 0xaa, 0xaa);
@@ -96,12 +93,8 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
             });
         }
 
-        // select level
-        selectLevel();
-
-        // connect presenter
-        initPresenter();
-
+        // select level and init presenter
+        selectLevelAndInitPresenter();
     }
 
     protected abstract void initContentView();
@@ -112,9 +105,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
 
     protected abstract void initButtons();
 
-    protected abstract void selectLevel();
-
-    protected abstract void initPresenter();
+    protected abstract void selectLevelAndInitPresenter();
 
     protected abstract void initInjection();
 
@@ -199,14 +190,15 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
                 getResources().getString(R.string.count_correct, countCorrect) + "\n" +
                 getResources().getString(R.string.count_wrong, countTotal - countCorrect) + "\n" +
                 getResources().getString(R.string.correct_rate, (countCorrect * 100) / countTotal) + "\n";
-        UIUtil.showAutoDismissAlertDialog(this, title, message, NOTIFICATION_DURATION,
-                new UIUtil.AutoDismissAlertDialogCallback() {
+        AutoDismissDlgFragment dlg = AutoDismissDlgFragment.newInstance(title, message, NOTIFICATION_DURATION,
+                new AutoDismissDlgFragment.OnDismissListener() {
 
                     @Override
-                    public void performActionAfterDismiss() {
+                    public void onDismiss() {
                         mPresenter.generateNext();
                     }
                 });
+        dlg.show(getSupportFragmentManager(), "auto_dismiss_dlg");
     }
 
     @Override
@@ -217,14 +209,15 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
                 getResources().getString(R.string.count_correct, countCorrect) + "\n" +
                 getResources().getString(R.string.count_wrong, countTotal - countCorrect) + "\n" +
                 getResources().getString(R.string.correct_rate, (countCorrect * 100) / countTotal) + "\n";
-        UIUtil.showAutoDismissAlertDialog(this, title, message, NOTIFICATION_DURATION,
-                new UIUtil.AutoDismissAlertDialogCallback() {
+        AutoDismissDlgFragment dlg = AutoDismissDlgFragment.newInstance(title, message, NOTIFICATION_DURATION,
+                new AutoDismissDlgFragment.OnDismissListener() {
 
                     @Override
-                    public void performActionAfterDismiss() {
+                    public void onDismiss() {
                         mPresenter.generateNext();
                     }
                 });
+        dlg.show(getSupportFragmentManager(), "auto_dismiss_dlg");
     }
 
     protected abstract void showHelp(List<String> texts);

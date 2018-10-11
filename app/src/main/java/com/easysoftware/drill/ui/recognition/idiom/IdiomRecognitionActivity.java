@@ -8,7 +8,7 @@ import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
 import com.easysoftware.drill.data.database.PoemDbHelper;
 import com.easysoftware.drill.ui.recognition.RecognitionBaseActivity;
-import com.easysoftware.drill.ui.recognition.help.HelpFragment;
+import com.easysoftware.drill.ui.util.HelpDlgFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,12 +73,7 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
     }
 
     @Override
-    protected void selectLevel() {
-
-    }
-
-    @Override
-    protected void initPresenter() {
+    protected void selectLevelAndInitPresenter() {
         // presenter, was injected
         mIRPresenter.start(this);
         mIRPresenter.loadChineseFragmentLibrary();
@@ -99,7 +94,7 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
 
     @Override
     public void showHelp(List<String> texts) {
-        HelpFragment ihf  = HelpFragment.newInstance(IDIOM, (ArrayList<String>) texts);
+        HelpDlgFragment ihf  = HelpDlgFragment.newInstance(IDIOM, (ArrayList<String>) texts);
         ihf.show(getSupportFragmentManager(), "Idiom Help");
     }
 }

@@ -22,4 +22,10 @@
     <string name="poem5_recognition_instruction">从如下九个字中选五个字组成一句五言古诗：</string>
     <string name="poem7_recognition_instruction">从如下十二个字中选七个字组成一句七言古诗：</string>
 
+    <string name="level_title">请选择难度</string>
+    <string-array name="levels_array">
+        <item>初级</item>
+        <item>中级</item>
+        <item>高级</item>
+    </string-array>
 </resources>

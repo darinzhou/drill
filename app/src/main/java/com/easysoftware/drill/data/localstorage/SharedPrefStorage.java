@@ -15,6 +15,12 @@ public class SharedPrefStorage implements LocalStorage {
     }
 
     @Override
+    public void write(String key, int value) {
+        mContext.getSharedPreferences(SHAREDPREF_NAME, Context.MODE_PRIVATE)
+                .edit().putInt(key, value).apply();
+    }
+
+    @Override
     public void write(String key, String message) {
         mContext.getSharedPreferences(SHAREDPREF_NAME, Context.MODE_PRIVATE)
                 .edit().putString(key, message).apply();

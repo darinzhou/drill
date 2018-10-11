@@ -1,5 +1,6 @@
 package com.easysoftware.drill.ui.recognition.poem5;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ToggleButton;
@@ -7,7 +8,8 @@ import android.widget.ToggleButton;
 import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
 import com.easysoftware.drill.ui.recognition.RecognitionBaseActivity;
-import com.easysoftware.drill.ui.recognition.help.HelpFragment;
+import com.easysoftware.drill.ui.util.HelpDlgFragment;
+import com.easysoftware.drill.ui.util.SingleChoiceDlgFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,17 +71,22 @@ public class Poem5RecognitionActivity extends RecognitionBaseActivity {
     }
 
     @Override
-    protected void selectLevel() {
+    protected void selectLevelAndInitPresenter() {
+        Resources res = getResources();
+        SingleChoiceDlgFragment dlg = SingleChoiceDlgFragment.newInstance(
+                res.getString(R.string.level_title), res.getStringArray(R.array.levels_array),
+                new SingleChoiceDlgFragment.OnChooseListener() {
+                    @Override
+                    public void onChoose(int which) {
+                        // presenter, was injected
+                        mP5RPresenter.setLevel(which);
+                        mP5RPresenter.start(Poem5RecognitionActivity.this);
+                        mP5RPresenter.loadChineseFragmentLibrary();
 
-    }
-
-    @Override
-    protected void initPresenter() {
-        // presenter, was injected
-        mP5RPresenter.start(this);
-        mP5RPresenter.loadChineseFragmentLibrary();
-
-        mPresenter = mP5RPresenter;
+                        mPresenter = mP5RPresenter;
+                    }
+                });
+        dlg.show(getSupportFragmentManager(), "level_dlg");
     }
 
     @Override
@@ -95,7 +102,7 @@ public class Poem5RecognitionActivity extends RecognitionBaseActivity {
 
     @Override
     public void showHelp(List<String> texts) {
-        HelpFragment ihf  = HelpFragment.newInstance(POEM, (ArrayList<String>) texts);
+        HelpDlgFragment ihf  = HelpDlgFragment.newInstance(POEM, (ArrayList<String>) texts);
         ihf.show(getSupportFragmentManager(), "Poem Help");
     }
 
