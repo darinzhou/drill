@@ -50,6 +50,7 @@ public abstract class RecognitionBasePresenter implements RecognitionContract.Pr
     @Override
     public void start(RecognitionContract.View view) {
         mView = view;
+        loadChineseFragmentLibrary();
     }
 
     protected DisposableObserver<CFRecognitionItem> createCfriObserver() {
@@ -74,8 +75,7 @@ public abstract class RecognitionBasePresenter implements RecognitionContract.Pr
         };
     }
 
-    @Override
-    public void loadChineseFragmentLibrary() {
+    protected void loadChineseFragmentLibrary() {
         mView.showProgress();
         mCompositeDisposable.add(
                 ChineseFragment.loadLibraryObservable(mCFLibLoader)
@@ -136,16 +136,11 @@ public abstract class RecognitionBasePresenter implements RecognitionContract.Pr
         help();
     }
 
-    @Override
-    public boolean isHelpCalled() {
-        return mHelpCalled;
-    }
-
     public int getCFLength() {
         return mCFLength;
     }
 
-    public int getObfuscationLengthLength() {
+    public int getObfuscationLength() {
         return mObfuscationLength;
     }
 }

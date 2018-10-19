@@ -81,8 +81,6 @@ public class Poem5RecognitionActivity extends RecognitionBaseActivity {
                         // presenter, was injected
                         mP5RPresenter.setLevel(which);
                         mP5RPresenter.start(Poem5RecognitionActivity.this);
-                        mP5RPresenter.loadChineseFragmentLibrary();
-
                         mPresenter = mP5RPresenter;
                     }
                 });

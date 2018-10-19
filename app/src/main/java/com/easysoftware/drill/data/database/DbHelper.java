@@ -1,14 +1,8 @@
 package com.easysoftware.drill.data.database;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.TextUtils;
-import android.util.Pair;
-
-import com.easysoftware.drill.data.model.ChineseFragment;
-import com.easysoftware.drill.data.model.Poem;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,11 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-import io.reactivex.Observable;
 
 public class DbHelper extends SQLiteOpenHelper {
 

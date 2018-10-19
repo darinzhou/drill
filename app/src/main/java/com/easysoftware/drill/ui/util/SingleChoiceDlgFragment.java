@@ -2,12 +2,20 @@ package com.easysoftware.drill.ui.util;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public class SingleChoiceDlgFragment extends DialogFragment {
     public static final String TITLE_KEY = "dlg_title";
@@ -48,17 +56,41 @@ public class SingleChoiceDlgFragment extends DialogFragment {
         String title = getArguments().getString(TITLE_KEY);
         String[] items = getArguments().getStringArray(ITEMS_KEY);
 
+        ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1,
+                items) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                // Cast the current view as a TextView
+                TextView tv = (TextView) super.getView(position, convertView, parent);
+                // Set the item text gravity to right/end and vertical center
+                tv.setGravity(Gravity.CENTER);
+
+                int cv = 255 - (position+1) * 20;
+                tv.setBackgroundColor(Color.rgb(0, cv, cv));
+
+                // Return the view
+                return tv;
+            }
+        };
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title)
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (mOnChooseListener != null) {
-                            mOnChooseListener.onChoose(which);
-                        }
-                    }
-                })
+                .setSingleChoiceItems(adapter, -1,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (mOnChooseListener != null) {
+                                    mOnChooseListener.onChoose(which);
+                                    dismiss();
+                                }
+                            }
+                        })
                 .setCancelable(false);
-        return builder.create();
+
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+
+        return dialog;
     }
 }

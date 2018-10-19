@@ -69,6 +69,13 @@ def parse_300_tang_poems(xmlfile):
                 elif child.tag == 'word':
                     note = child.text.encode('utf8')
 
+        # remove new line at first and final line
+        content = content.replace('\n\n', '\n')
+        while content[len(content) - 1] == '\n':
+            content = content[:len(content) - 1]
+        while content[0] == '\n':
+            content = content[1:]
+
         # build the poem
         poem = Poem(title, subtitle, style, author, prologue, content, period, comment + '\n' + note, explanation)
         # append the poem to poem list
@@ -968,18 +975,46 @@ def main():
 
     # build intermediate.json
     print('\nbuilding intermediate.json...')
-    total, count = merge(poems, poems1, 2)
+    total, count = merge(poems1, poems, 2)
     print(str(total) + ' poems were merged. ' + str(count) + ' poems were added.')
-    write_poems_json_file('data/result/intermediate.json', poems)
+    write_poems_json_file('data/result/intermediate.json', poems1)
     print('\n' + str(total) + ' poems were written to intermediate.json. \n')
 
     # advanced -->
 
-    poems1 = parse_500_gu_shi_ci('data/古诗词五百首.txt')
-    write_poems_json_file('data/result/gushici500.json', poems1)
+    poems = parse_500_gu_shi_ci('data/古诗词五百首.txt')
+    write_poems_json_file('data/result/gushici500.json', poems)
 
     # build advanced.json
     print('\nbuilding advanced.json...')
+    total, count = merge(poems1, poems, 3)
+    print(str(total) + ' poems were merged. ' + str(count) + ' poems were added.')
+    write_poems_json_file('data/result/advanced.json', poems1)
+    print('\n' + str(total) + ' poems were written to advanced.json. \n')
+
+
+    # merging advanced.json
+    print('\nmerging advanced.json with tangshi300...')
+    poems = parse_300_tang_poems('data/唐诗三百首.xml')
+    write_poems_json_file('data/result/tangshi300.json', poems)
+    total, count = merge(poems1, poems, 3)
+    print(str(total) + ' poems were merged. ' + str(count) + ' poems were added.')
+    write_poems_json_file('data/result/advanced.json', poems1)
+    print('\n' + str(total) + ' poems were written to advanced.json. \n')
+
+    # merging advanced.json
+    print('\nmerging advanced.json with qianjianshi...')
+    poems = parse_poems_of_1000_writers('data/千家诗.txt')
+    write_poems_json_file('data/result/qianjiashi.json', poems)
+    total, count = merge(poems1, poems, 3)
+    print(str(total) + ' poems were merged. ' + str(count) + ' poems were added.')
+    write_poems_json_file('data/result/advanced.json', poems1)
+    print('\n' + str(total) + ' poems were written to advanced.json. \n')
+
+    # merging advanced.json
+    print('\nmerging advanced.json with songci300...')
+    poems = parse_300_song_ci('data/宋词三百首.txt')
+    write_poems_json_file('data/result/songci300.json', poems)
     total, count = merge(poems1, poems, 3)
     print(str(total) + ' poems were merged. ' + str(count) + ' poems were added.')
     write_poems_json_file('data/result/advanced.json', poems1)
@@ -1022,7 +1057,7 @@ def main():
     #
     # poems = parse_300_tang_poems('data/唐诗三百首.xml')
     # write_poems_json_file('data/result/tangshi300.json', poems)
-
+    #
     # poems = parse_300_song_ci('data/宋词三百首.txt')
     # write_poems_json_file('data/result/songci300.json', poems)
     # # write_poems_text_file('data/result/shiju.txt', poems)
@@ -1033,9 +1068,9 @@ def main():
 
     # build_poem_fragment_lib('data/result/cf_lib_tangshi300_songci300.txt')
 
-    build_poem_fragment_lib_from_formatted_json('data/result/basic.json', 'data/result/cf_lib_basic.txt')
-    build_poem_fragment_lib_from_formatted_json('data/result/intermediate.json', 'data/result/cf_lib_intermediate.txt')
-    build_poem_fragment_lib_from_formatted_json('data/result/advanced.json', 'data/result/cf_lib_advanced.txt')
+    # build_poem_fragment_lib_from_formatted_json('data/result/basic.json', 'data/result/cf_lib_basic.txt')
+    # build_poem_fragment_lib_from_formatted_json('data/result/intermediate.json', 'data/result/cf_lib_intermediate.txt')
+    # build_poem_fragment_lib_from_formatted_json('data/result/advanced.json', 'data/result/cf_lib_advanced.txt')
 
 
 if __name__ == "__main__":

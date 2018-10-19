@@ -30,13 +30,10 @@ class Poem:
         self.level = level
 
     def equals(self, other):
-        content1 = remove_punctuations(self.content)
-        verses1 = content1.split('\n')
+        first1, second1 = get_first_second(self.content)
+        first2, second2 = get_first_second(other.content)
 
-        content2 = remove_punctuations(other.content)
-        verses2 = content2.split('\n')
-
-        return verses1[0] == verses2[0]  # and verses1[1] == verses2[1]
+        return first1 == first2 or second1 == second2
 
     def to_string(self):
         s = self.title + '  ' + self.subtitle + '\n'
@@ -64,6 +61,37 @@ def poem_dict(poem):
 # Poem util methods
 # =======================================================================
 
+def break_combined_sentences(txt):
+    lines = txt.split('，')
+    if len(lines) < 2:
+        lines = txt.split('？')
+        if len(lines) < 2:
+            lines = txt.split(',')
+            if len(lines) < 2:
+                lines = txt.split('?')
+    first = lines[0]
+    second = ''
+    if len(lines) >= 2:
+        second = lines[1]
+
+    return first, second
+
+
+def get_first_second(content):
+    verses = content.split('\n')
+    i = 0
+    first, second = break_combined_sentences(verses[i])
+    i += 1
+
+    while not first:
+        first, second = break_combined_sentences(verses[i])
+        i += 1
+
+    while not second:
+        second, third = break_combined_sentences(verses[i])
+        i += 1
+
+    return remove_punctuations(first), remove_punctuations(second)
 
 def remove_punctuations(content):
     text = content

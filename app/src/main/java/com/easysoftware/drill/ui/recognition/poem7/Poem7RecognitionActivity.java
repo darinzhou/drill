@@ -86,8 +86,6 @@ public class Poem7RecognitionActivity extends RecognitionBaseActivity {
                         // presenter, was injected
                         mP7RPresenter.setLevel(which);
                         mP7RPresenter.start(Poem7RecognitionActivity.this);
-                        mP7RPresenter.loadChineseFragmentLibrary();
-
                         mPresenter = mP7RPresenter;
                     }
                 });

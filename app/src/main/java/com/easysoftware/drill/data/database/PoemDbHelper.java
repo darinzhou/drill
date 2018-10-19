@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import android.util.Pair;
 
 import com.easysoftware.drill.data.model.ChineseFragment;
+import com.easysoftware.drill.data.model.Idiom;
 import com.easysoftware.drill.data.model.Poem;
+import com.easysoftware.drill.data.model.Verse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,7 +58,12 @@ public class PoemDbHelper extends DbHelper {
 
     }
 
-    protected String getString(Cursor cursor, String columName, String s) {
+    private String getString(Cursor cursor, String columName) {
+        byte[] blob = cursor.getBlob(cursor.getColumnIndexOrThrow(columName));
+        return blobToString(blob);
+    }
+
+    private String getString(Cursor cursor, String columName, String s) {
         if (TextUtils.isEmpty(s)) {
             byte[] blob = cursor.getBlob(cursor.getColumnIndexOrThrow(columName));
             s = blobToString(blob);
@@ -127,7 +134,7 @@ public class PoemDbHelper extends DbHelper {
     }
 
     // get poem from poem id
-    protected Poem getPoem(int poemId) {
+    private Poem getPoem(int poemId) {
         // Filter results WHERE "title" = 'My Title'
         String selection = PoemContract.PoemTable.COLUMN_NAME_POEM_ID + " = ?";
 
@@ -181,7 +188,7 @@ public class PoemDbHelper extends DbHelper {
         return new Poem(title, subtitle, author, period, prologue, content);
     }
 
-    protected List<Integer> getPoemIds(String sentence) {
+    private List<Integer> getPoemIdsContainSentence(String sentence) {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -220,9 +227,8 @@ public class PoemDbHelper extends DbHelper {
 
         return poemIds;
     }
-
-    public List<Poem> getPoems(String sentence) {
-        List<Integer> poemIds = getPoemIds(sentence);
+    public List<Poem> getPoemsContainSentence(String sentence) {
+        List<Integer> poemIds = getPoemIdsContainSentence(sentence);
         List<Poem> poems = new ArrayList<>();
         for (int i : poemIds) {
             Poem poem = getPoem(i);
@@ -232,16 +238,16 @@ public class PoemDbHelper extends DbHelper {
         }
         return poems;
     }
-    public Observable<List<Poem>> getPoemsObservable(String sentence) {
+    public Observable<List<Poem>> getPoemsContainSentenceObservable(String sentence) {
         return Observable.fromCallable(new Callable<List<Poem>>() {
             @Override
             public List<Poem> call() throws Exception {
-                return getPoems(sentence);
+                return getPoemsContainSentence(sentence);
             }
         });
     }
 
-    protected List<Integer> getPoemIds(List<String> keywords) {
+    private List<Integer> getPoemIds(List<String> keywords) {
         List<Integer> poemIds = new ArrayList<>();
         if (keywords == null || keywords.size() == 0) {
             return poemIds;
@@ -254,8 +260,7 @@ public class PoemDbHelper extends DbHelper {
                 PoemContract.PoemTable.COLUMN_NAME_TITLE,
                 PoemContract.PoemTable.COLUMN_NAME_AUTHOR,
                 PoemContract.PoemTable.COLUMN_NAME_SENTENCE,
-                PoemContract.PoemTable.TABLE_NAME,
-                PoemContract.PoemTable.COLUMN_NAME_POEM_ID);
+                PoemContract.PoemTable.TABLE_NAME);
 
         // selection and arguments
         StringBuilder selection = new StringBuilder();
@@ -301,8 +306,7 @@ public class PoemDbHelper extends DbHelper {
 
         return poemIds;
     }
-
-    public List<Poem> getPoems(List<String> keywords) {
+    public List<Poem> getPoemsContainKeywords(List<String> keywords) {
         List<Integer> poemIds = getPoemIds(keywords);
         List<Poem> poems = new ArrayList<>();
         for (int i : poemIds) {
@@ -312,6 +316,14 @@ public class PoemDbHelper extends DbHelper {
             }
         }
         return poems;
+    }
+    public Observable<List<Poem>> getPoemsContainKeywordsObservable(List<String> keywords) {
+        return Observable.fromCallable(new Callable<List<Poem>>() {
+            @Override
+            public List<Poem> call() throws Exception {
+                return getPoemsContainKeywords(keywords);
+            }
+        });
     }
 
     public List<ChineseFragment> getChineseFragments(int level) {
@@ -354,5 +366,150 @@ public class PoemDbHelper extends DbHelper {
         }
 
         return cfList;
+    }
+
+    public List<Verse> getVersesStartwith(String start) {
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                PoemContract.PoemTable.COLUMN_NAME_POEM_ID,
+                PoemContract.PoemTable.COLUMN_NAME_SENTENCE
+        };
+        // Filter results WHERE "title" = 'My Title'
+        String selection = PoemContract.PoemTable.COLUMN_NAME_SENTENCE + " like ?";
+
+        // Where clause arguments
+        String[] selectionArgs = {start + "%"};
+
+        // search
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                PoemContract.PoemTable.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        List<Verse> verses = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int poemId = cursor.getInt(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_POEM_ID));
+                Pair<String, String> pair = Poem.splitWordsAndPunctuation(
+                        getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
+                verses.add(new Verse(pair.first, getPoem(poemId)));
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return verses;
+    }
+    public Observable<List<Verse>> getVersesStartwithObservable(String start) {
+        return Observable.fromCallable(new Callable<List<Verse>>() {
+            @Override
+            public List<Verse> call() throws Exception {
+                return getVersesStartwith(start);
+            }
+        });
+    }
+
+    public List<Verse> getVersesEndwith(String end) {
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                PoemContract.PoemTable.COLUMN_NAME_POEM_ID,
+                PoemContract.PoemTable.COLUMN_NAME_SENTENCE
+        };
+        // Filter results WHERE "title" = 'My Title'
+        String selection = PoemContract.PoemTable.COLUMN_NAME_SENTENCE + " like ?";
+
+        // Where clause arguments
+        String[] selectionArgs = {"%" + end + "_"};
+
+        // search
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                PoemContract.PoemTable.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        List<Verse> verses = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int poemId = cursor.getInt(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_POEM_ID));
+                Pair<String, String> pair = Poem.splitWordsAndPunctuation(
+                        getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
+                verses.add(new Verse(pair.first, getPoem(poemId)));
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return verses;
+    }
+    public Observable<List<Verse>> getVersesEndwithObservable(String end) {
+        return Observable.fromCallable(new Callable<List<Verse>>() {
+            @Override
+            public List<Verse> call() throws Exception {
+                return getVersesEndwith(end);
+            }
+        });
+    }
+
+    public List<Verse> getVersesContainKeyword(String keyword) {
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                PoemContract.PoemTable.COLUMN_NAME_POEM_ID,
+                PoemContract.PoemTable.COLUMN_NAME_SENTENCE
+        };
+        // Filter results WHERE "title" = 'My Title'
+        String selection = PoemContract.PoemTable.COLUMN_NAME_SENTENCE + " like ?";
+
+        // Where clause arguments
+        String[] selectionArgs = {"%" + keyword + "%"};
+
+        // search
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                PoemContract.PoemTable.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        List<Verse> verses = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int poemId = cursor.getInt(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_POEM_ID));
+                Pair<String, String> pair = Poem.splitWordsAndPunctuation(
+                        getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
+                verses.add(new Verse(pair.first, getPoem(poemId)));
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return verses;
+    }
+
+    public Observable<List<Verse>> getVersesContainKeywordObservable(String keyword) {
+        return Observable.fromCallable(new Callable<List<Verse>>() {
+            @Override
+            public List<Verse> call() throws Exception {
+                return getVersesContainKeyword(keyword);
+            }
+        });
     }
 }

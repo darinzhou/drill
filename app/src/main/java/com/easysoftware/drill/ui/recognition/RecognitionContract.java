@@ -16,10 +16,8 @@ public interface RecognitionContract {
 
     interface Presenter extends MvpContract.MvpPresenter<View> {
         void setLevel(int level);
-        void loadChineseFragmentLibrary() throws FileNotFoundException;
         void generateNext();
         void onNext(String result);
         void onHelp();
-        boolean isHelpCalled();
     }
 }

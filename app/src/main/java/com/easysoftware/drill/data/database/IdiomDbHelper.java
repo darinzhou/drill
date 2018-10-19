@@ -54,12 +54,144 @@ public class IdiomDbHelper extends DbHelper {
 
     }
 
-    protected String getString(Cursor cursor, String columName) {
+    private String getString(Cursor cursor, String columName) {
         byte[] blob = cursor.getBlob(cursor.getColumnIndexOrThrow(columName));
         return blobToString(blob);
     }
 
-    public List<Idiom> getIdioms(String content) {
+    public Idiom getIdiom(String content) {
+        // Filter results WHERE "title" = 'My Title'
+        String selection = IdiomContract.IdiomTable.COLUMN_NAME_CONTENT + "=?";
+
+        // Where clause arguments
+        String[] selectionArgs = {content};
+
+        // search
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                IdiomContract.IdiomTable.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        Idiom idiom = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_CONTENT);
+                String pinyin = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_PINYIN);
+                String explanation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXPLANATION);
+                String derivation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_DERIVATION);
+                String example = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXAMPLE);
+                idiom = new Idiom(text, pinyin, explanation, derivation, example);
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return idiom;
+    }
+    public Observable<Idiom> getIdiomObservable(String content) {
+        return Observable.fromCallable(new Callable<Idiom>() {
+            @Override
+            public Idiom call() throws Exception {
+                return getIdiom(content);
+            }
+        });
+    }
+
+    public List<Idiom> getIdiomsStartwith(String start) {
+        // Filter results WHERE "title" = 'My Title'
+        String selection = IdiomContract.IdiomTable.COLUMN_NAME_CONTENT + " like ?";
+
+        // Where clause arguments
+        String[] selectionArgs = {start + "%"};
+
+        // search
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                IdiomContract.IdiomTable.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        List<Idiom> idioms = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_CONTENT);
+                String pinyin = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_PINYIN);
+                String explanation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXPLANATION);
+                String derivation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_DERIVATION);
+                String example = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXAMPLE);
+                idioms.add(new Idiom(text, pinyin, explanation, derivation, example));
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return idioms;
+    }
+    public Observable<List<Idiom>> getIdiomsStartwithObservable(String start) {
+        return Observable.fromCallable(new Callable<List<Idiom>>() {
+            @Override
+            public List<Idiom> call() throws Exception {
+                return getIdiomsStartwith(start);
+            }
+        });
+    }
+
+    public List<Idiom> getIdiomsEndwith(String end) {
+        // Filter results WHERE "title" = 'My Title'
+        String selection = IdiomContract.IdiomTable.COLUMN_NAME_CONTENT + " like ?";
+
+        // Where clause arguments
+        String[] selectionArgs = {"%" + end};
+
+        // search
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                IdiomContract.IdiomTable.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        List<Idiom> idioms = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_CONTENT);
+                String pinyin = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_PINYIN);
+                String explanation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXPLANATION);
+                String derivation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_DERIVATION);
+                String example = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXAMPLE);
+                idioms.add(new Idiom(text, pinyin, explanation, derivation, example));
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return idioms;
+    }
+    public Observable<List<Idiom>> getIdiomsEndwithObservable(String end) {
+        return Observable.fromCallable(new Callable<List<Idiom>>() {
+            @Override
+            public List<Idiom> call() throws Exception {
+                return getIdiomsEndwith(end);
+            }
+        });
+    }
+
+    public List<Idiom> getIdiomsContainKeyword(String content) {
         // Filter results WHERE "title" = 'My Title'
         String selection = IdiomContract.IdiomTable.COLUMN_NAME_CONTENT + " like ?";
 
@@ -94,11 +226,11 @@ public class IdiomDbHelper extends DbHelper {
 
         return idioms;
     }
-    public Observable<List<Idiom>> getIdiomsObservable(String content) {
+    public Observable<List<Idiom>> getIdiomsContainKeywordObservable(String content) {
         return Observable.fromCallable(new Callable<List<Idiom>>() {
             @Override
             public List<Idiom> call() throws Exception {
-                return getIdioms(content);
+                return getIdiomsContainKeyword(content);
             }
         });
     }

@@ -53,7 +53,7 @@ public class Poem5RecognitionPresenter extends RecognitionBasePresenter {
     @Override
     public void help() {
         mView.showProgress();
-        mCompositeDisposable.add(mDbHelper.getPoemsObservable(mCfri.getChineseFragment().toString())
+        mCompositeDisposable.add(mDbHelper.getPoemsContainSentenceObservable(mCfri.getChineseFragment().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<Poem>>() {

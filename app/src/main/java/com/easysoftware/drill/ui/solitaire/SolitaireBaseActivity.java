@@ -1,38 +1,31 @@
-package com.easysoftware.drill.ui.recognition;
+package com.easysoftware.drill.ui.solitaire;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.easysoftware.drill.R;
-
 import com.easysoftware.drill.base.BaseActivity;
+import com.easysoftware.drill.ui.recognition.RecognitionContract;
 import com.easysoftware.drill.ui.util.AutoDismissDlgFragment;
 
-import java.util.HashMap;
 import java.util.List;
 
-public abstract class RecognitionBaseActivity extends BaseActivity implements RecognitionContract.View {
+public abstract class SolitaireBaseActivity extends BaseActivity implements RecognitionContract.View {
     public static final int COLOR_EMPTY = Color.argb(0xff, 0xaa, 0xaa, 0xaa);
     public static final int COLOR_FILLED = Color.argb(0xff, 0, 0xdd, 0xff);
     public static final int NOTIFICATION_DURATION = 2000;
 
-    protected ToggleButton[] mCharButtons;
-    protected Button[] mAnsButtons;
     protected Button mHelp;
-    protected Button mNext;
     protected ProgressBar mProgressBar;
 
-    protected HashMap<ToggleButton, Button> mAnsMap = new HashMap<>();
-
     // will be injected in subclasses
-    protected RecognitionBasePresenter mPresenter;
+    protected SolitaireBasePresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +37,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
 
         // UI
         initTitle();
-        initButtons();
+        initCFPairItemRecyclerView();
         initProgressBar();
 
         // bring progress bar in front of buttons
@@ -58,44 +51,8 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
             }
         });
 
-        // Next button behavior
-        mNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.onNext(getAnswer());
-                clearAnswer();
-                lockButtons(false);
-            }
-        });
-
-        // Char buttons behavior
-        for (ToggleButton tb : mCharButtons) {
-            tb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        Button firstEmptyAnsButton = getFirstEmptyAnsButton();
-                        if (firstEmptyAnsButton != null) {
-                            firstEmptyAnsButton.setText(buttonView.getText());
-                            firstEmptyAnsButton.setBackgroundColor(COLOR_FILLED);
-                            mAnsMap.put((ToggleButton) buttonView, firstEmptyAnsButton);
-                        } else {
-                            buttonView.setChecked(false);
-                        }
-                    } else {
-                        Button ansButton = mAnsMap.get(buttonView);
-                        if (ansButton != null) {
-                            mAnsMap.get(buttonView).setText("");
-                            mAnsMap.get(buttonView).setBackgroundColor(COLOR_EMPTY);
-                            mAnsMap.remove((ToggleButton) buttonView);
-                        }
-                    }
-                }
-            });
-        }
-
         // select level and init presenter
-        selectLevelAndInitPresenter();
+        initPresenter();
     }
 
     protected abstract void initContentView();
@@ -104,9 +61,9 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
 
     protected abstract void initProgressBar();
 
-    protected abstract void initButtons();
+    protected abstract void initCFPairItemRecyclerView();
 
-    protected abstract void selectLevelAndInitPresenter();
+    protected abstract void initPresenter();
 
     protected abstract void initInjection();
 
@@ -119,55 +76,9 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
         cleanInjection();
     }
 
-    protected Button getFirstEmptyAnsButton() {
-        if (mAnsMap.size() == mPresenter.getCFLength()) {
-            return null;
-        }
-
-        for (Button bt : mAnsButtons) {
-            if (bt.getText().toString().isEmpty()) {
-                return bt;
-            }
-        }
-        return null;
-    }
-
-    protected String getAnswer() {
-        String s = "";
-        for (Button bt : mAnsButtons) {
-            s += bt.getText().toString();
-        }
-        return s;
-    }
-
-    protected void clearAnswer() {
-        mAnsMap.clear();
-        for (Button bt : mAnsButtons) {
-            bt.setBackgroundColor(COLOR_EMPTY);
-            bt.setText("");
-        }
-    }
-
-    protected void lockButtons(boolean lock) {
-        for (ToggleButton tb : mCharButtons) {
-            tb.setClickable(!lock);
-        }
-    }
-
     //--------------------------------------------------------------------------------------------
     // implements methods of IdiomRecognitionContract.View
     //--------------------------------------------------------------------------------------------
-
-    @Override
-    public void displayChallenge(String obfuscation) {
-        for (int i = 0; i < obfuscation.length(); ++i) {
-            mCharButtons[i].setChecked(false);
-            String c = Character.toString(obfuscation.charAt(i));
-            mCharButtons[i].setText(c);
-            mCharButtons[i].setTextOn(c);
-            mCharButtons[i].setTextOff(c);
-        }
-    }
 
     @Override
     public void showProgress() {
@@ -196,7 +107,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
 
                     @Override
                     public void onDismiss() {
-                        mPresenter.generateNext();
+//                        mPresenter.generateNext();
                     }
                 });
         dlg.show(getSupportFragmentManager(), "auto_dismiss_dlg");
@@ -215,7 +126,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
 
                     @Override
                     public void onDismiss() {
-                        mPresenter.generateNext();
+//                        mPresenter.generateNext();
                     }
                 });
         dlg.show(getSupportFragmentManager(), "auto_dismiss_dlg");
@@ -228,18 +139,4 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
         showHelp(texts);
     }
 
-    @Override
-    public void displayCorrectAnswer(String answer) {
-        clearAnswer();
-        for (int i = 0; i < answer.length(); ++i) {
-            for (ToggleButton tb : mCharButtons) {
-                if (!tb.isChecked()) {
-                    if (answer.charAt(i) == tb.getText().charAt(0)) {
-                        tb.performClick();
-                    }
-                }
-            }
-        }
-        lockButtons(true);
-    }
 }

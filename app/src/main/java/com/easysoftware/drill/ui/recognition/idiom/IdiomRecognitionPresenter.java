@@ -48,21 +48,12 @@ public class IdiomRecognitionPresenter extends RecognitionBasePresenter {
     @Override
     public void help() {
         mView.showProgress();
-        mCompositeDisposable.add(mDbHelper.getIdiomsObservable(mCfri.getChineseFragment().toString())
+        mCompositeDisposable.add(mDbHelper.getIdiomObservable(mCfri.getChineseFragment().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Idiom>>() {
+                .subscribeWith(new DisposableObserver<Idiom>() {
                     @Override
-                    public void onNext(List<Idiom> idioms) {
-                        // find the best matched idiom
-                        Idiom idiom = idioms.get(0);
-                        for (Idiom i : idioms) {
-                            if (i.getContent().length() == CF_LENGTH) {
-                                idiom = i;
-                                break;
-                            }
-                        }
-
+                    public void onNext(Idiom idiom) {
                         List<String> texts = new ArrayList<>();
                         texts.add(idiom.getContent());
                         texts.add(idiom.getPinyin());

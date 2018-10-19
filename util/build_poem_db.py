@@ -48,15 +48,30 @@ def poem_content_to_sentence(content):
 
 
 def end_with_punctuation(s):
+    print(str(len(s)) + ' > ' + s)
     return s[len(s)-1] in PUNCTUATIONS
 
 
 def word_count_in_sentence(s):
+    ns = s
     word_count = len(s)
     if end_with_punctuation(s):
         word_count -= 1
 
-    return word_count
+        p = s[len(s)-1]
+        if p == ',':
+            p = '，'
+        elif p == '?':
+            p = '？'
+        elif p == '!':
+            p = '！'
+        elif p == ':':
+            p = '：'
+        elif p == '.':
+            p = '。'
+        ns = s[:(len(s)-1)] + p
+
+    return word_count, ns
 
 
 def save_poems_to_db(poems, conn, last_poemid):
@@ -80,8 +95,8 @@ def save_poems_to_db(poems, conn, last_poemid):
         prologue = p.prologue
         sentences = poem_content_to_sentence(p.content)
         for s in sentences:
-            word_count = word_count_in_sentence(s)
-            conn.execute(sql, (poemid, level, title, subtitle, author, period, prologue, sn, word_count, s))
+            word_count, ns = word_count_in_sentence(s)
+            conn.execute(sql, (poemid, level, title, subtitle, author, period, prologue, sn, word_count, ns))
             sn += 1
     conn.commit()
 
@@ -263,6 +278,15 @@ def build_advanced():
     poems = load_formatted_poem_json('data/result/advanced.json')
     add_period(poems)
     write_poems_json_file('data/result/advanced.json', poems)
+    conn = create_db('data/result/advanced.db')
+    save_poems_to_db(poems, conn, 0)
+    conn.close()
+
+
+def build_advanced_1():
+    poems = load_formatted_poem_json('data/result/advanced.json')
+    # add_period(poems)
+    # write_poems_json_file('data/result/advanced.json', poems)
     conn = create_db('data/result/advanced.db')
     save_poems_to_db(poems, conn, 0)
     conn.close()

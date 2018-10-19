@@ -76,8 +76,6 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
     protected void selectLevelAndInitPresenter() {
         // presenter, was injected
         mIRPresenter.start(this);
-        mIRPresenter.loadChineseFragmentLibrary();
-
         mPresenter = mIRPresenter;
     }
 

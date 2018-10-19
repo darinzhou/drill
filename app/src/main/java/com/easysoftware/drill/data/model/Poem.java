@@ -66,12 +66,12 @@ public class Poem {
         for (int i = 0; i < mSentences.size(); ++i) {
             String s = mSentences.get(i);
             if (s.equals(sentence)) {
-                return i + 1;
+                return i;
             }
 
             Pair<String, String> pair = splitWordsAndPunctuation(s);
             if (pair.first.equals(sentence)) {
-                return i + 1;
+                return i;
             }
         }
         return -1;
