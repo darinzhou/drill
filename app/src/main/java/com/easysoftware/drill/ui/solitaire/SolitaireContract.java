@@ -9,11 +9,13 @@ public interface SolitaireContract {
         void displayNotificationForCorrectAnswer(int countCorrect, String text);
         void displayNotificationForWrongAnswer(int countCorrect, String text);
         void displayHelp(List<String> texts);
+        CFPairItemView getCFPairItemView(int position);
     }
 
     interface CFPairItemView {
         void setFirst(String text, List<Integer> keywordPositions, String explanation);
         void setSecond(String text, List<Integer> keywordPositions, String explanation);
+        String getAnswer();
     }
 
     interface Presenter extends MvpContract.MvpPresenter<View> {
@@ -21,7 +23,7 @@ public interface SolitaireContract {
         void generateNext();
         int getPairItemCount();
         void onBindPairItemView(CFPairItemView viewHolder, int position);
-        void onSubmitAnswer(String answer, CFPairItemView viewHolder, int position);
+        void onSubmitAnswer();
         void onViewDetailsFirst(int position);
         void onViewDetailsSecond(int position);
     }

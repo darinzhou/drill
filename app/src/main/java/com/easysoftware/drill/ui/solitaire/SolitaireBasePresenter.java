@@ -48,8 +48,13 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
     }
 
     @Override
-    public void onSubmitAnswer(String answer, SolitaireContract.CFPairItemView viewHolder, int position) {
+    public void onSubmitAnswer() {
+        // last item
+        int position = mCFPairItems.size()-1;
         CFPairItem item = mCFPairItems.get(position);
+        SolitaireContract.CFPairItemView viewHolder = mView.getCFPairItemView(position);
+        String answer = viewHolder.getAnswer();
+
         if (item.setSecond(answer)) {
             // answer is correct
             mCountCorrect++;
@@ -60,22 +65,6 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
             // answer is wrong and display failure info
             mView.displayNotificationForWrongAnswer(mCountCorrect, item.getSecondVerificationText());
         }
-    }
-
-    // create new pair based on conditions and add it to the pair list
-    // will be called in view, on dismiss of correct notification
-    @Override
-    public void generateNext() {
-    }
-
-    @Override
-    public void onViewDetailsFirst(int position) {
-
-    }
-
-    @Override
-    public void onViewDetailsSecond(int position) {
-
     }
 
     protected abstract String generateKeyword();

@@ -16,7 +16,6 @@ import com.easysoftware.drill.base.BaseActivity;
 import com.easysoftware.drill.ui.util.AutoDismissDlgFragment;
 
 import java.util.HashMap;
-import java.util.List;
 
 public abstract class RecognitionBaseActivity extends BaseActivity implements RecognitionContract.View {
     public static final int COLOR_EMPTY = Color.argb(0xff, 0xaa, 0xaa, 0xaa);
@@ -25,8 +24,8 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
 
     protected ToggleButton[] mCharButtons;
     protected Button[] mAnsButtons;
-    protected Button mHelp;
-    protected Button mNext;
+    protected Button mButtonHelp;
+    protected Button mButtonNext;
     protected ProgressBar mProgressBar;
 
     protected HashMap<ToggleButton, Button> mAnsMap = new HashMap<>();
@@ -51,7 +50,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
         ViewCompat.setTranslationZ(mProgressBar, 8);
 
         // Help button behavior
-        mHelp.setOnClickListener(new View.OnClickListener() {
+        mButtonHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.onHelp();
@@ -59,7 +58,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
         });
 
         // Next button behavior
-        mNext.setOnClickListener(new View.OnClickListener() {
+        mButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.onNext(getAnswer());
@@ -155,7 +154,7 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
     }
 
     //--------------------------------------------------------------------------------------------
-    // implements methods of IdiomRecognitionContract.View
+    // implements methods of in contract
     //--------------------------------------------------------------------------------------------
 
     @Override
@@ -219,13 +218,6 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
                     }
                 });
         dlg.show(getSupportFragmentManager(), "auto_dismiss_dlg");
-    }
-
-    protected abstract void showHelp(List<String> texts);
-
-    @Override
-    public void displayHelp(List<String> texts) {
-        showHelp(texts);
     }
 
     @Override

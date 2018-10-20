@@ -48,8 +48,8 @@ public class Poem5RecognitionActivity extends RecognitionBaseActivity {
         mCharButtons = new ToggleButton[Poem5RecognitionPresenter.OBSF_LENGTH];
         mAnsButtons = new Button[Poem5RecognitionPresenter.CF_LENGTH];
 
-        mHelp = findViewById(R.id.btHelp);
-        mNext = findViewById(R.id.btNext);
+        mButtonHelp = findViewById(R.id.btHelp);
+        mButtonNext = findViewById(R.id.btNext);
 
         int i = 0;
         mAnsButtons[i++] = findViewById(R.id.btAnsChar);
@@ -99,7 +99,7 @@ public class Poem5RecognitionActivity extends RecognitionBaseActivity {
     }
 
     @Override
-    public void showHelp(List<String> texts) {
+    public void displayHelp(List<String> texts) {
         HelpDlgFragment ihf  = HelpDlgFragment.newInstance(POEM, (ArrayList<String>) texts);
         ihf.show(getSupportFragmentManager(), "Poem Help");
     }

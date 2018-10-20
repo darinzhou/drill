@@ -20,9 +20,6 @@ import static com.easysoftware.drill.util.Constants.TYPE.IDIOM;
 public class IdiomRecognitionActivity extends RecognitionBaseActivity {
 
     @Inject
-    PoemDbHelper mPoemDbHelper;
-
-    @Inject
     IdiomRecognitionPresenter mIRPresenter;
 
     @Override
@@ -50,8 +47,8 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
         mCharButtons = new ToggleButton[IdiomRecognitionPresenter.OBSF_LENGTH];
         mAnsButtons = new Button[IdiomRecognitionPresenter.CF_LENGTH];
 
-        mHelp = findViewById(R.id.btHelp);
-        mNext = findViewById(R.id.btNext);
+        mButtonHelp = findViewById(R.id.btHelp);
+        mButtonNext = findViewById(R.id.btNext);
 
         int i = 0;
         mAnsButtons[i++] = findViewById(R.id.btAnsChar);
@@ -91,7 +88,7 @@ public class IdiomRecognitionActivity extends RecognitionBaseActivity {
     }
 
     @Override
-    public void showHelp(List<String> texts) {
+    public void displayHelp(List<String> texts) {
         HelpDlgFragment ihf  = HelpDlgFragment.newInstance(IDIOM, (ArrayList<String>) texts);
         ihf.show(getSupportFragmentManager(), "Idiom Help");
     }
