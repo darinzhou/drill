@@ -24,7 +24,7 @@ public class CFPairItemsRecyclerAdapter extends RecyclerView.Adapter<CFPairItems
     @Override
     public CFPairItemsRecyclerAdapter.CFPairItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cfpair, parent, false);
-        return new CFPairItemViewHolder(v);
+        return new CFPairItemViewHolder(v, mPresenter);
     }
 
     @Override
@@ -39,8 +39,10 @@ public class CFPairItemsRecyclerAdapter extends RecyclerView.Adapter<CFPairItems
 
     public static class CFPairItemViewHolder extends RecyclerView.ViewHolder implements SolitaireContract.CFPairItemView {
 
-        public static final String KEYWORD_FORMAT = "<strong style=\"color: red;\">%s</strong>";
-        public static final String EXPLANATION_FORMAT = "<u style=\"color: blue;\">%s</u>";
+        public static final String KEYWORD_FORMAT = "<b><font color='red'>%s</font></b>";
+        public static final String EXPLANATION_FORMAT = "<u><font color='blue'>%s</font></u>";
+
+        private SolitaireContract.Presenter mPresenter;
 
         private TextView mTvFirstText;
         private TextView mTvFirstExplanation;
@@ -49,28 +51,40 @@ public class CFPairItemsRecyclerAdapter extends RecyclerView.Adapter<CFPairItems
         private TextView mTvSecondExplanation;
         private EditText mEtSecond;
 
-        public CFPairItemViewHolder(View itemView) {
+        public CFPairItemViewHolder(View itemView, SolitaireContract.Presenter presenter) {
             super(itemView);
+
+            mPresenter = presenter;
 
             mTvFirstText = itemView.findViewById(R.id.tvFirstText);
             mTvFirstExplanation = itemView.findViewById(R.id.tvFirstExplanation);
+            mTvFirstExplanation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPresenter.onViewDetailsFirst(getAdapterPosition());
+                }
+            });
 
             mTvSecondText = itemView.findViewById(R.id.tvSecondText);
             mTvSecondExplanation = itemView.findViewById(R.id.tvSecondExplanation);
-            mEtSecond = itemView.findViewById(R.id.etSecond);
+            mTvSecondExplanation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPresenter.onViewDetailsSecond(getAdapterPosition());
+                }
+            });
 
-            mEtSecond.setVisibility(View.VISIBLE);
-            mTvSecondText.setVisibility(View.GONE);
-            mTvSecondExplanation.setVisibility(View.GONE);
+            mEtSecond = itemView.findViewById(R.id.etSecond);
+            emptySecond(true);
         }
 
         private String buildTextHtml(String text, List<Integer> keywordPositions) {
             String html = "";
             for (int i = 0; i < text.length(); ++i) {
                 if (keywordPositions.contains(i)) {
-                    html += text.charAt(i);
-                } else {
                     html += String.format(KEYWORD_FORMAT, String.valueOf(text.charAt(i)));
+                } else {
+                    html += text.charAt(i);
                 }
             }
             return html;
@@ -101,9 +115,22 @@ public class CFPairItemsRecyclerAdapter extends RecyclerView.Adapter<CFPairItems
             displayText(mTvSecondText, text, keywordPositions);
             displayExplanation(mTvSecondExplanation, explanation);
 
-            mEtSecond.setVisibility(View.GONE);
-            mTvSecondText.setVisibility(View.VISIBLE);
-            mTvSecondExplanation.setVisibility(View.VISIBLE);
+            emptySecond(false);
+        }
+
+        @Override
+        public void emptySecond(boolean empty) {
+            if (empty) {
+                mEtSecond.setText("");
+                mEtSecond.setVisibility(View.VISIBLE);
+                mTvSecondText.setVisibility(View.GONE);
+                mTvSecondExplanation.setVisibility(View.GONE);
+                mEtSecond.requestFocus();
+            } else {
+                mEtSecond.setVisibility(View.GONE);
+                mTvSecondText.setVisibility(View.VISIBLE);
+                mTvSecondExplanation.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override

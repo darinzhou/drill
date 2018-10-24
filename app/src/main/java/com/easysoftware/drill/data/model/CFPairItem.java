@@ -2,80 +2,121 @@ package com.easysoftware.drill.data.model;
 
 import java.util.List;
 
-public abstract class CFPairItem {
-    protected ChineseFragment mFirst;
-    protected ChineseFragment mSecond;
-    protected char mKeywordIn;
-    protected char mKeywordOut;
+public class CFPairItem {
+    protected String mFirst;
+    protected String mSecond;
 
-    // should be set in setFirst/Second, checkFirst/Second and checkFitstCF/SecondCF
+    protected String mKeywordIn;
+    protected String mKeywordOut;
+
     protected String mFirstVerificationText;
     protected String mSecondVerificationText;
 
-    public CFPairItem(char keywordIn) {
+    protected String mFirstExplanation;
+    protected String mSecondExplanation;
+
+    protected List<Integer> mFirstKeywordPositions;
+    protected List<Integer> mSecondKeywordPositions;
+
+    protected List<String> mFirstTexts;
+    protected List<String> mSecondTexts;
+
+    public CFPairItem() {
+    }
+
+    public void setFirst(String text) {
+        mFirst = text;
+    }
+    public void setSecond(String text) {
+        mSecond = text;
+    }
+
+    public void setKeywordIn(String keywordIn) {
         mKeywordIn = keywordIn;
     }
-
-    public boolean setFirst(String text) {
-        ChineseFragment first = new ChineseFragment(text);
-        if (!checkFirstCF(first) || !checkFirst(first)) {
-            return false;
-        }
-
-        mFirst = first;
-        return true;
+    public void setKeywordOut(String keywordOut) {
+        mKeywordOut = keywordOut;
     }
 
-    public boolean setSecond(String text) {
-        ChineseFragment second = new ChineseFragment(text);
-        if (!checkSecondCF(second) || !checkSecond(second)) {
-            return false;
-        }
+    public void setFirstVerificationText(String firstVerificationText) {
+        mFirstVerificationText = firstVerificationText;
+    }
+    public void setSecondVerificationText(String secondVerificationText) {
+        mSecondVerificationText = secondVerificationText;
+    }
 
-        mSecond = second;
-        mKeywordOut = findKeywordOut();
+    public void setFirstExplanation(String firstExplanation) {
+        mFirstExplanation = firstExplanation;
+    }
+    public void setSecondExplanation(String secondExplanation) {
+        mSecondExplanation = secondExplanation;
+    }
 
-        return true;
+    public void setFirstKeywordPositions(List<Integer> firstKeywordPositions) {
+        mFirstKeywordPositions = firstKeywordPositions;
+    }
+    public void setSecondKeywordPositions(List<Integer> secondKeywordPositions) {
+        mSecondKeywordPositions = secondKeywordPositions;
+    }
+
+    public void setFirstTexts(List<String> firstTexts) {
+        mFirstTexts = firstTexts;
+    }
+    public void setSecondTexts(List<String> secondTexts) {
+        mSecondTexts = secondTexts;
     }
 
     public boolean isMatched() {
         return mFirst != null && mSecond != null;
     }
 
-    public ChineseFragment getFirst() {
+    public String getFirst() {
         return mFirst;
     }
-
-    public ChineseFragment getSecond() {
+    public String getSecond() {
         return mSecond;
     }
 
-    public char getKeywordIn() {
+    public String getKeywordIn() {
         return mKeywordIn;
     }
-
-    public char getKeywordOut() {
+    public String getKeywordOut() {
         return mKeywordOut;
     }
 
     public String getFirstVerificationText() {
         return mFirstVerificationText;
     }
-
     public String getSecondVerificationText() {
         return mSecondVerificationText;
     }
 
-    protected abstract boolean checkFirstCF(ChineseFragment first);
-    protected abstract boolean checkSecondCF(ChineseFragment second);
-    protected abstract boolean checkFirst(ChineseFragment first);
-    protected abstract boolean checkSecond(ChineseFragment second);
+    public String getFirstExplanation() {
+        return mFirstExplanation;
+    }
+    public String getSecondExplanation() {
+        return mSecondExplanation;
+    }
 
-    protected abstract char findKeywordOut();
+    public List<Integer> getFirstKeywordPositions() {
+        return mFirstKeywordPositions;
+    }
+    public List<Integer> getSecondKeywordPositions() {
+        return mSecondKeywordPositions;
+    }
 
-    public abstract List<Integer> getKeywordPositionsInFirst();
-    public abstract List<Integer> getKeywordPositionsInSecond();
+    public List<String> getFirstTexts() {
+        return mFirstTexts;
+    }
+    public List<String> getSecondTexts() {
+        return mSecondTexts;
+    }
 
-    public abstract String getFirstExplanation();
-    public abstract String getSecondExplanation();
+//    protected abstract boolean checkFirstCF(ChineseFragment first);
+//    protected abstract boolean checkSecondCF(ChineseFragment second);
+//    protected abstract boolean checkFirst(ChineseFragment first);
+//    protected abstract boolean checkSecond(ChineseFragment second);
+//
+//    protected abstract char findKeywordOut();
+//
 }

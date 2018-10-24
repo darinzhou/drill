@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -20,7 +19,6 @@ import io.reactivex.schedulers.Schedulers;
 public class IdiomRecognitionPresenter extends RecognitionBasePresenter {
     public static final int CF_LENGTH = 4;
     public static final int OBSF_LENGTH = 9;
-    public static final String IDIOM_OTHER_FORMAT = "【解释】\n%s\n\n【出处】\n%s\n\n【例子】\n%s";
 
     private IdiomDbHelper mDbHelper;
 
@@ -54,15 +52,7 @@ public class IdiomRecognitionPresenter extends RecognitionBasePresenter {
                 .subscribeWith(new DisposableObserver<Idiom>() {
                     @Override
                     public void onNext(Idiom idiom) {
-                        List<String> texts = new ArrayList<>();
-                        texts.add(idiom.getContent());
-                        texts.add(idiom.getPinyin());
-
-                        String other = String.format(IDIOM_OTHER_FORMAT, idiom.getExplanation(),
-                                idiom.getDerivation(), idiom.getExample());
-                        texts.add(other);
-
-                        mView.displayHelp(texts);
+                        mView.displayHelp(Idiom.getFormatedTexts(idiom));
                     }
 
                     @Override

@@ -11,6 +11,7 @@ import com.easysoftware.drill.R;
 import com.easysoftware.drill.ui.recognition.idiom.IdiomRecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem5.Poem5RecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem7.Poem7RecognitionActivity;
+import com.easysoftware.drill.ui.solitaire.idiom.IdiomSolitaireActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,5 +43,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.btIdiomSolitaire).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, IdiomSolitaireActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

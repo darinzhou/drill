@@ -22,11 +22,9 @@ public abstract class CFPairWithKeywordItem extends CFPairItem {
     protected int mType;
 
     public CFPairWithKeywordItem(@CFPType int type, char keywordIn) {
-        super(keywordIn);
         mType = type;
     }
 
-    @Override
     public List<Integer> getKeywordPositionsInFirst() {
         List<Integer> kwPositions = new ArrayList<>();
         if (mType == KEYWORD_HEAD_AND_TAIL) {
@@ -35,15 +33,14 @@ public abstract class CFPairWithKeywordItem extends CFPairItem {
         } else {
             int len = mFirst.length();
             for (int i=0; i< len; ++i) {
-                if (mKeywordIn == mFirst.charAt(i)) {
-                    kwPositions.add(i);
-                }
+//                if (mKeywordIn == mFirst.charAt(i)) {
+//                    kwPositions.add(i);
+//                }
             }
         }
         return kwPositions;
     }
 
-    @Override
     public List<Integer> getKeywordPositionsInSecond() {
         List<Integer> kwPositions = new ArrayList<>();
         if (mType == KEYWORD_HEAD_AND_TAIL) {
@@ -52,54 +49,51 @@ public abstract class CFPairWithKeywordItem extends CFPairItem {
         } else {
             int len = mSecond.length();
             for (int i=0; i< len; ++i) {
-                if (mKeywordIn == mSecond.charAt(i)) {
-                    kwPositions.add(i);
-                }
+//                if (mKeywordIn == mSecond.charAt(i)) {
+//                    kwPositions.add(i);
+//                }
             }
         }
         return kwPositions;
     }
 
-    @Override
     protected boolean checkFirst(ChineseFragment first) {
         if (mFirst == null) {
             return false;
         }
 
         boolean succeed = false;
-        if (mType == KEYWORD_HEAD_AND_TAIL) {
-            succeed = first.getFirstChar() == mKeywordIn;
-        } else {
-            succeed = first.contains(mKeywordIn);
-        }
+//        if (mType == KEYWORD_HEAD_AND_TAIL) {
+//            succeed = first.getFirstChar() == mKeywordIn;
+//        } else {
+//            succeed = first.contains(mKeywordIn);
+//        }
 
         mFirstVerificationText += succeed ? VALID_KEYWORD_TEXT : INVALID_KEYWORD_TEXT;
         return succeed;
     }
 
-    @Override
     protected boolean checkSecond(ChineseFragment second) {
         if (mFirst == null || mSecond == null) {
             return false;
         }
 
         boolean succeed = false;
-        if (mType == KEYWORD_HEAD_AND_TAIL) {
-            succeed = second.getFirstChar() == mFirst.getLastChar();
-        } else {
-            succeed = second.contains(mKeywordIn);
-        }
+//        if (mType == KEYWORD_HEAD_AND_TAIL) {
+//            succeed = second.getFirstChar() == mFirst.getLastChar();
+//        } else {
+//            succeed = second.contains(mKeywordIn);
+//        }
 
         mSecondVerificationText += succeed ? VALID_KEYWORD_TEXT : INVALID_KEYWORD_TEXT;
         return succeed;
     }
 
-    @Override
     protected char findKeywordOut() {
         if (mType == KEYWORD_HEAD_AND_TAIL) {
-            return mSecond.getLastChar();
+            return ' ';//mSecond.getLastChar();
         }
-        return mKeywordIn;
+        return ' ';//mKeywordIn;
     }
 
 }

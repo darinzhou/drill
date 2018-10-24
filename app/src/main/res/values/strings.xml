@@ -24,8 +24,10 @@
     <string name="poem7_recognition_instruction">从如下十二个字中选七个字组成一句七言古诗：</string>
 
     <string name="idiom_solitaire_instruction">请输入一个成语，其字头必须是上一个成语的字尾：</string>
+    <string name="idiom_solitaire_keyword"><![CDATA[初始字头： <b><font color=red>%1$s</font></b>]]></string>
 
     <string name="level_title">请选择难度</string>
+    <string name="input_answer">请输入答案</string>
     <string-array name="levels_array">
         <item>初级</item>
         <item>中级</item>

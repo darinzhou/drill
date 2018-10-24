@@ -20,7 +20,6 @@ public class CFPairWithKeywordPoemItem extends CFPairWithKeywordItem {
         mVerseList = cfList;
     }
 
-    @Override
     protected boolean checkFirstCF(ChineseFragment cf) {
         mFirstPoem = Verse.findPoemWithSentence(cf.toString(), mVerseList);
         if (mFirstPoem != null) {
@@ -32,7 +31,6 @@ public class CFPairWithKeywordPoemItem extends CFPairWithKeywordItem {
         return false;
     }
 
-    @Override
     protected boolean checkSecondCF(ChineseFragment cf) {
         mSecondPoem = Verse.findPoemWithSentence(cf.toString(), mVerseList);
         if (mSecondPoem != null) {

@@ -34,14 +34,12 @@ public class CFPairWithKeywordIdiomItem extends CFPairWithKeywordItem {
         return mCFList.contains(cf);
     }
 
-    @Override
     protected boolean checkFirstCF(ChineseFragment cf) {
         boolean succeed = checkCF(cf);
         mFirstVerificationText = succeed ? VALID_IDIOM_TEXT : INVALID_IDIOM_TEXT;
         return succeed;
     }
 
-    @Override
     protected boolean checkSecondCF(ChineseFragment cf) {
         boolean succeed = checkCF(cf);
         mSecondVerificationText = succeed ? VALID_IDIOM_TEXT : INVALID_IDIOM_TEXT;

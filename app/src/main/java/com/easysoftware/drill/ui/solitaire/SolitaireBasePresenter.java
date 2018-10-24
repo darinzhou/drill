@@ -4,7 +4,9 @@ import com.easysoftware.drill.data.model.CFPairItem;
 import com.easysoftware.drill.di.PerActivity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -14,11 +16,14 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
     protected SolitaireContract.View mView;
     protected CompositeDisposable mCompositeDisposable;
 
+    protected Set<String> mUsedSet;
     protected List<CFPairItem> mCFPairItems;
-    protected String mKeyword;
+    protected String mInitialKeyword;
+    protected String mKeywordForNext;
     protected int mCountCorrect = 0;
 
     public SolitaireBasePresenter() {
+        mUsedSet = new HashSet<>();
         mCFPairItems = new ArrayList<>();
         mCompositeDisposable = new CompositeDisposable();
     }
@@ -26,7 +31,8 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
     @Override
     public void start(SolitaireContract.View view) {
         mView = view;
-        mKeyword = generateKeyword();
+        mInitialKeyword = generateInitialKeyword();
+        mKeywordForNext = mInitialKeyword;
         generateNext();
     }
 
@@ -43,30 +49,64 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
     @Override
     public void onBindPairItemView(SolitaireContract.CFPairItemView viewHolder, int position) {
         CFPairItem item = mCFPairItems.get(position);
-        viewHolder.setFirst(item.getFirst().toString(),
-                item.getKeywordPositionsInFirst(), item.getFirstExplanation());
+
+        viewHolder.setFirst(item.getFirst(),
+                item.getFirstKeywordPositions(), item.getFirstExplanation());
+
+        if (item.isMatched()) {
+            viewHolder.setSecond(item.getSecond(),
+                    item.getSecondKeywordPositions(), item.getSecondExplanation());
+        } else {
+            viewHolder.emptySecond(true);
+        }
     }
 
     @Override
     public void onSubmitAnswer() {
         // last item
         int position = mCFPairItems.size()-1;
-        CFPairItem item = mCFPairItems.get(position);
         SolitaireContract.CFPairItemView viewHolder = mView.getCFPairItemView(position);
         String answer = viewHolder.getAnswer();
-
-        if (item.setSecond(answer)) {
-            // answer is correct
-            mCountCorrect++;
-            viewHolder.setSecond(item.getSecond().toString(), item.getKeywordPositionsInFirst(),
-                    item.getSecondExplanation());
-            mView.displayNotificationForCorrectAnswer(mCountCorrect, item.getSecondVerificationText());
-        } else {
-            // answer is wrong and display failure info
-            mView.displayNotificationForWrongAnswer(mCountCorrect, item.getSecondVerificationText());
-        }
+        verifyAnswer(answer, position);
     }
 
-    protected abstract String generateKeyword();
+    @Override
+    public String getInitialKeyword() {
+        return mInitialKeyword;
+    }
+
+    protected boolean isCFUsed(String text) {
+        return mUsedSet.contains(text);
+    }
+
+    protected String getKeywordForNext() {
+        return mKeywordForNext;
+    }
+
+    protected CFPairItem getCurrentItem() {
+        if (mCFPairItems == null || mCFPairItems.isEmpty()) {
+            return null;
+        }
+        return mCFPairItems.get(mCFPairItems.size()-1);
+    }
+
+    protected void updateUsedSet(String cf) {
+        mUsedSet.add(cf);
+        mView.notifyLastItemChanged();
+    }
+
+    protected void addItem(CFPairItem item) {
+        mCFPairItems.add(item);
+        updateUsedSet(item.getFirst());
+    }
+
+    protected abstract String generateInitialKeyword();
+    protected abstract String updateKeywordForNext(String cf);
+
+    protected abstract void verifyAnswer(String answer, int position);
+    protected abstract void onCorrectAnswer(String message);
+    protected abstract void onWrongAnswer(String message);
+    protected abstract void onSurrender(String message);
+    protected abstract void onDuplication(String message);
 
 }

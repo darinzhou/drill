@@ -61,7 +61,7 @@ public class IdiomDbHelper extends DbHelper {
 
     public Idiom getIdiom(String content) {
         // Filter results WHERE "title" = 'My Title'
-        String selection = IdiomContract.IdiomTable.COLUMN_NAME_CONTENT + "=?";
+        String selection = IdiomContract.IdiomTable.COLUMN_NAME_TEXT + "=?";
 
         // Where clause arguments
         String[] selectionArgs = {content};
@@ -81,7 +81,7 @@ public class IdiomDbHelper extends DbHelper {
         Idiom idiom = null;
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_CONTENT);
+                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_TEXT);
                 String pinyin = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_PINYIN);
                 String explanation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXPLANATION);
                 String derivation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_DERIVATION);
@@ -105,7 +105,7 @@ public class IdiomDbHelper extends DbHelper {
 
     public List<Idiom> getIdiomsStartwith(String start) {
         // Filter results WHERE "title" = 'My Title'
-        String selection = IdiomContract.IdiomTable.COLUMN_NAME_CONTENT + " like ?";
+        String selection = IdiomContract.IdiomTable.COLUMN_NAME_TEXT + " like ?";
 
         // Where clause arguments
         String[] selectionArgs = {start + "%"};
@@ -125,7 +125,7 @@ public class IdiomDbHelper extends DbHelper {
         List<Idiom> idioms = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_CONTENT);
+                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_TEXT);
                 String pinyin = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_PINYIN);
                 String explanation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXPLANATION);
                 String derivation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_DERIVATION);
@@ -149,7 +149,7 @@ public class IdiomDbHelper extends DbHelper {
 
     public List<Idiom> getIdiomsEndwith(String end) {
         // Filter results WHERE "title" = 'My Title'
-        String selection = IdiomContract.IdiomTable.COLUMN_NAME_CONTENT + " like ?";
+        String selection = IdiomContract.IdiomTable.COLUMN_NAME_TEXT + " like ?";
 
         // Where clause arguments
         String[] selectionArgs = {"%" + end};
@@ -169,7 +169,7 @@ public class IdiomDbHelper extends DbHelper {
         List<Idiom> idioms = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_CONTENT);
+                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_TEXT);
                 String pinyin = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_PINYIN);
                 String explanation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXPLANATION);
                 String derivation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_DERIVATION);
@@ -193,7 +193,7 @@ public class IdiomDbHelper extends DbHelper {
 
     public List<Idiom> getIdiomsContainKeyword(String content) {
         // Filter results WHERE "title" = 'My Title'
-        String selection = IdiomContract.IdiomTable.COLUMN_NAME_CONTENT + " like ?";
+        String selection = IdiomContract.IdiomTable.COLUMN_NAME_TEXT + " like ?";
 
         // Where clause arguments
         String[] selectionArgs = {"%" + content + "%"};
@@ -213,7 +213,7 @@ public class IdiomDbHelper extends DbHelper {
         List<Idiom> idioms = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_CONTENT);
+                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_TEXT);
                 String pinyin = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_PINYIN);
                 String explanation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXPLANATION);
                 String derivation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_DERIVATION);
@@ -239,7 +239,7 @@ public class IdiomDbHelper extends DbHelper {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
-                IdiomContract.IdiomTable.COLUMN_NAME_CONTENT
+                IdiomContract.IdiomTable.COLUMN_NAME_TEXT
         };
 
         // search
@@ -257,7 +257,7 @@ public class IdiomDbHelper extends DbHelper {
         List<ChineseFragment> cfList = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                String s = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_CONTENT);
+                String s = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_TEXT);
                 if (!s.isEmpty()) {
                     cfList.add(new ChineseFragment(s));
                 }

@@ -29,12 +29,10 @@ public class CFPairWithVersesItem extends CFPairItem {
     protected Poem mSecondPoem;
 
     public CFPairWithVersesItem(@CFPType int type, List<Verse> verseList) {
-        super(' ');
         mType = type;
         mVerseList = verseList;
     }
 
-    @Override
     protected boolean checkFirstCF(ChineseFragment cf) {
         mFirstPoem = Verse.findPoemWithSentence(cf.toString(), mVerseList);
         if (mFirstPoem != null) {
@@ -46,7 +44,6 @@ public class CFPairWithVersesItem extends CFPairItem {
         return false;
     }
 
-    @Override
     protected boolean checkSecondCF(ChineseFragment cf) {
         mSecondPoem = Verse.findPoemWithSentence(cf.toString(), mVerseList);
         if (mSecondPoem != null) {
@@ -58,7 +55,6 @@ public class CFPairWithVersesItem extends CFPairItem {
         return false;
     }
 
-    @Override
     protected boolean checkFirst(ChineseFragment first) {
         if (mFirst == null) {
             return false;
@@ -76,7 +72,6 @@ public class CFPairWithVersesItem extends CFPairItem {
         return succeed;
     }
 
-    @Override
     protected boolean checkSecond(ChineseFragment second) {
         if (mFirst == null || mSecond == null) {
             return false;
@@ -95,17 +90,14 @@ public class CFPairWithVersesItem extends CFPairItem {
         return succeed;
     }
 
-    @Override
     protected char findKeywordOut() {
         return 0;
     }
 
-    @Override
     public List<Integer> getKeywordPositionsInFirst() {
         return null;
     }
 
-    @Override
     public List<Integer> getKeywordPositionsInSecond() {
         return null;
     }

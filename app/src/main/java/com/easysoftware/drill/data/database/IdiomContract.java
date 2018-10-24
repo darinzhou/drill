@@ -10,7 +10,7 @@ public final class IdiomContract {
     /* Inner class that defines the table contents */
     public static class IdiomTable implements BaseColumns {
         public static final String TABLE_NAME = "idiom_table";
-        public static final String COLUMN_NAME_CONTENT = "content";
+        public static final String COLUMN_NAME_TEXT = "content";
         public static final String COLUMN_NAME_PINYIN = "pinyin";
         public static final String COLUMN_NAME_EXPLANATION = "explanation";
         public static final String COLUMN_NAME_DERIVATION = "derivation";

@@ -62,6 +62,9 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
                 mPresenter.onSubmitAnswer();
             }
         });
+        mTvInstructions = findViewById(R.id.tvInstructions);
+        mTvKeywordInfo = findViewById(R.id.tvKeywordInfo);
+        initInstructions();
 
         // items
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -76,10 +79,10 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
         // select level and init presenter
         selectLevelAndInitPresenter();
 
-        // init the item recyclerview adapter, must be after initialization of presenter object,
-        // as the presenter provides content for the adapter
+        // following calls should be after presenter initialized
         mAdapter = new CFPairItemsRecyclerAdapter(mPresenter);
-
+        mRecyclerView.setAdapter(mAdapter);
+        initKeywordInfo();
     }
 
     protected abstract void initTitle();
@@ -148,7 +151,15 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
     }
 
     @Override
+    public void notifyLastItemChanged() {
+        int last = mAdapter.getItemCount()-1;
+        mAdapter.notifyItemChanged(last);
+        mRecyclerView.scrollToPosition(last);
+    }
+
+    @Override
     public SolitaireContract.CFPairItemView getCFPairItemView(int position) {
         return (SolitaireContract.CFPairItemView) mRecyclerView.findViewHolderForAdapterPosition(position);
     }
+
 }

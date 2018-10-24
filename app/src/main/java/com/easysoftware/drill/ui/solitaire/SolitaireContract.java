@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface SolitaireContract {
     interface View extends MvpContract.MvpView {
+        void notifyLastItemChanged();
         void displayNotificationForCorrectAnswer(int countCorrect, String text);
         void displayNotificationForWrongAnswer(int countCorrect, String text);
         void displayHelp(List<String> texts);
@@ -15,10 +16,12 @@ public interface SolitaireContract {
     interface CFPairItemView {
         void setFirst(String text, List<Integer> keywordPositions, String explanation);
         void setSecond(String text, List<Integer> keywordPositions, String explanation);
+        void emptySecond(boolean empty);
         String getAnswer();
     }
 
     interface Presenter extends MvpContract.MvpPresenter<View> {
+        String getInitialKeyword();
         void onHelp();
         void generateNext();
         int getPairItemCount();
