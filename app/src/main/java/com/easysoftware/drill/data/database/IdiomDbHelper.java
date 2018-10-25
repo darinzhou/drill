@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.easysoftware.drill.data.model.CFItem;
 import com.easysoftware.drill.data.model.ChineseFragment;
 import com.easysoftware.drill.data.model.Idiom;
 
@@ -14,7 +15,7 @@ import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
 
-public class IdiomDbHelper extends DbHelper {
+public class IdiomDbHelper extends DbHelper implements CFItemDbHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "idioms.db";
 
@@ -59,6 +60,40 @@ public class IdiomDbHelper extends DbHelper {
         return blobToString(blob);
     }
 
+    public List<ChineseFragment> getChineseFragments() {
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                IdiomContract.IdiomTable.COLUMN_NAME_TEXT
+        };
+
+        // search
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                IdiomContract.IdiomTable.TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        List<ChineseFragment> cfList = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String s = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_TEXT);
+                if (!s.isEmpty()) {
+                    cfList.add(new ChineseFragment(s));
+                }
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return cfList;
+    }
+
     public Idiom getIdiom(String content) {
         // Filter results WHERE "title" = 'My Title'
         String selection = IdiomContract.IdiomTable.COLUMN_NAME_TEXT + "=?";
@@ -87,6 +122,7 @@ public class IdiomDbHelper extends DbHelper {
                 String derivation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_DERIVATION);
                 String example = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXAMPLE);
                 idiom = new Idiom(text, pinyin, explanation, derivation, example);
+                break;
             } while (cursor.moveToNext());
 
             cursor.close();
@@ -191,12 +227,12 @@ public class IdiomDbHelper extends DbHelper {
         });
     }
 
-    public List<Idiom> getIdiomsContainKeyword(String content) {
+    public List<Idiom> getIdiomsContainKeyword(String keyword) {
         // Filter results WHERE "title" = 'My Title'
         String selection = IdiomContract.IdiomTable.COLUMN_NAME_TEXT + " like ?";
 
         // Where clause arguments
-        String[] selectionArgs = {"%" + content + "%"};
+        String[] selectionArgs = {"%" + keyword + "%"};
 
         // search
         SQLiteDatabase db = getReadableDatabase();
@@ -226,46 +262,72 @@ public class IdiomDbHelper extends DbHelper {
 
         return idioms;
     }
-    public Observable<List<Idiom>> getIdiomsContainKeywordObservable(String content) {
+    public Observable<List<Idiom>> getIdiomsContainKeywordObservable(String keyword) {
         return Observable.fromCallable(new Callable<List<Idiom>>() {
             @Override
             public List<Idiom> call() throws Exception {
-                return getIdiomsContainKeyword(content);
+                return getIdiomsContainKeyword(keyword);
             }
         });
     }
 
-    public List<ChineseFragment> getChineseFragments() {
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                IdiomContract.IdiomTable.COLUMN_NAME_TEXT
-        };
+    @Override
+    public CFItem getCFItem(String content) {
+        return getIdiom(content);
+    }
 
-        // search
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(
-                IdiomContract.IdiomTable.TABLE_NAME,   // The table to query
-                projection,             // The array of columns to return (pass null to get all)
-                null,              // The columns for the WHERE clause
-                null,          // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                null               // The sort order
-        );
+    @Override
+    public Observable<CFItem> getCFItemObservable(String content) {
+        return Observable.fromCallable(new Callable<CFItem>() {
+            @Override
+            public CFItem call() throws Exception {
+                return getCFItem(content);
+            }
+        });
+    }
 
-        List<ChineseFragment> cfList = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String s = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_TEXT);
-                if (!s.isEmpty()) {
-                    cfList.add(new ChineseFragment(s));
-                }
-            } while (cursor.moveToNext());
+    @Override
+    public List<CFItem> getCFItemsStartwith(String start) {
+        return new ArrayList<>(getIdiomsStartwith(start));
+    }
 
-            cursor.close();
-        }
+    @Override
+    public Observable<List<CFItem>> getCFItemsStartwithObservable(String start) {
+        return Observable.fromCallable(new Callable<List<CFItem>>() {
+            @Override
+            public List<CFItem> call() throws Exception {
+                return getCFItemsStartwith(start);
+            }
+        });
+    }
 
-        return cfList;
+    @Override
+    public List<CFItem> getCFItemsEndwith(String end) {
+        return new ArrayList<>(getIdiomsEndwith(end));
+    }
+
+    @Override
+    public Observable<List<CFItem>> getCFItemsEndwithObservable(String end) {
+        return Observable.fromCallable(new Callable<List<CFItem>>() {
+            @Override
+            public List<CFItem> call() throws Exception {
+                return getCFItemsEndwith(end);
+            }
+        });
+    }
+
+    @Override
+    public List<CFItem> getCFItemsContainKeyword(String keyword) {
+        return new ArrayList<>(getIdiomsContainKeyword(keyword));
+    }
+
+    @Override
+    public Observable<List<CFItem>> getCFItemsContainKeywordObservable(String keyword) {
+        return Observable.fromCallable(new Callable<List<CFItem>>() {
+            @Override
+            public List<CFItem> call() throws Exception {
+                return getCFItemsContainKeyword(keyword);
+            }
+        });
     }
 }

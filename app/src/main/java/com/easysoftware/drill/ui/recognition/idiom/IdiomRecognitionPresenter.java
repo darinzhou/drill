@@ -6,9 +6,6 @@ import com.easysoftware.drill.data.model.Idiom;
 import com.easysoftware.drill.di.PerActivity;
 import com.easysoftware.drill.ui.recognition.RecognitionBasePresenter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -52,7 +49,7 @@ public class IdiomRecognitionPresenter extends RecognitionBasePresenter {
                 .subscribeWith(new DisposableObserver<Idiom>() {
                     @Override
                     public void onNext(Idiom idiom) {
-                        mView.displayHelp(Idiom.getFormatedTexts(idiom));
+                        mView.displayHelp(Idiom.getFormattedTexts(idiom));
                     }
 
                     @Override

@@ -2,18 +2,23 @@ package com.easysoftware.drill.data.model;
 
 import android.util.Pair;
 
+import com.easysoftware.drill.ui.util.Utils;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Verse {
-    private String mContent;
+public class Verse implements CFItem {
+    public static final String VERSE_FORMAT = "\n  【诗句】%s\n  【出处】";
+
+    private String mText;
     private Poem mPoem;
     private int mPosition;
     private String mPrevious;
     private String mNext;
     private boolean mIsEnd;
 
-    public Verse(String content, Poem poem) {
-        mContent = content;
+    public Verse(String text, Poem poem) {
+        mText = text;
         mPoem = poem;
         mPosition = -1;
         build();
@@ -23,15 +28,15 @@ public class Verse {
         int scount = mPoem.getSentences().size();
         for (int i = 0; i < scount; ++i) {
             String s = mPoem.getSentences().get(i);
-            Pair<String, String> pair = Poem.splitWordsAndPunctuation(s);
-            if (mContent.equals(pair.first)) {
+            Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(s);
+            if (mText.equals(pair.first)) {
                 mPosition = i;
                 if (i > 0) {
-                    Pair<String, String> p = Poem.splitWordsAndPunctuation(mPoem.getSentences().get(i - 1));
+                    Pair<String, String> p = Utils.splitTextAndEndingPunctuation(mPoem.getSentences().get(i - 1));
                     mPrevious = p.first;
                 }
                 if (i < scount - 1) {
-                    Pair<String, String> p = Poem.splitWordsAndPunctuation(mPoem.getSentences().get(i + 1));
+                    Pair<String, String> p = Utils.splitTextAndEndingPunctuation(mPoem.getSentences().get(i + 1));
                     mNext = p.first;
                 }
 
@@ -46,8 +51,14 @@ public class Verse {
         return false;
     }
 
-    public String getContent() {
-        return mContent;
+    @Override
+    public String getText() {
+        return mText;
+    }
+
+    @Override
+    public List<String> getFormattedTexts() {
+        return Verse.getFormattedTexts(this);
     }
 
     public Poem getPoem() {
@@ -75,10 +86,23 @@ public class Verse {
 
     public static Poem findPoemWithSentence(String sentence, List<Verse> verseList) {
         for (Verse v : verseList) {
-            if (v.getContent().equals(sentence)) {
+            if (v.getText().equals(sentence)) {
                 return v.getPoem();
             }
         }
         return null;
     }
+
+    public static List<String> getFormattedTexts(Verse verse) {
+        List<String> texts = new ArrayList<>();
+        texts.add(String.format(VERSE_FORMAT, verse.getNext()));
+        Poem poem = verse.getPoem();
+        texts.add(poem.getTitleString());
+        texts.add(poem.getAuthorString());
+        texts.add(poem.getPrologue());
+        texts.add(poem.getContent());
+
+        return texts;
+    }
+
 }

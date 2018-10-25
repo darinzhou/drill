@@ -6,10 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import com.easysoftware.drill.data.model.CFItem;
 import com.easysoftware.drill.data.model.ChineseFragment;
-import com.easysoftware.drill.data.model.Idiom;
-import com.easysoftware.drill.data.model.Poem;
 import com.easysoftware.drill.data.model.Verse;
+import com.easysoftware.drill.data.model.Poem;
+import com.easysoftware.drill.ui.util.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
 
-public class PoemDbHelper extends DbHelper {
+public class PoemDbHelper extends DbHelper implements CFItemDbHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "poems.db";
 
@@ -357,7 +358,7 @@ public class PoemDbHelper extends DbHelper {
                 byte[] blobSentence = cursor.getBlob(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
                 String s = blobToString(blobSentence);
                 if (!s.isEmpty()) {
-                    Pair<String, String> pair = Poem.splitWordsAndPunctuation(s);
+                    Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(s);
                     cfList.add(new ChineseFragment(pair.first));
                 }
             } while (cursor.moveToNext());
@@ -366,6 +367,55 @@ public class PoemDbHelper extends DbHelper {
         }
 
         return cfList;
+    }
+
+    public Verse getVerse(String verseText) {
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                PoemContract.PoemTable.COLUMN_NAME_POEM_ID,
+                PoemContract.PoemTable.COLUMN_NAME_SENTENCE
+        };
+        // Filter results WHERE "title" = 'My Title'
+        String selection = PoemContract.PoemTable.COLUMN_NAME_SENTENCE + "=?";
+
+        // Where clause arguments
+        String[] selectionArgs = {verseText};
+
+        // search
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                PoemContract.PoemTable.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        Verse verse = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int poemId = cursor.getInt(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_POEM_ID));
+                Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(
+                        getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
+                verse = new Verse(pair.first, getPoem(poemId));
+                break;
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return verse;
+    }
+    public Observable<Verse> getVerseObservable(String verseText) {
+        return Observable.fromCallable(new Callable<Verse>() {
+            @Override
+            public Verse call() throws Exception {
+                return getVerse(verseText);
+            }
+        });
     }
 
     public List<Verse> getVersesStartwith(String start) {
@@ -397,7 +447,7 @@ public class PoemDbHelper extends DbHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 int poemId = cursor.getInt(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_POEM_ID));
-                Pair<String, String> pair = Poem.splitWordsAndPunctuation(
+                Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(
                         getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
                 verses.add(new Verse(pair.first, getPoem(poemId)));
             } while (cursor.moveToNext());
@@ -445,7 +495,7 @@ public class PoemDbHelper extends DbHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 int poemId = cursor.getInt(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_POEM_ID));
-                Pair<String, String> pair = Poem.splitWordsAndPunctuation(
+                Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(
                         getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
                 verses.add(new Verse(pair.first, getPoem(poemId)));
             } while (cursor.moveToNext());
@@ -493,7 +543,7 @@ public class PoemDbHelper extends DbHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 int poemId = cursor.getInt(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_POEM_ID));
-                Pair<String, String> pair = Poem.splitWordsAndPunctuation(
+                Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(
                         getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
                 verses.add(new Verse(pair.first, getPoem(poemId)));
             } while (cursor.moveToNext());
@@ -503,12 +553,71 @@ public class PoemDbHelper extends DbHelper {
 
         return verses;
     }
-
     public Observable<List<Verse>> getVersesContainKeywordObservable(String keyword) {
         return Observable.fromCallable(new Callable<List<Verse>>() {
             @Override
             public List<Verse> call() throws Exception {
                 return getVersesContainKeyword(keyword);
+            }
+        });
+    }
+
+    @Override
+    public CFItem getCFItem(String content) {
+        return getVerse(content);
+    }
+
+    @Override
+    public Observable<CFItem> getCFItemObservable(String content) {
+        return Observable.fromCallable(new Callable<CFItem>() {
+            @Override
+            public CFItem call() throws Exception {
+                return getCFItem(content);
+            }
+        });
+    }
+
+    @Override
+    public List<CFItem> getCFItemsStartwith(String start) {
+        return new ArrayList<>(getVersesStartwith(start));
+    }
+
+    @Override
+    public Observable<List<CFItem>> getCFItemsStartwithObservable(String start) {
+        return Observable.fromCallable(new Callable<List<CFItem>>() {
+            @Override
+            public List<CFItem> call() throws Exception {
+                return getCFItemsStartwith(start);
+            }
+        });
+    }
+
+    @Override
+    public List<CFItem> getCFItemsEndwith(String end) {
+        return new ArrayList<>(getVersesEndwith(end));
+    }
+
+    @Override
+    public Observable<List<CFItem>> getCFItemsEndwithObservable(String end) {
+        return Observable.fromCallable(new Callable<List<CFItem>>() {
+            @Override
+            public List<CFItem> call() throws Exception {
+                return getCFItemsEndwith(end);
+            }
+        });
+    }
+
+    @Override
+    public List<CFItem> getCFItemsContainKeyword(String keyword) {
+        return new ArrayList<>(getVersesContainKeyword(keyword));
+    }
+
+    @Override
+    public Observable<List<CFItem>> getCFItemsContainKeywordObservable(String keyword) {
+        return Observable.fromCallable(new Callable<List<CFItem>>() {
+            @Override
+            public List<CFItem> call() throws Exception {
+                return getCFItemsContainKeyword(keyword);
             }
         });
     }

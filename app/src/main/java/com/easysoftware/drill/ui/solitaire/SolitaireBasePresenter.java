@@ -1,7 +1,11 @@
 package com.easysoftware.drill.ui.solitaire;
 
+import android.text.TextUtils;
+import android.util.Pair;
+
 import com.easysoftware.drill.data.model.CFPairItem;
 import com.easysoftware.drill.di.PerActivity;
+import com.easysoftware.drill.ui.util.Utils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -73,6 +77,17 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
     @Override
     public String getInitialKeyword() {
         return mInitialKeyword;
+    }
+
+    protected String formatAnswer(String answer) {
+        if (TextUtils.isEmpty(answer)) {
+            return "";
+        }
+        // remove spaces
+        answer = answer.replace(" ", "");
+        // remove ending punctuation
+        Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(answer);
+        return pair.first;
     }
 
     protected boolean isCFUsed(String text) {

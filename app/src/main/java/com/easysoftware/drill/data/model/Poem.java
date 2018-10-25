@@ -5,8 +5,9 @@ import android.util.Pair;
 
 import java.util.List;
 
+import static com.easysoftware.drill.ui.util.Utils.splitTextAndEndingPunctuation;
+
 public class Poem {
-    public static final char[] PUNCTUATIONS = {',', ';', '?', '!', '.', '，', '；', '？', '！', '。', ':', '：', '、'};
 
     private String mTitle;
     private String mSubtitle;
@@ -48,20 +49,6 @@ public class Poem {
         return mSentences;
     }
 
-    public static Pair<String, String> splitWordsAndPunctuation(String s) {
-        int len = s.length();
-        char endChar = s.charAt(len-1);
-        String punctuation = "";
-        for (char p : PUNCTUATIONS) {
-            if (p == endChar) {
-                s = s.substring(0, len-1);
-                punctuation = "" + p;
-                break;
-            }
-        }
-        return new Pair<>(s, punctuation);
-    }
-    
     public int sentencePosition(String sentence) {
         for (int i = 0; i < mSentences.size(); ++i) {
             String s = mSentences.get(i);
@@ -69,7 +56,7 @@ public class Poem {
                 return i;
             }
 
-            Pair<String, String> pair = splitWordsAndPunctuation(s);
+            Pair<String, String> pair = splitTextAndEndingPunctuation(s);
             if (pair.first.equals(sentence)) {
                 return i;
             }
