@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.widget.TextView;
 
 public class AutoDismissDlgFragment extends DialogFragment {
     public static final String TITLE_KEY = "dlg_title";
@@ -54,6 +55,10 @@ public class AutoDismissDlgFragment extends DialogFragment {
         builder.setTitle(title)
                 .setMessage(message)
                 .setCancelable(false);
+
+        TextView textView = Utils.createDlgTitle(getActivity(), title);
+        builder.setCustomTitle(textView);
+
         return builder.create();
     }
 

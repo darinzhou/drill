@@ -20,11 +20,6 @@ public class IdiomSolitairePresenter extends SolitaireWithKeywordHeadAndTailBase
     }
 
     @Override
-    protected String generateInitialKeyword() {
-        return "一";
-    }
-
-    @Override
     protected String getCorrectTextMessage() {
         return VALID_IDIOM_TEXT;
     }

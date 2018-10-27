@@ -82,12 +82,10 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
         // following calls should be after presenter initialized
         mAdapter = new CFPairItemsRecyclerAdapter(mPresenter);
         mRecyclerView.setAdapter(mAdapter);
-        initKeywordInfo();
     }
 
     protected abstract void initTitle();
     protected abstract void initInstructions();
-    protected abstract void initKeywordInfo();
     protected abstract void selectLevelAndInitPresenter();
     protected abstract void initInjection();
     protected abstract void cleanInjection();

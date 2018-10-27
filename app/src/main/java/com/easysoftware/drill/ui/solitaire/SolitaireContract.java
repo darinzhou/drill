@@ -11,6 +11,8 @@ public interface SolitaireContract {
         void displayNotificationForWrongAnswer(int countCorrect, String text);
         void displayHelp(List<String> texts);
         CFPairItemView getCFPairItemView(int position);
+        void inputInitialKeyword();
+        void displayInitialKeyword();
     }
 
     interface CFPairItemView {

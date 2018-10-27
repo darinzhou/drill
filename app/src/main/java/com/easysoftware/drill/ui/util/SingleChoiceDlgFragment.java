@@ -66,8 +66,8 @@ public class SingleChoiceDlgFragment extends DialogFragment {
                 // Set the item text gravity to right/end and vertical center
                 tv.setGravity(Gravity.CENTER);
 
-                int cv = 255 - (position+1) * 20;
-                tv.setBackgroundColor(Color.rgb(0, cv, cv));
+                int cv = 255 - (position+1) * 24;
+                tv.setBackgroundColor(Color.rgb(0, cv, 0));
 
                 // Return the view
                 return tv;
@@ -87,6 +87,9 @@ public class SingleChoiceDlgFragment extends DialogFragment {
                             }
                         })
                 .setCancelable(false);
+
+        TextView textView = Utils.createDlgTitle(getActivity(), title);
+        builder.setCustomTitle(textView);
 
         AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false);

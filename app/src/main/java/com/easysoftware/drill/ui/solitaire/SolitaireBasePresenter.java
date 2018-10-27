@@ -22,8 +22,6 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
 
     protected Set<String> mUsedSet;
     protected List<CFPairItem> mCFPairItems;
-    protected String mInitialKeyword;
-    protected String mKeywordForNext;
     protected int mCountCorrect = 0;
 
     public SolitaireBasePresenter() {
@@ -35,9 +33,7 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
     @Override
     public void start(SolitaireContract.View view) {
         mView = view;
-        mInitialKeyword = generateInitialKeyword();
-        mKeywordForNext = mInitialKeyword;
-        generateNext();
+        init();
     }
 
     @Override
@@ -74,11 +70,6 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
         verifyAnswer(answer, position);
     }
 
-    @Override
-    public String getInitialKeyword() {
-        return mInitialKeyword;
-    }
-
     protected String formatAnswer(String answer) {
         if (TextUtils.isEmpty(answer)) {
             return "";
@@ -92,10 +83,6 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
 
     protected boolean isCFUsed(String text) {
         return mUsedSet.contains(text);
-    }
-
-    protected String getKeywordForNext() {
-        return mKeywordForNext;
     }
 
     protected CFPairItem getCurrentItem() {
@@ -115,9 +102,8 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
         updateUsedSet(item.getFirst());
     }
 
-    protected abstract String generateInitialKeyword();
-    protected abstract String updateKeywordForNext(String cf);
 
+    protected abstract void init();
     protected abstract void verifyAnswer(String answer, int position);
     protected abstract void onCorrectAnswer(String message);
     protected abstract void onWrongAnswer(String message);

@@ -1,13 +1,14 @@
 package com.easysoftware.drill.ui.solitaire.idiom;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
-import com.easysoftware.drill.data.model.Idiom;
 import com.easysoftware.drill.ui.solitaire.SolitaireBaseActivity;
 import com.easysoftware.drill.ui.util.HelpDlgFragment;
-import com.easysoftware.drill.ui.util.UiUtils;
+import com.easysoftware.drill.ui.util.InputDlgFragment;
+import com.easysoftware.drill.ui.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import static com.easysoftware.drill.util.Constants.TYPE.IDIOM;
-import static com.easysoftware.drill.util.Constants.TYPE.POEM;
 
 public class IdiomSolitaireActivity extends SolitaireBaseActivity {
 
@@ -38,9 +38,9 @@ public class IdiomSolitaireActivity extends SolitaireBaseActivity {
     }
 
     @Override
-    protected void initKeywordInfo() {
+    public void displayInitialKeyword() {
         String html = getResources().getString(R.string.idiom_solitaire_keyword, mPresenter.getInitialKeyword());
-        UiUtils.displayHtml(mTvKeywordInfo, html);
+        Utils.displayHtml(mTvKeywordInfo, html);
     }
 
     @Override
@@ -64,5 +64,25 @@ public class IdiomSolitaireActivity extends SolitaireBaseActivity {
     public void displayHelp(List<String> texts) {
         HelpDlgFragment ihf  = HelpDlgFragment.newInstance(IDIOM, (ArrayList<String>) texts);
         ihf.show(getSupportFragmentManager(), "Idiom Help");
+    }
+
+    @Override
+    public void inputInitialKeyword() {
+        Resources res = getResources();
+        InputDlgFragment idf  = InputDlgFragment.newInstance(
+                res.getString(R.string.input_initial_keyword_ht_idiom_title),
+                res.getString(R.string.input_initial_keyword_ht_idiom_message),
+                new InputDlgFragment.OnDismissListener() {
+                    @Override
+                    public void onOK(String input) {
+                        mIRPresenter.generateFirst(input);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        finish();
+                    }
+                });
+        idf.show(getSupportFragmentManager(), "Idiom Initial Keyword");
     }
 }

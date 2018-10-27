@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.easysoftware.drill.R;
-import com.easysoftware.drill.ui.util.UiUtils;
+import com.easysoftware.drill.ui.util.Utils;
 
 import java.util.List;
 
@@ -96,12 +96,12 @@ public class CFPairItemsRecyclerAdapter extends RecyclerView.Adapter<CFPairItems
 
         private void displayText(TextView textView, String text, List<Integer> keywordPositions) {
             String html = buildTextHtml(text, keywordPositions);
-            UiUtils.displayHtml(textView, html);
+            Utils.displayHtml(textView, html);
         }
 
         private void displayExplanation(TextView textView, String explanation) {
             String html = buildExplanationHtml(explanation);
-            UiUtils.displayHtml(textView, html);
+            Utils.displayHtml(textView, html);
         }
 
         @Override

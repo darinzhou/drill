@@ -16,9 +16,22 @@ import io.reactivex.schedulers.Schedulers;
 public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePresenter {
     protected CFItemDbHelper mDbHelper;
 
+    protected String mInitialKeyword;
+    protected String mKeywordForNext;
+
     public SolitaireWithKeywordBasePresenter(CFItemDbHelper dbHelper) {
         super();
         mDbHelper = dbHelper;
+    }
+
+    @Override
+    protected void init() {
+        mView.inputInitialKeyword();
+    }
+
+    @Override
+    public String getInitialKeyword() {
+        return mInitialKeyword;
     }
 
     @Override
@@ -67,14 +80,32 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
 
     }
 
+    protected String getKeywordForNext() {
+        return mKeywordForNext;
+    }
+
+    public void generateFirst(String keyword) {
+        mInitialKeyword = keyword;
+        mKeywordForNext = mInitialKeyword;
+        mView.displayInitialKeyword();
+        generateNext();
+    }
+
+
     // abstract methods to be implemented in subclasses
 
     protected abstract String getCorrectTextMessage();
+
     protected abstract String getWrongTextMessage();
+
     protected abstract String getDuplicatedTextMessage();
+
     protected abstract String getExplanationMessage();
+
     protected abstract String getCannotFindTextMessage();
+
     protected abstract String getValidKeywordTextMessage();
+
     protected abstract String getInvalidKeywordTextMessage();
 
     protected abstract void checkAnswerWithDb(String answer, int position);

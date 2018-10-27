@@ -31,7 +31,7 @@
         android:textSize="48sp"
         app:layout_constraintEnd_toStartOf="@+id/btChar1"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btAnsChar" />
 
@@ -78,7 +78,7 @@
         android:textSize="48sp"
         app:layout_constraintEnd_toStartOf="@+id/btChar4"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btChar" />
 
@@ -125,6 +125,7 @@
         android:textSize="48sp"
         app:layout_constraintEnd_toStartOf="@+id/btChar7"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btChar3" />
 
