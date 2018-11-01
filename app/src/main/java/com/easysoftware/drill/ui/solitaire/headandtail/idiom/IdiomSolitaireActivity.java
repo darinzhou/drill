@@ -1,4 +1,4 @@
-package com.easysoftware.drill.ui.solitaire.idiom;
+package com.easysoftware.drill.ui.solitaire.headandtail.idiom;
 
 import android.content.res.Resources;
 import android.os.Bundle;

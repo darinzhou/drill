@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 
 import com.easysoftware.drill.R;
 
 import com.easysoftware.drill.ui.recognition.idiom.IdiomRecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem5.Poem5RecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem7.Poem7RecognitionActivity;
-import com.easysoftware.drill.ui.solitaire.idiom.IdiomSolitaireActivity;
+import com.easysoftware.drill.ui.solitaire.headandtail.idiom.IdiomSolitaireActivity;
+import com.easysoftware.drill.ui.solitaire.headandtail.poem.PoemSolitaireActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,5 +52,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.btPoemSolitaire).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PoemSolitaireActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -2,6 +2,7 @@ package com.easysoftware.drill.ui.solitaire;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,6 +103,15 @@ public class CFPairItemsRecyclerAdapter extends RecyclerView.Adapter<CFPairItems
         private void displayExplanation(TextView textView, String explanation) {
             String html = buildExplanationHtml(explanation);
             Utils.displayHtml(textView, html);
+        }
+
+        @Override
+        public void setItemTextSize(float sp) {
+            mTvFirstText.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
+            mTvFirstExplanation.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp * 0.66f);
+            mTvSecondText.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
+            mTvSecondExplanation.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp * 0.66f);
+            mEtSecond.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
         }
 
         @Override

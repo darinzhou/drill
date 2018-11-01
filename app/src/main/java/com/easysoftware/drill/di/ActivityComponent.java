@@ -3,8 +3,8 @@ package com.easysoftware.drill.di;
 import com.easysoftware.drill.ui.recognition.idiom.IdiomRecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem5.Poem5RecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem7.Poem7RecognitionActivity;
-import com.easysoftware.drill.ui.solitaire.idiom.IdiomSolitaireActivity;
-import com.easysoftware.drill.ui.solitaire.idiom.IdiomSolitairePresenter;
+import com.easysoftware.drill.ui.solitaire.headandtail.idiom.IdiomSolitaireActivity;
+import com.easysoftware.drill.ui.solitaire.headandtail.poem.PoemSolitaireActivity;
 
 import dagger.Subcomponent;
 
@@ -16,4 +16,5 @@ public interface ActivityComponent {
     void inject(Poem7RecognitionActivity activity);
 
     void inject(IdiomSolitaireActivity activity);
+    void inject(PoemSolitaireActivity activity);
 }

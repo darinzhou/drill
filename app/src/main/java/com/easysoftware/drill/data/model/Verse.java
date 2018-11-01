@@ -95,7 +95,7 @@ public class Verse implements CFItem {
 
     public static List<String> getFormattedTexts(Verse verse) {
         List<String> texts = new ArrayList<>();
-        texts.add(String.format(VERSE_FORMAT, verse.getNext()));
+        texts.add(String.format(VERSE_FORMAT, verse.getText()));
         Poem poem = verse.getPoem();
         texts.add(poem.getTitleString());
         texts.add(poem.getAuthorString());

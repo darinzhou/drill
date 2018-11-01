@@ -32,7 +32,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.solitaire.idiom.IdiomSolitaireActivity">
+        <activity android:name=".ui.solitaire.headandtail.idiom.IdiomSolitaireActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.main.MainActivity" />
+        </activity>
+        <activity android:name=".ui.solitaire.headandtail.poem.PoemSolitaireActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />

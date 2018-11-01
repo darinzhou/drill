@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 
 import com.easysoftware.drill.data.model.CFItem;
@@ -182,7 +183,7 @@ public class PoemDbHelper extends DbHelper implements CFItemDbHelper {
         }
 
         // no valid poem found
-        if (title.isEmpty() || author.isEmpty() || content.isEmpty()) {
+        if (title.isEmpty() || content.isEmpty()) {
             return null;
         }
 
@@ -377,10 +378,10 @@ public class PoemDbHelper extends DbHelper implements CFItemDbHelper {
                 PoemContract.PoemTable.COLUMN_NAME_SENTENCE
         };
         // Filter results WHERE "title" = 'My Title'
-        String selection = PoemContract.PoemTable.COLUMN_NAME_SENTENCE + "=?";
+        String selection = PoemContract.PoemTable.COLUMN_NAME_SENTENCE + " like ?";
 
         // Where clause arguments
-        String[] selectionArgs = {verseText};
+        String[] selectionArgs = {verseText + "%"};
 
         // search
         SQLiteDatabase db = getReadableDatabase();
@@ -400,8 +401,10 @@ public class PoemDbHelper extends DbHelper implements CFItemDbHelper {
                 int poemId = cursor.getInt(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_POEM_ID));
                 Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(
                         getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
-                verse = new Verse(pair.first, getPoem(poemId));
-                break;
+                if (pair.first.equals(verseText)) {
+                    verse = new Verse(pair.first, getPoem(poemId));
+                    break;
+                }
             } while (cursor.moveToNext());
 
             cursor.close();
@@ -447,9 +450,11 @@ public class PoemDbHelper extends DbHelper implements CFItemDbHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 int poemId = cursor.getInt(cursor.getColumnIndexOrThrow(PoemContract.PoemTable.COLUMN_NAME_POEM_ID));
-                Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(
-                        getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE));
-                verses.add(new Verse(pair.first, getPoem(poemId)));
+                String sentence = getString(cursor, PoemContract.PoemTable.COLUMN_NAME_SENTENCE);
+                Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(sentence);
+
+                Poem poem = getPoem(poemId);
+                verses.add(new Verse(pair.first, poem));
             } while (cursor.moveToNext());
 
             cursor.close();

@@ -3,6 +3,7 @@ package com.easysoftware.drill.ui.solitaire;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import com.easysoftware.drill.data.database.CFItemDbHelper;
 import com.easysoftware.drill.data.model.CFPairItem;
 import com.easysoftware.drill.di.PerActivity;
 import com.easysoftware.drill.ui.util.Utils;
@@ -20,14 +21,15 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
     protected SolitaireContract.View mView;
     protected CompositeDisposable mCompositeDisposable;
 
+    protected CFItemDbHelper mDbHelper;
     protected Set<String> mUsedSet;
     protected List<CFPairItem> mCFPairItems;
-    protected int mCountCorrect = 0;
 
-    public SolitaireBasePresenter() {
+    public SolitaireBasePresenter(CFItemDbHelper dbHelper) {
         mUsedSet = new HashSet<>();
         mCFPairItems = new ArrayList<>();
         mCompositeDisposable = new CompositeDisposable();
+        mDbHelper = dbHelper;
     }
 
     @Override
@@ -48,6 +50,9 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
 
     @Override
     public void onBindPairItemView(SolitaireContract.CFPairItemView viewHolder, int position) {
+
+        setItemTextSize(viewHolder);
+
         CFPairItem item = mCFPairItems.get(position);
 
         viewHolder.setFirst(item.getFirst(),
@@ -104,6 +109,7 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
 
 
     protected abstract void init();
+    protected abstract void setItemTextSize(SolitaireContract.CFPairItemView viewHolder);
     protected abstract void verifyAnswer(String answer, int position);
     protected abstract void onCorrectAnswer(String message);
     protected abstract void onWrongAnswer(String message);

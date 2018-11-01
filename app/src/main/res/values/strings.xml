@@ -26,10 +26,12 @@
     <string name="poem7_recognition_instruction">从如下十二个字中选七个字组成一句七言古诗：</string>
 
     <string name="idiom_solitaire_instruction">请输入一个成语，其字头必须是上一个成语的字尾：</string>
+    <string name="poem_solitaire_instruction">请输入一句诗，其字头必须是上一句诗的字尾：</string>
     <string name="idiom_solitaire_keyword"><![CDATA[初始字头： <b><font color=red>%1$s</font></b>]]></string>
 
     <string name="input_initial_keyword_ht_idiom_title">请输入起始字头</string>
     <string name="input_initial_keyword_ht_idiom_message">请输入第一个成语的字头：</string>
+    <string name="input_initial_keyword_ht_poem_message">请输入第一句诗的字头：</string>
 
     <string name="level_title">请选择难度</string>
     <string name="input_answer">请输入答案</string>

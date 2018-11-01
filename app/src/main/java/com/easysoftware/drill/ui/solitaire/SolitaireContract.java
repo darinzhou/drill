@@ -16,6 +16,7 @@ public interface SolitaireContract {
     }
 
     interface CFPairItemView {
+        void setItemTextSize(float sp);
         void setFirst(String text, List<Integer> keywordPositions, String explanation);
         void setSecond(String text, List<Integer> keywordPositions, String explanation);
         void emptySecond(boolean empty);

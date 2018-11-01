@@ -8,6 +8,8 @@ import java.util.List;
 import static com.easysoftware.drill.ui.util.Utils.splitTextAndEndingPunctuation;
 
 public class Poem {
+    private final static String POEM_MARK_FORMAT = "%s《%s》";
+    private final static String UNKNOWN_AUTHOR = "佚名";
 
     private String mTitle;
     private String mSubtitle;
@@ -18,7 +20,7 @@ public class Poem {
 
     public Poem(String title, String subtitle, String author, String period, String prologue, List<String> sentences) {
         mTitle = title;
-        mAuthor = author;
+        mAuthor = TextUtils.isEmpty(author) ? UNKNOWN_AUTHOR : author;
         mSubtitle = subtitle;
         mPeriod = period;
         mPrologue = prologue;
@@ -112,5 +114,9 @@ public class Poem {
             return mAuthor;
         }
         return "（" + mPeriod + "）" + mAuthor;
+    }
+
+    public String getMarkString() {
+        return String.format(POEM_MARK_FORMAT, getAuthorString(), getTitle());
     }
 }
