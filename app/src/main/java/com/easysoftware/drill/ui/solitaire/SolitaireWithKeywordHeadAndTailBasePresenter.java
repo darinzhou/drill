@@ -2,6 +2,7 @@ package com.easysoftware.drill.ui.solitaire;
 
 import com.easysoftware.drill.data.database.CFItemDbHelper;
 import com.easysoftware.drill.data.model.CFItem;
+import com.easysoftware.drill.ui.util.HelpDlgFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.easysoftware.drill.util.Constants.HelpType.IDIOM;
 
 public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends SolitaireWithKeywordBasePresenter {
 
@@ -19,13 +22,13 @@ public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends Solit
     @Override
     public void generateNext() {
         mView.showProgress();
-        mCompositeDisposable.add(mDbHelper.getCFItemsStartwithObservable(getKeywordForNext())
+        mCompositeDisposable.add(mDbHelper.getCFItemsStartwithObservable(mKeywordForNext)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<CFItem>>() {
                     @Override
-                    public void onNext(List<CFItem> idioms) {
-                        if (!generateAndAddItem(idioms)) {
+                    public void onNext(List<CFItem> cfItems) {
+                        if (!generateAndAddItem(cfItems)) {
                             onSurrender(getCannotFindTextMessage());
                         }
                     }
@@ -34,6 +37,36 @@ public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends Solit
                     public void onError(Throwable e) {
                         mView.hideProgress();
                         onSurrender(getCannotFindTextMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.hideProgress();
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void onHelp() {
+        mView.showProgress();
+        mCompositeDisposable.add(mDbHelper.getCFItemsStartwithObservable(mKeywordForNext)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<CFItem>>() {
+                    @Override
+                    public void onNext(List<CFItem> cfItems) {
+                        List<String> texts = new ArrayList<>();
+                        texts.add(String.format(SOLITAIRE_HELP_TITLE_FORMAT, getCurrentItem().getFirst()));
+                        for (CFItem cfItem : cfItems) {
+                            texts.add(cfItem.getText());
+                        }
+                        mView.displayHelp(texts);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.hideProgress();
                     }
 
                     @Override

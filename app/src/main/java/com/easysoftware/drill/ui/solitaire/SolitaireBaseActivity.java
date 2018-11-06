@@ -15,6 +15,13 @@ import android.widget.Toast;
 import com.easysoftware.drill.R;
 import com.easysoftware.drill.base.BaseActivity;
 import com.easysoftware.drill.ui.util.AutoDismissDlgFragment;
+import com.easysoftware.drill.ui.util.HelpDlgFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.easysoftware.drill.util.Constants.HelpType.IDIOM;
+import static com.easysoftware.drill.util.Constants.HelpType.SOLITAIRE;
 
 public abstract class SolitaireBaseActivity extends BaseActivity implements SolitaireContract.View {
     public static final int COLOR_EMPTY = Color.argb(0xff, 0xaa, 0xaa, 0xaa);
@@ -158,6 +165,12 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
     @Override
     public SolitaireContract.CFPairItemView getCFPairItemView(int position) {
         return (SolitaireContract.CFPairItemView) mRecyclerView.findViewHolderForAdapterPosition(position);
+    }
+
+    @Override
+    public void displayHelp(List<String> texts) {
+        HelpDlgFragment ihf  = HelpDlgFragment.newInstance(SOLITAIRE, (ArrayList<String>) texts);
+        ihf.show(getSupportFragmentManager(), "Solitaire Help");
     }
 
 }

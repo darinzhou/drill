@@ -15,7 +15,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static com.easysoftware.drill.util.Constants.TYPE.IDIOM;
+import static com.easysoftware.drill.util.Constants.HelpType.IDIOM;
 
 public class IdiomSolitaireActivity extends SolitaireBaseActivity {
 
@@ -61,7 +61,7 @@ public class IdiomSolitaireActivity extends SolitaireBaseActivity {
     }
 
     @Override
-    public void displayHelp(List<String> texts) {
+    public void displayItemDetails(List<String> texts) {
         HelpDlgFragment ihf  = HelpDlgFragment.newInstance(IDIOM, (ArrayList<String>) texts);
         ihf.show(getSupportFragmentManager(), "Idiom Help");
     }

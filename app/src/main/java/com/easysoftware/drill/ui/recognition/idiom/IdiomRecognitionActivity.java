@@ -6,7 +6,6 @@ import android.widget.ToggleButton;
 
 import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
-import com.easysoftware.drill.data.database.PoemDbHelper;
 import com.easysoftware.drill.ui.recognition.RecognitionBaseActivity;
 import com.easysoftware.drill.ui.util.HelpDlgFragment;
 
@@ -15,7 +14,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static com.easysoftware.drill.util.Constants.TYPE.IDIOM;
+import static com.easysoftware.drill.util.Constants.HelpType.IDIOM;
 
 public class IdiomRecognitionActivity extends RecognitionBaseActivity {
 

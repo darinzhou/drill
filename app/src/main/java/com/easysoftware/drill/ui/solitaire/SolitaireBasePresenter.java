@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 @PerActivity
 public abstract class SolitaireBasePresenter implements SolitaireContract.Presenter {
+    public static final String SOLITAIRE_HELP_TITLE_FORMAT = "\n  【上句】%s\n  【可选答案】";
 
     protected SolitaireContract.View mView;
     protected CompositeDisposable mCompositeDisposable;

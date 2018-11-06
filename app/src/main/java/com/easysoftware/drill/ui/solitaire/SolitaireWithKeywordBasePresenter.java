@@ -49,7 +49,7 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
         CFItem cfItem = idioms.get(selected);
         String cf = cfItem.getText();
         CFPairItem item = new CFPairItem();
-        item.setKeywordIn(getKeywordForNext());
+        item.setKeywordIn(mKeywordForNext);
         item.setFirst(cf);
         item.setFirstKeywordPositions(findKeywordPositions(cf));
         item.setFirstVerificationText(getCorrectTextMessage());
@@ -80,7 +80,7 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
                         updateKeywordForNext(cf);
 
                         CFPairItem item = mCFPairItems.get(position);
-                        item.setKeywordOut(getKeywordForNext());
+                        item.setKeywordOut(mKeywordForNext);
                         item.setSecond(cf);
                         item.setSecondKeywordPositions(findKeywordPositions(cf));
                         item.setSecondVerificationText(getCorrectTextMessage());
@@ -118,22 +118,17 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
 
     @Override
     public void onViewDetailsFirst(int position) {
-        mView.displayHelp(mCFPairItems.get(position).getFirstTexts());
+        mView.displayItemDetails(mCFPairItems.get(position).getFirstTexts());
     }
 
     @Override
     public void onViewDetailsSecond(int position) {
-        mView.displayHelp(mCFPairItems.get(position).getSecondTexts());
+        mView.displayItemDetails(mCFPairItems.get(position).getSecondTexts());
     }
 
     @Override
     protected void onCorrectAnswer(String message) {
         mView.displayNotificationForCorrectAnswer(mCFPairItems.size(), message);
-    }
-
-    @Override
-    public void onHelp() {
-
     }
 
     @Override
@@ -149,10 +144,6 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
     @Override
     protected void onDuplication(String message) {
 
-    }
-
-    protected String getKeywordForNext() {
-        return mKeywordForNext;
     }
 
     public void generateFirst(String keyword) {

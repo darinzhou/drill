@@ -8,11 +8,11 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import static com.easysoftware.drill.util.Constants.Dimension.DLG_TITLE_BACKGROUND_COLOR;
-import static com.easysoftware.drill.util.Constants.Dimension.DLG_TITLE_HEIGHT;
-import static com.easysoftware.drill.util.Constants.Dimension.DLG_TITLE_LEFT_PADDING;
-import static com.easysoftware.drill.util.Constants.Dimension.DLG_TITLE_TEXT_COLOR;
-import static com.easysoftware.drill.util.Constants.Dimension.DLG_TITLE_TEXT_SIZE;
+import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_BACKGROUND_COLOR;
+import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_HEIGHT;
+import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_LEFT_PADDING;
+import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_TEXT_COLOR;
+import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_TEXT_SIZE;
 
 public class Utils {
     public static final char[] PUNCTUATIONS = {',', ';', '?', '!', '.', '，', '；', '？', '！', '。', ':', '：', '、'};

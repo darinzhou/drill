@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static com.easysoftware.drill.util.Constants.TYPE.POEM;
+import static com.easysoftware.drill.util.Constants.HelpType.POEM;
 
 public class Poem7RecognitionActivity extends RecognitionBaseActivity {
 
