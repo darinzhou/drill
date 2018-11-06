@@ -35,7 +35,9 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
         int count = idioms.size();
         int checked = 0;
         int selected = rnd.nextInt(count);
-        while (isCFUsed(idioms.get(selected).getText())) {
+        CFItem cfItem = idioms.get(selected);
+        String cf = cfItem.getText();
+        while (isCFUsed(cf) || !checkLengthLimitation(cf)) {
             checked++;
             // if all items were checked and all were used, return false
             if (checked == count) {
@@ -43,11 +45,11 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
             }
 
             selected = rnd.nextInt(idioms.size());
+            cfItem = idioms.get(selected);
+            cf = cfItem.getText();
         }
 
         // found one item
-        CFItem cfItem = idioms.get(selected);
-        String cf = cfItem.getText();
         CFPairItem item = new CFPairItem();
         item.setKeywordIn(mKeywordForNext);
         item.setFirst(cf);
@@ -63,7 +65,7 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
         return true;
     }
 
-    protected void checkAnswerWithDb(String answer, final int position) {
+    protected void checkAnswerWithDb(final String answer, final int position) {
         mView.showProgress();
         mCompositeDisposable.add(mDbHelper.getCFItemObservable(answer)
                 .subscribeOn(Schedulers.io())
@@ -114,36 +116,6 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
             return;
         }
         checkAnswerWithDb(answer, position);
-    }
-
-    @Override
-    public void onViewDetailsFirst(int position) {
-        mView.displayItemDetails(mCFPairItems.get(position).getFirstTexts());
-    }
-
-    @Override
-    public void onViewDetailsSecond(int position) {
-        mView.displayItemDetails(mCFPairItems.get(position).getSecondTexts());
-    }
-
-    @Override
-    protected void onCorrectAnswer(String message) {
-        mView.displayNotificationForCorrectAnswer(mCFPairItems.size(), message);
-    }
-
-    @Override
-    protected void onWrongAnswer(String message) {
-
-    }
-
-    @Override
-    protected void onSurrender(String message) {
-
-    }
-
-    @Override
-    protected void onDuplication(String message) {
-
     }
 
     public void generateFirst(String keyword) {

@@ -33,6 +33,8 @@
     <string name="input_initial_keyword_ht_idiom_message">请输入第一个成语的字头：</string>
     <string name="input_initial_keyword_ht_poem_message">请输入第一句诗的字头：</string>
 
+    <string name="surrender">我已词穷，恭喜你赢了！</string>
+
     <string name="level_title">请选择难度</string>
     <string name="input_answer">请输入答案</string>
     <string-array name="levels_array">

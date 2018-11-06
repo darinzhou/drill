@@ -9,6 +9,7 @@ public interface SolitaireContract {
         void notifyLastItemChanged();
         void displayNotificationForCorrectAnswer(int countCorrect, String text);
         void displayNotificationForWrongAnswer(int countCorrect, String text);
+        void displayNotificationForSurrender(int countCorrect, String text);
         void displayItemDetails(List<String> texts);
         void displayHelp(List<String> texts);
         CFPairItemView getCFPairItemView(int position);

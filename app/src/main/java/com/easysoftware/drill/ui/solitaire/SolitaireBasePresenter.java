@@ -76,6 +76,16 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
         verifyAnswer(answer, position);
     }
 
+    @Override
+    public void onViewDetailsFirst(int position) {
+        mView.displayItemDetails(mCFPairItems.get(position).getFirstTexts());
+    }
+
+    @Override
+    public void onViewDetailsSecond(int position) {
+        mView.displayItemDetails(mCFPairItems.get(position).getSecondTexts());
+    }
+
     protected String formatAnswer(String answer) {
         if (TextUtils.isEmpty(answer)) {
             return "";
@@ -85,6 +95,10 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
         // remove ending punctuation
         Pair<String, String> pair = Utils.splitTextAndEndingPunctuation(answer);
         return pair.first;
+    }
+
+    protected boolean checkLengthLimitation(String text) {
+        return text.length() <= 8;
     }
 
     protected boolean isCFUsed(String text) {
@@ -108,13 +122,25 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
         updateUsedSet(item.getFirst());
     }
 
+    protected void onCorrectAnswer(String message) {
+        mView.displayNotificationForCorrectAnswer(mCFPairItems.size(), message);
+    }
 
+    protected void onWrongAnswer(String message) {
+        mView.displayNotificationForWrongAnswer(mCFPairItems.size()-1, message);
+    }
+
+    protected void onDuplication(String message) {
+        mView.displayNotificationForWrongAnswer(mCFPairItems.size()-1, message);
+    }
+
+    protected void onSurrender(String message) {
+        mView.displayNotificationForSurrender(mCFPairItems.size()-1, message);
+    }
+
+    // abstract methods
     protected abstract void init();
     protected abstract void setItemTextSize(SolitaireContract.CFPairItemView viewHolder);
     protected abstract void verifyAnswer(String answer, int position);
-    protected abstract void onCorrectAnswer(String message);
-    protected abstract void onWrongAnswer(String message);
-    protected abstract void onSurrender(String message);
-    protected abstract void onDuplication(String message);
 
 }

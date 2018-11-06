@@ -1,8 +1,10 @@
 package com.easysoftware.drill.ui.solitaire;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,7 @@ import com.easysoftware.drill.R;
 import com.easysoftware.drill.base.BaseActivity;
 import com.easysoftware.drill.ui.util.AutoDismissDlgFragment;
 import com.easysoftware.drill.ui.util.HelpDlgFragment;
+import com.easysoftware.drill.ui.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,6 +156,29 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
                     }
                 });
         dlg.show(getSupportFragmentManager(), "auto_dismiss_dlg");
+    }
+
+    @Override
+    public void displayNotificationForSurrender(int countCorrect, String text) {
+        String title = getResources().getString(R.string.surrender);
+        String message = text + "\n" +
+                getResources().getString(R.string.count_correct, countCorrect) + "\n";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+        TextView textView = Utils.createDlgTitle(this, title);
+        builder.setCustomTitle(textView);
+
+        builder.create().show();
     }
 
     @Override
