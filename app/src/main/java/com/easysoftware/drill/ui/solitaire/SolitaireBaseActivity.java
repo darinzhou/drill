@@ -201,7 +201,13 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
 
     @Override
     public void displayHelp(List<String> texts) {
-        HelpDlgFragment ihf  = HelpDlgFragment.newInstance(SOLITAIRE, (ArrayList<String>) texts);
+        HelpDlgFragment ihf  = HelpDlgFragment.newInstance(SOLITAIRE, (ArrayList<String>) texts,
+                new HelpDlgFragment.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(String item) {
+                        mPresenter.onSubmitAnswer(item);
+                    }
+                });
         ihf.show(getSupportFragmentManager(), "Solitaire Help");
     }
 

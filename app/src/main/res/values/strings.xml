@@ -51,17 +51,27 @@
     <string name="keyword_title">请选择主题字</string>
     <string-array name="keywords_array">
         <item>花</item>
-        <item>家</item>
         <item>春</item>
-        <item>夏</item>
         <item>秋</item>
-        <item>冬</item>
+        <item>日</item>
+        <item>月</item>
+        <item>雨</item>
+        <item>雪</item>
+        <item>风</item>
+        <item>霜</item>
+        <item>天</item>
+        <item>地</item>
         <item>山</item>
         <item>水</item>
-        <item>天</item>
+        <item>海</item>
+        <item>江</item>
         <item>湖</item>
-        <item>月</item>
         <item>夜</item>
-        <item>国</item>
+        <item>愁</item>
+        <item>情</item>
+        <item>爱</item>
+        <item>家</item>
+        <item>诗</item>
+        <item>酒</item>
     </string-array>
 </resources>

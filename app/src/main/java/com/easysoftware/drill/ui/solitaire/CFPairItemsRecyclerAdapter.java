@@ -147,5 +147,10 @@ public class CFPairItemsRecyclerAdapter extends RecyclerView.Adapter<CFPairItems
         public String getAnswer() {
             return mEtSecond.getText().toString();
         }
+
+        @Override
+        public void setAnswer(String answer) {
+            mEtSecond.setText(answer);
+        }
     }
 }

@@ -23,6 +23,7 @@ public interface SolitaireContract {
         void setSecond(String text, List<Integer> keywordPositions, String explanation);
         void emptySecond(boolean empty);
         String getAnswer();
+        void setAnswer(String answer);
     }
 
     interface Presenter extends MvpContract.MvpPresenter<View> {
@@ -32,6 +33,7 @@ public interface SolitaireContract {
         int getPairItemCount();
         void onBindPairItemView(CFPairItemView viewHolder, int position);
         void onSubmitAnswer();
+        void onSubmitAnswer(String answer);
         void onViewDetailsFirst(int position);
         void onViewDetailsSecond(int position);
     }

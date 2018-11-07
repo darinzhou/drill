@@ -17,7 +17,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 @PerActivity
 public abstract class SolitaireBasePresenter implements SolitaireContract.Presenter {
-    public static final String SOLITAIRE_HELP_TITLE_FORMAT = "\n  【上句】%s\n  【可选答案】";
+    public static final String SOLITAIRE_HELP_TITLE_FORMAT = "\n  【上句】%s\n  【可选答案】(%d句)";
 
     protected SolitaireContract.View mView;
     protected CompositeDisposable mCompositeDisposable;
@@ -73,6 +73,15 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
         int position = mCFPairItems.size()-1;
         SolitaireContract.CFPairItemView viewHolder = mView.getCFPairItemView(position);
         String answer = viewHolder.getAnswer();
+        verifyAnswer(answer, position);
+    }
+
+    @Override
+    public void onSubmitAnswer(String answer) {
+        // last item
+        int position = mCFPairItems.size()-1;
+        SolitaireContract.CFPairItemView viewHolder = mView.getCFPairItemView(position);
+        viewHolder.setAnswer(answer);
         verifyAnswer(answer, position);
     }
 
@@ -135,7 +144,7 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
     }
 
     protected void onSurrender(String message) {
-        mView.displayNotificationForSurrender(mCFPairItems.size()-1, message);
+        mView.displayNotificationForSurrender(mCFPairItems.size(), message);
     }
 
     // abstract methods
