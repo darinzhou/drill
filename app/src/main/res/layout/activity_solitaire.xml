@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.solitaire.headandtail.idiom.IdiomSolitaireActivity">
+    tools:context=".ui.solitaire.keywordheadandtail.idiom.IdiomSolitaireWithKeywordHeadAndTailActivity">
 
     <ProgressBar
         android:id="@+id/progressBar"

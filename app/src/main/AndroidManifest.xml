@@ -32,12 +32,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.solitaire.headandtail.idiom.IdiomSolitaireActivity">
+        <activity android:name=".ui.solitaire.keywordheadandtail.idiom.IdiomSolitaireWithKeywordHeadAndTailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.solitaire.headandtail.poem.PoemSolitaireActivity">
+        <activity android:name=".ui.solitaire.keywordheadandtail.poem.PoemSolitaireWithKeywordHeadAndTailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.main.MainActivity" />
+        </activity>
+        <activity android:name=".ui.solitaire.keywordinside.poem.PoemSolitaireWithKeywordInsideActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />

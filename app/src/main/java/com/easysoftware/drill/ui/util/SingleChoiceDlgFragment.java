@@ -66,6 +66,7 @@ public class SingleChoiceDlgFragment extends DialogFragment {
                 // Set the item text gravity to right/end and vertical center
                 tv.setGravity(Gravity.CENTER);
 
+                position %= 4;
                 int cv = 255 - (position+1) * 24;
                 tv.setBackgroundColor(Color.rgb(0, cv, 0));
 

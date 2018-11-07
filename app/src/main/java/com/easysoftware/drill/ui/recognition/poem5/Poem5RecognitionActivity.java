@@ -84,6 +84,7 @@ public class Poem5RecognitionActivity extends RecognitionBaseActivity {
                         mPresenter = mP5RPresenter;
                     }
                 });
+        dlg.setCancelable(false);
         dlg.show(getSupportFragmentManager(), "level_dlg");
     }
 

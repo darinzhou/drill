@@ -10,8 +10,9 @@ import com.easysoftware.drill.R;
 import com.easysoftware.drill.ui.recognition.idiom.IdiomRecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem5.Poem5RecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem7.Poem7RecognitionActivity;
-import com.easysoftware.drill.ui.solitaire.headandtail.idiom.IdiomSolitaireActivity;
-import com.easysoftware.drill.ui.solitaire.headandtail.poem.PoemSolitaireActivity;
+import com.easysoftware.drill.ui.solitaire.keywordheadandtail.idiom.IdiomSolitaireWithKeywordHeadAndTailActivity;
+import com.easysoftware.drill.ui.solitaire.keywordheadandtail.poem.PoemSolitaireWithKeywordHeadAndTailActivity;
+import com.easysoftware.drill.ui.solitaire.keywordinside.poem.PoemSolitaireWithKeywordInsideActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,18 +45,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btIdiomSolitaire).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btIdiomSolitaireWithKeywordHeadAndTail).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, IdiomSolitaireActivity.class);
+                Intent intent = new Intent(MainActivity.this, IdiomSolitaireWithKeywordHeadAndTailActivity.class);
                 startActivity(intent);
             }
         });
 
-        findViewById(R.id.btPoemSolitaire).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btPoemSolitaireWithKeywordHeadAndTail).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, PoemSolitaireActivity.class);
+                Intent intent = new Intent(MainActivity.this, PoemSolitaireWithKeywordHeadAndTailActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.btPoemSolitaireWithKeywordInside).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PoemSolitaireWithKeywordInsideActivity.class);
                 startActivity(intent);
             }
         });

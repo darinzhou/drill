@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -74,6 +75,8 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
         });
         mTvInstructions = findViewById(R.id.tvInstructions);
         mTvKeywordInfo = findViewById(R.id.tvKeywordInfo);
+        mTvKeywordInfo.setVisibility(View.INVISIBLE);
+
         initInstructions();
 
         // items
@@ -82,6 +85,9 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                layoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         // bring progress bar in front of buttons
         ViewCompat.setTranslationZ(mProgressBar, 8);

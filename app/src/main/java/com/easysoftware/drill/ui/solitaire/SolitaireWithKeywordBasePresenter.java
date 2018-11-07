@@ -30,9 +30,13 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
     }
 
     protected boolean generateAndAddItem(List<CFItem> idioms) {
+        int count = idioms.size();
+        if (count == 0) {
+            return false;
+        }
+
         // randomly find one item
         Random rnd = new Random();
-        int count = idioms.size();
         int checked = 0;
         int selected = rnd.nextInt(count);
         CFItem cfItem = idioms.get(selected);

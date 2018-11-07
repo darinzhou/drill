@@ -1,8 +1,8 @@
-package com.easysoftware.drill.ui.solitaire;
+package com.easysoftware.drill.ui.solitaire.keywordinside;
 
 import com.easysoftware.drill.data.database.CFItemDbHelper;
 import com.easysoftware.drill.data.model.CFItem;
-import com.easysoftware.drill.ui.util.HelpDlgFragment;
+import com.easysoftware.drill.ui.solitaire.SolitaireWithKeywordBasePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +11,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.easysoftware.drill.util.Constants.HelpType.IDIOM;
+public abstract class SolitaireWithKeywordInsideBasePresenter extends SolitaireWithKeywordBasePresenter {
 
-public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends SolitaireWithKeywordBasePresenter {
-
-    public SolitaireWithKeywordHeadAndTailBasePresenter(CFItemDbHelper dbHelper) {
+    public SolitaireWithKeywordInsideBasePresenter(CFItemDbHelper dbHelper) {
         super(dbHelper);
     }
 
     @Override
     public void generateNext() {
         mView.showProgress();
-        mCompositeDisposable.add(mDbHelper.getCFItemsStartwithObservable(mKeywordForNext)
+        mCompositeDisposable.add(mDbHelper.getCFItemsContainKeywordObservable(mInitialKeyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<CFItem>>() {
@@ -50,7 +48,7 @@ public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends Solit
     @Override
     public void onHelp() {
         mView.showProgress();
-        mCompositeDisposable.add(mDbHelper.getCFItemsStartwithObservable(mKeywordForNext)
+        mCompositeDisposable.add(mDbHelper.getCFItemsContainKeywordObservable(mInitialKeyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<CFItem>>() {
@@ -59,7 +57,10 @@ public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends Solit
                         List<String> texts = new ArrayList<>();
                         texts.add(String.format(SOLITAIRE_HELP_TITLE_FORMAT, getCurrentItem().getFirst()));
                         for (CFItem cfItem : cfItems) {
-                            texts.add(cfItem.getText());
+                            String text = cfItem.getText();
+                            if (!isCFUsed(text) && checkLengthLimitation(text)) {
+                                texts.add(text);
+                            }
                         }
                         mView.displayHelp(texts);
                     }
@@ -80,19 +81,21 @@ public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends Solit
     @Override
     protected List<Integer> findKeywordPositions(String cf) {
         List<Integer> kwPositions = new ArrayList<>();
-        kwPositions.add(0);
-        kwPositions.add(cf.length() - 1);
+        for (int i=0; i<cf.length(); ++i) {
+            if (mInitialKeyword.equals(String.valueOf(cf.charAt(i)))) {
+                kwPositions.add(i);
+            }
+        }
         return kwPositions;
     }
 
     @Override
     protected void updateKeywordForNext(String cf) {
-        mKeywordForNext = cf.substring(cf.length()-1);
     }
 
     @Override
     protected boolean checkKeyword(String answer) {
-        return answer.startsWith(mKeywordForNext);
+        return answer.contains(mInitialKeyword);
     }
 
 }

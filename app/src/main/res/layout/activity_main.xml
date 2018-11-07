@@ -37,22 +37,33 @@
         app:layout_constraintTop_toBottomOf="@+id/btPoem5Recognition" />
 
     <Button
-        android:id="@+id/btIdiomSolitaire"
+        android:id="@+id/btIdiomSolitaireWithKeywordHeadAndTail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:text="@string/idiom_solitaire"
+        android:text="@string/idiom_solitaire_keyword_head_and_tail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btPoem7Recognition" />
 
     <Button
-        android:id="@+id/btPoemSolitaire"
+        android:id="@+id/btPoemSolitaireWithKeywordHeadAndTail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:text="@string/poem_solitaire"
+        android:text="@string/poem_solitaire_keyword_head_and_tail"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btIdiomSolitaire" />
+        app:layout_constraintTop_toBottomOf="@+id/btIdiomSolitaireWithKeywordHeadAndTail" />
+
+    <Button
+        android:id="@+id/btPoemSolitaireWithKeywordInside"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/poem_solitaire_keyword_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btPoemSolitaireWithKeywordHeadAndTail" />
+
 </android.support.constraint.ConstraintLayout>

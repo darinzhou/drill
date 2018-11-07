@@ -1,7 +1,8 @@
-package com.easysoftware.drill.ui.solitaire.headandtail.idiom;
+package com.easysoftware.drill.ui.solitaire.keywordheadandtail.idiom;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.View;
 
 import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
@@ -17,10 +18,10 @@ import javax.inject.Inject;
 
 import static com.easysoftware.drill.util.Constants.HelpType.IDIOM;
 
-public class IdiomSolitaireActivity extends SolitaireBaseActivity {
+public class IdiomSolitaireWithKeywordHeadAndTailActivity extends SolitaireBaseActivity {
 
     @Inject
-    IdiomSolitairePresenter mIRPresenter;
+    IdiomSolitaireWithKeywordHeadAndTailPresenter mIRPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,18 +30,19 @@ public class IdiomSolitaireActivity extends SolitaireBaseActivity {
 
     @Override
     protected void initTitle() {
-        setTitle(R.string.idiom_solitaire);
+        setTitle(R.string.idiom_solitaire_keyword_head_and_tail);
     }
 
     @Override
     protected void initInstructions() {
-        mTvInstructions.setText(R.string.idiom_solitaire_instruction);
+        mTvInstructions.setText(R.string.idiom_solitaire_keyword_head_and_tail_instruction);
     }
 
     @Override
     public void displayInitialKeyword() {
-        String html = getResources().getString(R.string.idiom_solitaire_keyword, mPresenter.getInitialKeyword());
+        String html = getResources().getString(R.string.solitaire_keyword_head_and_tail_keyword_info, mPresenter.getInitialKeyword());
         Utils.displayHtml(mTvKeywordInfo, html);
+        mTvKeywordInfo.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -70,8 +72,8 @@ public class IdiomSolitaireActivity extends SolitaireBaseActivity {
     public void inputInitialKeyword() {
         Resources res = getResources();
         InputDlgFragment idf  = InputDlgFragment.newInstance(
-                res.getString(R.string.input_initial_keyword_ht_idiom_title),
-                res.getString(R.string.input_initial_keyword_ht_idiom_message),
+                res.getString(R.string.input_initial_keyword_head_and_tail_title),
+                res.getString(R.string.input_initial_keyword_head_and_tail_idiom_message),
                 new InputDlgFragment.OnDismissListener() {
                     @Override
                     public void onOK(String input) {

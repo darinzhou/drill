@@ -3,8 +3,9 @@
     <string name="idiom_recognition">成语识别</string>
     <string name="poem5_recognition">五言古诗识别</string>
     <string name="poem7_recognition">七言古诗识别</string>
-    <string name="idiom_solitaire">成语接龙</string>
-    <string name="poem_solitaire">古诗接龙</string>
+    <string name="idiom_solitaire_keyword_head_and_tail">成语接龙</string>
+    <string name="poem_solitaire_keyword_head_and_tail">古诗接龙</string>
+    <string name="poem_solitaire_keyword_inside">飞花令</string>
 
     <string name="correct">正确</string>
     <string name="wrong">错误</string>
@@ -25,21 +26,42 @@
     <string name="poem5_recognition_instruction">从如下九个字中选五个字组成一句五言古诗：</string>
     <string name="poem7_recognition_instruction">从如下十二个字中选七个字组成一句七言古诗：</string>
 
-    <string name="idiom_solitaire_instruction">请输入一个成语，其字头必须是上一个成语的字尾：</string>
-    <string name="poem_solitaire_instruction">请输入一句诗，其字头必须是上一句诗的字尾：</string>
-    <string name="idiom_solitaire_keyword"><![CDATA[初始字头： <b><font color=red>%1$s</font></b>]]></string>
+    <string name="idiom_solitaire_keyword_head_and_tail_instruction">请输入一个成语，其字头必须是上一个成语的字尾：</string>
+    <string name="poem_solitaire_keyword_head_and_tail_instruction">请输入一句诗，其字头必须是上一句诗的字尾：</string>
+    <string name="solitaire_keyword_head_and_tail_keyword_info"><![CDATA[初始字头： <b><font color=red>%1$s</font></b>]]></string>
 
-    <string name="input_initial_keyword_ht_idiom_title">请输入起始字头</string>
-    <string name="input_initial_keyword_ht_idiom_message">请输入第一个成语的字头：</string>
-    <string name="input_initial_keyword_ht_poem_message">请输入第一句诗的字头：</string>
+    <string name="input_initial_keyword_head_and_tail_title">请输入起始字头</string>
+    <string name="input_initial_keyword_head_and_tail_idiom_message">请输入第一个成语的字头：</string>
+    <string name="input_initial_keyword_head_and_tail_poem_message">请输入第一句诗的字头：</string>
+
+    <string name="poem_solitaire_keyword_inside_instruction">请输入一句诗，其中必须包含指定的主题字：</string>
+    <string name="solitaire_keyword_inside_keyword_info"><![CDATA[主题字： <b><font color=red>%1$s</font></b>]]></string>
+    <string name="choose_keyword_inside_title">请选择主题字</string>
 
     <string name="surrender">我已词穷，恭喜你赢了！</string>
+    <string name="input_answer">请输入答案</string>
 
     <string name="level_title">请选择难度</string>
-    <string name="input_answer">请输入答案</string>
     <string-array name="levels_array">
         <item>初级</item>
         <item>中级</item>
         <item>高级</item>
+    </string-array>
+
+    <string name="keyword_title">请选择主题字</string>
+    <string-array name="keywords_array">
+        <item>花</item>
+        <item>家</item>
+        <item>春</item>
+        <item>夏</item>
+        <item>秋</item>
+        <item>冬</item>
+        <item>山</item>
+        <item>水</item>
+        <item>天</item>
+        <item>湖</item>
+        <item>月</item>
+        <item>夜</item>
+        <item>国</item>
     </string-array>
 </resources>
