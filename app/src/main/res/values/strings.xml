@@ -1,5 +1,16 @@
 <resources>
-    <string name="app_name">Drill</string>
+    <string name="app_name">韵味</string>
+    <string name="title_activity_main">韵味</string>
+    <string name="nav_header_title">韵味</string>
+    <string name="nav_header_subtitle">快快乐乐学诗词</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="study">学习</string>
+    <string name="game_idiom">成语游戏</string>
+    <string name="game_poem">诗词游戏</string>
     <string name="idiom_recognition">成语识别</string>
     <string name="poem5_recognition">五言古诗识别</string>
     <string name="poem7_recognition">七言古诗识别</string>
@@ -74,4 +85,5 @@
         <item>诗</item>
         <item>酒</item>
     </string-array>
+
 </resources>

@@ -2,11 +2,19 @@ package com.easysoftware.drill.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.easysoftware.drill.R;
-
 import com.easysoftware.drill.ui.recognition.idiom.IdiomRecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem5.Poem5RecognitionActivity;
 import com.easysoftware.drill.ui.recognition.poem7.Poem7RecognitionActivity;
@@ -14,59 +22,98 @@ import com.easysoftware.drill.ui.solitaire.keywordheadandtail.idiom.IdiomSolitai
 import com.easysoftware.drill.ui.solitaire.keywordheadandtail.poem.PoemSolitaireWithKeywordHeadAndTailActivity;
 import com.easysoftware.drill.ui.solitaire.keywordinside.poem.PoemSolitaireWithKeywordInsideActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        findViewById(R.id.btIdiomRecognition).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, IdiomRecognitionActivity.class);
-                startActivity(intent);
-            }
-        });
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-        findViewById(R.id.btPoem5Recognition).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Poem5RecognitionActivity.class);
-                startActivity(intent);
-            }
-        });
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        findViewById(R.id.btPoem7Recognition).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Poem7RecognitionActivity.class);
-                startActivity(intent);
-            }
-        });
+        drawer.openDrawer(GravityCompat.START);
+    }
 
-        findViewById(R.id.btIdiomSolitaireWithKeywordHeadAndTail).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, IdiomSolitaireWithKeywordHeadAndTailActivity.class);
-                startActivity(intent);
-            }
-        });
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-        findViewById(R.id.btPoemSolitaireWithKeywordHeadAndTail).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, PoemSolitaireWithKeywordHeadAndTailActivity.class);
-                startActivity(intent);
-            }
-        });
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-        findViewById(R.id.btPoemSolitaireWithKeywordInside).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, PoemSolitaireWithKeywordInsideActivity.class);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        Intent intent = null;
+        switch (id) {
+            case R.id.nav_study:
+                break;
+            case R.id.nav_idiom_recognition:
+                intent = new Intent(MainActivity.this, IdiomRecognitionActivity.class);
                 startActivity(intent);
-            }
-        });
+                break;
+            case R.id.nav_idiom_solitaire_keyword_head_and_tail:
+                intent = new Intent(MainActivity.this, IdiomSolitaireWithKeywordHeadAndTailActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_poem5_recognition:
+                intent = new Intent(MainActivity.this, Poem5RecognitionActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_poem7_recognition:
+                intent = new Intent(MainActivity.this, Poem7RecognitionActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_poem_solitaire_keyword_head_and_tail:
+                intent = new Intent(MainActivity.this, PoemSolitaireWithKeywordHeadAndTailActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_poem_solitaire_keyword_inside:
+                intent = new Intent(MainActivity.this, PoemSolitaireWithKeywordInsideActivity.class);
+                startActivity(intent);
+                break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_study"
+            android:icon="@mipmap/ic_study"
+            android:title="@string/study" />
+    </group>
+
+    <item android:title="@string/game_poem">
+        <menu>
+            <item
+                android:id="@+id/nav_poem5_recognition"
+                android:icon="@mipmap/ic_game_poem5_recognition"
+                android:title="@string/poem5_recognition" />
+            <item
+                android:id="@+id/nav_poem7_recognition"
+                android:icon="@mipmap/ic_game_poem7_recognition"
+                android:title="@string/poem7_recognition" />
+            <item
+                android:id="@+id/nav_poem_solitaire_keyword_head_and_tail"
+                android:icon="@mipmap/ic_game_poem_solitaire_keyword_ht"
+                android:title="@string/poem_solitaire_keyword_head_and_tail" />
+            <item
+                android:id="@+id/nav_poem_solitaire_keyword_inside"
+                android:icon="@mipmap/ic_game_poem_solitaire_keyword_inside"
+                android:title="@string/poem_solitaire_keyword_inside" />
+        </menu>
+    </item>
+
+    <item android:title="@string/game_idiom">
+        <menu>
+            <item
+                android:id="@+id/nav_idiom_recognition"
+                android:icon="@mipmap/ic_game_idiom_recognition"
+                android:title="@string/idiom_recognition" />
+            <item
+                android:id="@+id/nav_idiom_solitaire_keyword_head_and_tail"
+                android:icon="@mipmap/ic_game_idiom_solitaire_keyword_ht"
+                android:title="@string/idiom_solitaire_keyword_head_and_tail" />
+        </menu>
+    </item>
+
+</menu>
