@@ -114,7 +114,9 @@ public abstract class RecognitionBaseActivity extends BaseActivity implements Re
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.stop();
+        if (mPresenter != null) {
+            mPresenter.stop();
+        }
         cleanInjection();
     }
 

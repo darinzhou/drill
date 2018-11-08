@@ -5,7 +5,7 @@ import android.util.Pair;
 
 import java.util.List;
 
-import static com.easysoftware.drill.ui.util.Utils.splitTextAndEndingPunctuation;
+import static com.easysoftware.drill.util.Utils.splitTextAndEndingPunctuation;
 
 public class Poem {
     private final static String POEM_MARK_FORMAT = "%s《%s》";

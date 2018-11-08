@@ -79,7 +79,13 @@ public class PoemSolitaireWithKeywordInsideActivity extends SolitaireBaseActivit
                 new SingleChoiceDlgFragment.OnChooseListener() {
                     @Override
                     public void onChoose(int which) {
-                        mIRPresenter.generateFirst(keywords[which]);                    }
+                        mIRPresenter.generateFirst(keywords[which]);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        finish();
+                    }
                 });
         dlg.setCancelable(false);
         dlg.show(getSupportFragmentManager(), "level_dlg");

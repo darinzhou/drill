@@ -1,11 +1,13 @@
 package com.easysoftware.drill.ui.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.text.Html;
-import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_BACKGROUND_COLOR;
@@ -15,19 +17,16 @@ import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_TEXT_COLOR;
 import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_TEXT_SIZE;
 
 public class Utils {
-    public static final char[] PUNCTUATIONS = {',', ';', '?', '!', '.', '，', '；', '？', '！', '。', ':', '：', '、'};
-    public static Pair<String, String> splitTextAndEndingPunctuation(String s) {
-        int len = s.length();
-        char endChar = s.charAt(len-1);
-        String punctuation = "";
-        for (char p : PUNCTUATIONS) {
-            if (p == endChar) {
-                s = s.substring(0, len-1);
-                punctuation = "" + p;
-            }
-            s = s.replace(String.valueOf(p), "");
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
         }
-        return new Pair<>(s, punctuation);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public static void displayHtml(TextView textView, String html) {

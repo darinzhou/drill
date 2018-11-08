@@ -17,6 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.easysoftware.drill.R;
+
 public class SingleChoiceDlgFragment extends DialogFragment {
     public static final String TITLE_KEY = "dlg_title";
     public static final String ITEMS_KEY = "dlg_items";
@@ -24,6 +26,7 @@ public class SingleChoiceDlgFragment extends DialogFragment {
     // event listener
     public interface OnChooseListener {
         void onChoose(int which);
+        void onCancel();
     }
 
     private OnChooseListener mOnChooseListener;
@@ -77,6 +80,15 @@ public class SingleChoiceDlgFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dismiss();
+                        if (mOnChooseListener != null) {
+                            mOnChooseListener.onCancel();
+                        }
+                    }
+                })
                 .setSingleChoiceItems(adapter, -1,
                         new DialogInterface.OnClickListener() {
                             @Override

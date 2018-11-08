@@ -6,7 +6,7 @@ import android.util.Pair;
 import com.easysoftware.drill.data.database.CFItemDbHelper;
 import com.easysoftware.drill.data.model.CFPairItem;
 import com.easysoftware.drill.di.PerActivity;
-import com.easysoftware.drill.ui.util.Utils;
+import com.easysoftware.drill.util.Utils;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -11,7 +11,7 @@ import com.easysoftware.drill.data.model.CFItem;
 import com.easysoftware.drill.data.model.ChineseFragment;
 import com.easysoftware.drill.data.model.Verse;
 import com.easysoftware.drill.data.model.Poem;
-import com.easysoftware.drill.ui.util.Utils;
+import com.easysoftware.drill.util.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;

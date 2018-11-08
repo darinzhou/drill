@@ -83,6 +83,11 @@ public class Poem5RecognitionActivity extends RecognitionBaseActivity {
                         mP5RPresenter.start(Poem5RecognitionActivity.this);
                         mPresenter = mP5RPresenter;
                     }
+
+                    @Override
+                    public void onCancel() {
+                        finish();
+                    }
                 });
         dlg.setCancelable(false);
         dlg.show(getSupportFragmentManager(), "level_dlg");
