@@ -22,11 +22,11 @@ public class Constants {
         int ADVANCED = 2;
     }
 
-    public interface UI {
-        int DLG_TITLE_HEIGHT = 48;      // dp
-        int DLG_TITLE_LEFT_PADDING = 24;      // dp
-        int DLG_TITLE_TEXT_SIZE = 24;   // sp
-        int DLG_TITLE_BACKGROUND_COLOR = Color.rgb(0, 196, 196);
-        int DLG_TITLE_TEXT_COLOR = Color.rgb(196, 0, 0);
-    }
+//    public interface UI {
+//        int DLG_TITLE_HEIGHT = 48;      // dp
+//        int DLG_TITLE_LEFT_PADDING = 24;      // dp
+//        int DLG_TITLE_TEXT_SIZE = 24;   // sp
+//        int DLG_TITLE_BACKGROUND_COLOR = Color.rgb(0, 196, 196);
+//        int DLG_TITLE_TEXT_COLOR = Color.rgb(196, 0, 0);
+//    }
 }

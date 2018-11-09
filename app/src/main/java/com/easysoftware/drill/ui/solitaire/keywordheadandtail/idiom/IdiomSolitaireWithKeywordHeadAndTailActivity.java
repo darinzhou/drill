@@ -2,6 +2,7 @@ package com.easysoftware.drill.ui.solitaire.keywordheadandtail.idiom;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.View;
 
 import com.easysoftware.drill.R;
@@ -82,7 +83,7 @@ public class IdiomSolitaireWithKeywordHeadAndTailActivity extends SolitaireBaseA
 
                     @Override
                     public void onCancel() {
-                        finish();
+                        NavUtils.navigateUpFromSameTask(IdiomSolitaireWithKeywordHeadAndTailActivity.this);
                     }
                 });
         idf.show(getSupportFragmentManager(), "Idiom Initial Keyword");

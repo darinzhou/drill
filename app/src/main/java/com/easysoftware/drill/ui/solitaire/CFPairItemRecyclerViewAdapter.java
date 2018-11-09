@@ -14,22 +14,22 @@ import com.easysoftware.drill.ui.util.Utils;
 
 import java.util.List;
 
-public class CFPairItemsRecyclerAdapter extends RecyclerView.Adapter<CFPairItemsRecyclerAdapter.CFPairItemViewHolder> {
+public class CFPairItemRecyclerViewAdapter extends RecyclerView.Adapter<CFPairItemRecyclerViewAdapter.CFPairItemViewHolder> {
     private SolitaireContract.Presenter mPresenter;
 
-    public CFPairItemsRecyclerAdapter(@NonNull SolitaireContract.Presenter presenter) {
+    public CFPairItemRecyclerViewAdapter(@NonNull SolitaireContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
     @NonNull
     @Override
-    public CFPairItemsRecyclerAdapter.CFPairItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CFPairItemRecyclerViewAdapter.CFPairItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cfpair, parent, false);
         return new CFPairItemViewHolder(v, mPresenter);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CFPairItemsRecyclerAdapter.CFPairItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CFPairItemRecyclerViewAdapter.CFPairItemViewHolder holder, int position) {
         mPresenter.onBindPairItemView(holder, position);
     }
 

@@ -2,6 +2,7 @@ package com.easysoftware.drill.ui.solitaire.keywordheadandtail.poem;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.View;
 
 import com.easysoftware.drill.R;
@@ -82,7 +83,7 @@ public class PoemSolitaireWithKeywordHeadAndTailActivity extends SolitaireBaseAc
 
                     @Override
                     public void onCancel() {
-                        finish();
+                        NavUtils.navigateUpFromSameTask(PoemSolitaireWithKeywordHeadAndTailActivity.this);
                     }
                 });
         idf.show(getSupportFragmentManager(), "Poem Initial Keyword");

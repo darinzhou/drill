@@ -3,6 +3,7 @@ package com.easysoftware.drill.ui.solitaire;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,7 +25,6 @@ import com.easysoftware.drill.ui.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.easysoftware.drill.util.Constants.HelpType.IDIOM;
 import static com.easysoftware.drill.util.Constants.HelpType.SOLITAIRE;
 
 public abstract class SolitaireBaseActivity extends BaseActivity implements SolitaireContract.View {
@@ -39,7 +39,7 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
     protected ProgressBar mProgressBar;
 
     protected RecyclerView mRecyclerView;
-    protected CFPairItemsRecyclerAdapter mAdapter;
+    protected CFPairItemRecyclerViewAdapter mAdapter;
 
     // will be injected in subclasses
     protected SolitaireBasePresenter mPresenter;
@@ -96,7 +96,7 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
         selectLevelAndInitPresenter();
 
         // following calls should be after presenter initialized
-        mAdapter = new CFPairItemsRecyclerAdapter(mPresenter);
+        mAdapter = new CFPairItemRecyclerViewAdapter(mPresenter);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -177,7 +177,7 @@ public abstract class SolitaireBaseActivity extends BaseActivity implements Soli
                 .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                        NavUtils.navigateUpFromSameTask(SolitaireBaseActivity.this);
                     }
                 });
 

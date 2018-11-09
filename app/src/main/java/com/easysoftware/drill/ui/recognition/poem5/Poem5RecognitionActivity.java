@@ -2,6 +2,7 @@ package com.easysoftware.drill.ui.recognition.poem5;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.widget.Button;
 import android.widget.ToggleButton;
 
@@ -86,7 +87,7 @@ public class Poem5RecognitionActivity extends RecognitionBaseActivity {
 
                     @Override
                     public void onCancel() {
-                        finish();
+                        NavUtils.navigateUpFromSameTask(Poem5RecognitionActivity.this);
                     }
                 });
         dlg.setCancelable(false);

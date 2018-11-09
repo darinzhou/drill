@@ -2,14 +2,13 @@ package com.easysoftware.drill.ui.solitaire.keywordinside.poem;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.View;
 
 import com.easysoftware.drill.R;
 import com.easysoftware.drill.app.DrillApp;
-import com.easysoftware.drill.ui.recognition.poem5.Poem5RecognitionActivity;
 import com.easysoftware.drill.ui.solitaire.SolitaireBaseActivity;
 import com.easysoftware.drill.ui.util.HelpDlgFragment;
-import com.easysoftware.drill.ui.util.InputDlgFragment;
 import com.easysoftware.drill.ui.util.SingleChoiceDlgFragment;
 import com.easysoftware.drill.ui.util.Utils;
 
@@ -84,7 +83,7 @@ public class PoemSolitaireWithKeywordInsideActivity extends SolitaireBaseActivit
 
                     @Override
                     public void onCancel() {
-                        finish();
+                        NavUtils.navigateUpFromSameTask(PoemSolitaireWithKeywordInsideActivity.this);
                     }
                 });
         dlg.setCancelable(false);

@@ -2,6 +2,7 @@ package com.easysoftware.drill.ui.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.text.Html;
 import android.util.TypedValue;
@@ -10,11 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_BACKGROUND_COLOR;
-import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_HEIGHT;
-import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_LEFT_PADDING;
-import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_TEXT_COLOR;
-import static com.easysoftware.drill.util.Constants.UI.DLG_TITLE_TEXT_SIZE;
+import com.easysoftware.drill.R;
 
 public class Utils {
 
@@ -48,14 +45,15 @@ public class Utils {
     }
 
     public static TextView createDlgTitle(Context context, String title) {
+        Resources res = context.getResources();
+
         TextView textView = new TextView(context);
         textView.setGravity(Gravity.CENTER_VERTICAL);
-        int height = (int)Utils.dp2px(context, DLG_TITLE_HEIGHT);
-        textView.setHeight(height);
-        textView.setPadding((int)Utils.dp2px(context, DLG_TITLE_LEFT_PADDING), 0, 0, 0);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, DLG_TITLE_TEXT_SIZE);
-        textView.setBackgroundColor(DLG_TITLE_BACKGROUND_COLOR);
-        textView.setTextColor(DLG_TITLE_TEXT_COLOR);
+        textView.setHeight((int)res.getDimension(R.dimen.dlg_title_height));
+        textView.setPadding((int)res.getDimension(R.dimen.dlg_title_left_padding), 0, 0, 0);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.dlg_title_text_size));
+        textView.setBackgroundColor(res.getColor(R.color.colorDlgTitleBackground));
+        textView.setTextColor(res.getColor(R.color.colorDlgTitleTextColor));
         textView.setText(title);
         return textView;
     }
