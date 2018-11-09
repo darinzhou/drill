@@ -17,14 +17,14 @@ import io.reactivex.disposables.CompositeDisposable;
 
 @PerActivity
 public abstract class SolitaireBasePresenter implements SolitaireContract.Presenter {
-    public static final String SOLITAIRE_HELP_TITLE_FORMAT = "\n  【上句】%s\n  【可选答案】(%d句)";
-
     protected SolitaireContract.View mView;
     protected CompositeDisposable mCompositeDisposable;
 
     protected CFItemDbHelper mDbHelper;
     protected Set<String> mUsedSet;
     protected List<CFPairItem> mCFPairItems;
+
+    protected int mHelpCount;
 
     public SolitaireBasePresenter(CFItemDbHelper dbHelper) {
         mUsedSet = new HashSet<>();
@@ -95,6 +95,11 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
         mView.displayItemDetails(mCFPairItems.get(position).getSecondTexts());
     }
 
+    @Override
+    public void onHelp() {
+        mHelpCount++;
+    }
+
     protected String formatAnswer(String answer) {
         if (TextUtils.isEmpty(answer)) {
             return "";
@@ -131,20 +136,28 @@ public abstract class SolitaireBasePresenter implements SolitaireContract.Presen
         updateUsedSet(item.getFirst());
     }
 
+    protected int getCorrentAnswerCount(boolean isCurrectCorrect) {
+        int count = mCFPairItems.size() - mHelpCount;
+        if (!isCurrectCorrect) {
+            count--;
+        }
+        return count;
+    }
+
     protected void onCorrectAnswer(String message) {
-        mView.displayNotificationForCorrectAnswer(mCFPairItems.size(), message);
+        mView.displayNotificationForCorrectAnswer(getCorrentAnswerCount(true), message);
     }
 
     protected void onWrongAnswer(String message) {
-        mView.displayNotificationForWrongAnswer(mCFPairItems.size()-1, message);
+        mView.displayNotificationForWrongAnswer(getCorrentAnswerCount(false), message);
     }
 
     protected void onDuplication(String message) {
-        mView.displayNotificationForWrongAnswer(mCFPairItems.size()-1, message);
+        mView.displayNotificationForWrongAnswer(getCorrentAnswerCount(false), message);
     }
 
     protected void onSurrender(String message) {
-        mView.displayNotificationForSurrender(mCFPairItems.size(), message);
+        mView.displayNotificationForSurrender(getCorrentAnswerCount(true), message);
     }
 
     // abstract methods

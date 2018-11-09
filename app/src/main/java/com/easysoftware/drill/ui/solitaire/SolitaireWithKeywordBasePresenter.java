@@ -12,8 +12,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePresenter {
-    protected String mInitialKeyword;
-    protected String mKeywordForNext;
+    protected String mKeyword;
 
     public SolitaireWithKeywordBasePresenter(CFItemDbHelper dbHelper) {
         super(dbHelper);
@@ -25,8 +24,8 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
     }
 
     @Override
-    public String getInitialKeyword() {
-        return mInitialKeyword;
+    public String getKeyword() {
+        return mKeyword;
     }
 
     protected boolean generateAndAddItem(List<CFItem> idioms) {
@@ -55,14 +54,14 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
 
         // found one item
         CFPairItem item = new CFPairItem();
-        item.setKeywordIn(mKeywordForNext);
+        item.setKeywordIn(mKeyword);
         item.setFirst(cf);
         item.setFirstKeywordPositions(findKeywordPositions(cf));
         item.setFirstVerificationText(getCorrectTextMessage());
         item.setFirstExplanation(getExplanationMessage(cfItem));
         item.setFirstTexts(cfItem.getFormattedTexts());
 
-        updateKeywordForNext(cf);
+        updateKeyword(cf);
 
         addItem(item);
 
@@ -83,10 +82,10 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
                             return;
                         }
 
-                        updateKeywordForNext(cf);
+                        updateKeyword(cf);
 
                         CFPairItem item = mCFPairItems.get(position);
-                        item.setKeywordOut(mKeywordForNext);
+                        item.setKeywordOut(mKeyword);
                         item.setSecond(cf);
                         item.setSecondKeywordPositions(findKeywordPositions(cf));
                         item.setSecondVerificationText(getCorrectTextMessage());
@@ -123,9 +122,8 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
     }
 
     public void generateFirst(String keyword) {
-        mInitialKeyword = keyword;
-        mKeywordForNext = mInitialKeyword;
-        mView.displayInitialKeyword();
+        mKeyword = keyword;
+        mView.displayKeyword();
         generateNext();
     }
 
@@ -134,7 +132,7 @@ public abstract class SolitaireWithKeywordBasePresenter extends SolitaireBasePre
 
     // functionalities
     protected abstract List<Integer> findKeywordPositions(String cf);
-    protected abstract void updateKeywordForNext(String cf);
+    protected abstract void updateKeyword(String cf);
     protected abstract boolean checkKeyword(String answer);
 
 

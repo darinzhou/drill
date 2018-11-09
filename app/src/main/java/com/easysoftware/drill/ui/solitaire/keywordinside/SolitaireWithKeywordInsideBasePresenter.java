@@ -15,6 +15,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public abstract class SolitaireWithKeywordInsideBasePresenter extends SolitaireWithKeywordBasePresenter {
+    public static final String SOLITAIRE_HELP_TITLE_FORMAT = "\n  【上句】%s\n  【主题字】%s\n  【可选答案】(%d句)";
 
     public SolitaireWithKeywordInsideBasePresenter(CFItemDbHelper dbHelper) {
         super(dbHelper);
@@ -23,7 +24,7 @@ public abstract class SolitaireWithKeywordInsideBasePresenter extends SolitaireW
     @Override
     public void generateNext() {
         mView.showProgress();
-        mCompositeDisposable.add(mDbHelper.getCFItemsContainKeywordObservable(mInitialKeyword)
+        mCompositeDisposable.add(mDbHelper.getCFItemsContainKeywordObservable(mKeyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<CFItem>>() {
@@ -50,8 +51,10 @@ public abstract class SolitaireWithKeywordInsideBasePresenter extends SolitaireW
 
     @Override
     public void onHelp() {
+        super.onHelp();
+
         mView.showProgress();
-        mCompositeDisposable.add(mDbHelper.getCFItemsContainKeywordObservable(mInitialKeyword)
+        mCompositeDisposable.add(mDbHelper.getCFItemsContainKeywordObservable(mKeyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<CFItem>>() {
@@ -66,7 +69,7 @@ public abstract class SolitaireWithKeywordInsideBasePresenter extends SolitaireW
                         }
                         List<String> textList = new ArrayList<>();
                         textList.add(String.format(Locale.CHINA, SOLITAIRE_HELP_TITLE_FORMAT,
-                                getCurrentItem().getFirst(), texts.size()));
+                                getCurrentItem().getFirst(), getKeyword(), texts.size()));
                         textList.addAll(texts);
                         mView.displayHelp(textList);
                     }
@@ -88,7 +91,7 @@ public abstract class SolitaireWithKeywordInsideBasePresenter extends SolitaireW
     protected List<Integer> findKeywordPositions(String cf) {
         List<Integer> kwPositions = new ArrayList<>();
         for (int i=0; i<cf.length(); ++i) {
-            if (mInitialKeyword.equals(String.valueOf(cf.charAt(i)))) {
+            if (mKeyword.equals(String.valueOf(cf.charAt(i)))) {
                 kwPositions.add(i);
             }
         }
@@ -96,12 +99,12 @@ public abstract class SolitaireWithKeywordInsideBasePresenter extends SolitaireW
     }
 
     @Override
-    protected void updateKeywordForNext(String cf) {
+    protected void updateKeyword(String cf) {
     }
 
     @Override
     protected boolean checkKeyword(String answer) {
-        return answer.contains(mInitialKeyword);
+        return answer.contains(mKeyword);
     }
 
 }

@@ -15,6 +15,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends SolitaireWithKeywordBasePresenter {
+    public static final String SOLITAIRE_HELP_TITLE_FORMAT = "\n  【上句】%s\n  【要求字头】%s\n  【可选答案】(%d句)";
 
     public SolitaireWithKeywordHeadAndTailBasePresenter(CFItemDbHelper dbHelper) {
         super(dbHelper);
@@ -23,7 +24,7 @@ public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends Solit
     @Override
     public void generateNext() {
         mView.showProgress();
-        mCompositeDisposable.add(mDbHelper.getCFItemsStartwithObservable(mKeywordForNext)
+        mCompositeDisposable.add(mDbHelper.getCFItemsStartwithObservable(mKeyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<CFItem>>() {
@@ -50,8 +51,10 @@ public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends Solit
 
     @Override
     public void onHelp() {
+        super.onHelp();
+
         mView.showProgress();
-        mCompositeDisposable.add(mDbHelper.getCFItemsStartwithObservable(mKeywordForNext)
+        mCompositeDisposable.add(mDbHelper.getCFItemsStartwithObservable(mKeyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<CFItem>>() {
@@ -66,7 +69,7 @@ public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends Solit
                         }
                         List<String> textList = new ArrayList<>();
                         textList.add(String.format(Locale.CHINA, SOLITAIRE_HELP_TITLE_FORMAT,
-                                getCurrentItem().getFirst(), texts.size()));
+                                getCurrentItem().getFirst(), getKeyword(), texts.size()));
                         textList.addAll(texts);
                         mView.displayHelp(textList);
                     }
@@ -93,13 +96,14 @@ public abstract class SolitaireWithKeywordHeadAndTailBasePresenter extends Solit
     }
 
     @Override
-    protected void updateKeywordForNext(String cf) {
-        mKeywordForNext = cf.substring(cf.length()-1);
+    protected void updateKeyword(String cf) {
+        mKeyword = cf.substring(cf.length()-1);
+        mView.displayKeyword();
     }
 
     @Override
     protected boolean checkKeyword(String answer) {
-        return answer.startsWith(mKeywordForNext);
+        return answer.startsWith(mKeyword);
     }
 
 }

@@ -43,7 +43,7 @@
 
     <string name="idiom_solitaire_keyword_head_and_tail_instruction">请输入一个成语，其字头必须是上一个成语的字尾：</string>
     <string name="poem_solitaire_keyword_head_and_tail_instruction">请输入一句诗，其字头必须是上一句诗的字尾：</string>
-    <string name="solitaire_keyword_head_and_tail_keyword_info"><![CDATA[初始字头： <b><font color=red>%1$s</font></b>]]></string>
+    <string name="solitaire_keyword_head_and_tail_keyword_info"><![CDATA[要求字头： <b><font color=red>%1$s</font></b>]]></string>
 
     <string name="input_initial_keyword_head_and_tail_title">请输入起始字头</string>
     <string name="input_initial_keyword_head_and_tail_idiom_message">请输入第一个成语的字头：</string>

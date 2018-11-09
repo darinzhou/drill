@@ -14,7 +14,7 @@ public interface SolitaireContract {
         void displayHelp(List<String> texts);
         CFPairItemView getCFPairItemView(int position);
         void inputInitialKeyword();
-        void displayInitialKeyword();
+        void displayKeyword();
     }
 
     interface CFPairItemView {
@@ -27,7 +27,7 @@ public interface SolitaireContract {
     }
 
     interface Presenter extends MvpContract.MvpPresenter<View> {
-        String getInitialKeyword();
+        String getKeyword();
         void onHelp();
         void generateNext();
         int getPairItemCount();

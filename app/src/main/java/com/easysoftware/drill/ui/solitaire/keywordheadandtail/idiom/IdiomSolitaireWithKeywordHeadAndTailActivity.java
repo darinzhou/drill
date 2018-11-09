@@ -40,8 +40,8 @@ public class IdiomSolitaireWithKeywordHeadAndTailActivity extends SolitaireBaseA
     }
 
     @Override
-    public void displayInitialKeyword() {
-        String html = getResources().getString(R.string.solitaire_keyword_head_and_tail_keyword_info, mPresenter.getInitialKeyword());
+    public void displayKeyword() {
+        String html = getResources().getString(R.string.solitaire_keyword_head_and_tail_keyword_info, mPresenter.getKeyword());
         Utils.displayHtml(mTvKeywordInfo, html);
         mTvKeywordInfo.setVisibility(View.VISIBLE);
     }
