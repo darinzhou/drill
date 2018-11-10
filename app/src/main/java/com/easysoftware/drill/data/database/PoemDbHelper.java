@@ -626,4 +626,36 @@ public class PoemDbHelper extends DbHelper implements CFItemDbHelper {
             }
         });
     }
+
+    @Override
+    public List<CFItem> getCFItemsContainKeywords(List<String> keywords) {
+        List<Poem> poems = getPoemsContainKeywords(keywords);
+        List<Verse> verses = new ArrayList<>();
+        for (Poem p : poems) {
+            String text = "";
+            for (String s : p.getSentences()) {
+                for (String kw : keywords) {
+                    if (s.contains(kw)) {
+                        text = s;
+                        break;
+                    }
+                }
+                if (!text.isEmpty()) {
+                    break;
+                }
+            }
+            verses.add(new Verse(text, p));
+        }
+        return new ArrayList<>(verses);
+    }
+
+    @Override
+    public Observable<List<CFItem>> getCFItemsContainKeywordsObservable(List<String> keywords) {
+        return Observable.fromCallable(new Callable<List<CFItem>>() {
+            @Override
+            public List<CFItem> call() throws Exception {
+                return getCFItemsContainKeywords(keywords);
+            }
+        });
+    }
 }

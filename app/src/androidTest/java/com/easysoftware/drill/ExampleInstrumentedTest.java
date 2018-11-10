@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.easysoftware.drill.data.database.IdiomDbHelper;
+import com.easysoftware.drill.data.model.CFItem;
 import com.easysoftware.drill.data.model.Idiom;
 import com.easysoftware.drill.data.model.Poem;
 import com.easysoftware.drill.data.database.PoemDbHelper;
@@ -56,7 +57,11 @@ public class ExampleInstrumentedTest {
     public void test_idiom_db() {
         IdiomDbHelper dbHelper = IdiomDbHelper.getInstance(
                 InstrumentationRegistry.getTargetContext(), true);
-        List<Idiom> idioms = dbHelper.getIdioms("知己知彼");
+        List<CFItem> idioms = dbHelper.getCFItemsContainKeyword("知己");
+        List<String> keywords = new ArrayList<>();
+        keywords.add("知己");
+        keywords.add("知彼");
+        List<CFItem> idms = dbHelper.getCFItemsContainKeywords(keywords);
 
         List<Idiom> idioms1 = dbHelper.getIdiomsStartwith("明");
         List<Idiom> idioms2 = dbHelper.getIdiomsEndwith("明");

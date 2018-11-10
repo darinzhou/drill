@@ -3,6 +3,8 @@ package com.easysoftware.drill.ui.main;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ public class CFItemFragment extends Fragment {
 
     private MainBasePresenter mPresenter;
     private String mTitle;
+    private CFItemRecyclerViewAdapter mAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -32,6 +35,7 @@ public class CFItemFragment extends Fragment {
     public void init(MainBasePresenter presenter, String title) {
         mPresenter = presenter;
         mTitle = title;
+        mAdapter = new CFItemRecyclerViewAdapter(mPresenter);
     }
 
     public String getTitle() {
@@ -47,11 +51,22 @@ public class CFItemFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new CFItemRecyclerViewAdapter(mPresenter));
+
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(layoutManager);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,
+                    layoutManager.getOrientation());
+            recyclerView.addItemDecoration(dividerItemDecoration);
+
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
 
 
+    public void filter(String constraint) {
+        mAdapter.getFilter().filter(constraint);
+    }
 }

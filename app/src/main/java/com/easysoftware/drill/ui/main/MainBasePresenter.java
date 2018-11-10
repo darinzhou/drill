@@ -3,6 +3,7 @@ package com.easysoftware.drill.ui.main;
 import com.easysoftware.drill.data.database.CFItemDbHelper;
 import com.easysoftware.drill.data.model.CFItem;
 import com.easysoftware.drill.data.model.CFPairItem;
+import com.easysoftware.drill.data.model.Verse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +43,17 @@ public abstract class MainBasePresenter implements MainContract.Presenter {
 
     @Override
     public void onBindCFItemView(MainContract.CFItemView viewHolder, int position) {
-
+        CFItem item = mCFItems.get(position);
+        viewHolder.display(buildTitle(item), buildContent(item));
     }
 
     @Override
-    public void onDisplayItem(int position) {
+    public void onViewItemDetails(int position) {
 
     }
+
+    // abstract methods
+    protected abstract String buildTitle(CFItem item);
+    protected abstract String buildContent(CFItem item);
+
 }

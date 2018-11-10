@@ -4,11 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.easysoftware.drill.R;
 
-public class CFItemRecyclerViewAdapter extends RecyclerView.Adapter<CFItemRecyclerViewAdapter.ViewHolder> {
+public class CFItemRecyclerViewAdapter extends RecyclerView.Adapter<CFItemRecyclerViewAdapter.ViewHolder>
+        implements Filterable {
 
     private final MainBasePresenter mPresenter;
 
@@ -33,6 +36,25 @@ public class CFItemRecyclerViewAdapter extends RecyclerView.Adapter<CFItemRecycl
         return mPresenter.getCFItemCount();
     }
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                Object filteredResults = mPresenter.performFiltering(constraint.toString());
+                FilterResults results = new FilterResults();
+                results.values = filteredResults;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mPresenter.updateFilterResults(results.values);
+                notifyDataSetChanged();
+            }
+        };
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements MainContract.CFItemView {
         public final View mView;
         public final TextView mTitleView;
@@ -45,7 +67,7 @@ public class CFItemRecyclerViewAdapter extends RecyclerView.Adapter<CFItemRecycl
             mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    presenter.onDisplayItem(getAdapterPosition());
+                    presenter.onViewItemDetails(getAdapterPosition());
                 }
             });
 
@@ -55,7 +77,8 @@ public class CFItemRecyclerViewAdapter extends RecyclerView.Adapter<CFItemRecycl
 
         @Override
         public void display(String title, String content) {
-
+            mTitleView.setText(title);
+            mContentView.setText(content);
         }
     }
 }

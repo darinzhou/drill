@@ -22,4 +22,8 @@ public interface CFItemDbHelper {
     List<CFItem> getCFItemsContainKeyword(String keyword);
 
     Observable<List<CFItem>> getCFItemsContainKeywordObservable(String keyword);
+
+    List<CFItem> getCFItemsContainKeywords(List<String> keywords);
+
+    Observable<List<CFItem>> getCFItemsContainKeywordsObservable(List<String> keywords);
 }

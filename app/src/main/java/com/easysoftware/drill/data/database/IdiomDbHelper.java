@@ -271,6 +271,62 @@ public class IdiomDbHelper extends DbHelper implements CFItemDbHelper {
         });
     }
 
+    public List<Idiom> getIdiomsContainKeywords(List<String> keywords) {
+        List<Idiom> idioms = new ArrayList<>();
+        if (keywords == null || keywords.size() == 0) {
+            return idioms;
+        }
+
+        // build Where clause and arguments
+        String selection = "";
+        String[] selectionArgs = new String[keywords.size()];
+        int i = 0;
+        for (String kw : keywords) {
+            if (!selection.isEmpty()) {
+                selection += " and ";
+            }
+            selection += IdiomContract.IdiomTable.COLUMN_NAME_TEXT + " like ?";
+            selectionArgs[i++] = "%" + kw + "%";
+        }
+
+        // search
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                IdiomContract.IdiomTable.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String text = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_TEXT);
+                String pinyin = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_PINYIN);
+                String explanation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXPLANATION);
+                String derivation = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_DERIVATION);
+                String example = getString(cursor, IdiomContract.IdiomTable.COLUMN_NAME_EXAMPLE);
+                idioms.add(new Idiom(text, pinyin, explanation, derivation, example));
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return idioms;
+    }
+    public Observable<List<Idiom>> getIdiomsContainKeywordsObservable(List<String> keywords) {
+        return Observable.fromCallable(new Callable<List<Idiom>>() {
+            @Override
+            public List<Idiom> call() throws Exception {
+                return getIdiomsContainKeywords(keywords);
+            }
+        });
+    }
+
+    // implement CFItemDbHelper methods
+
     @Override
     public CFItem getCFItem(String content) {
         return getIdiom(content);
@@ -330,4 +386,20 @@ public class IdiomDbHelper extends DbHelper implements CFItemDbHelper {
             }
         });
     }
+
+    @Override
+    public List<CFItem> getCFItemsContainKeywords(List<String> keywords) {
+        return new ArrayList<>(getIdiomsContainKeywords(keywords));
+    }
+
+    @Override
+    public Observable<List<CFItem>> getCFItemsContainKeywordsObservable(List<String> keywords) {
+        return Observable.fromCallable(new Callable<List<CFItem>>() {
+            @Override
+            public List<CFItem> call() throws Exception {
+                return getCFItemsContainKeywords(keywords);
+            }
+        });
+    }
+
 }

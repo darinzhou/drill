@@ -20,7 +20,7 @@
     <string name="poem_solitaire_keyword_head_and_tail">古诗接龙</string>
     <string name="poem_solitaire_keyword_inside">飞花令</string>
 
-    <string name="search_hint">关键字、诗词名、作者、朝代</string>
+    <string name="search_hint">关键字、诗词名、作者</string>
 
     <string name="correct">正确</string>
     <string name="wrong">错误</string>

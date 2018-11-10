@@ -113,9 +113,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         // Fragments
-        CFItemFragment poemFragment = CFItemFragment.newInstance(mPoemPresenter,
+        final CFItemFragment poemFragment = CFItemFragment.newInstance(mPoemPresenter,
                 getResources().getString(R.string.poem));
-        CFItemFragment idiomFragment = CFItemFragment.newInstance(mIdiomPresenter,
+        final CFItemFragment idiomFragment = CFItemFragment.newInstance(mIdiomPresenter,
                 getResources().getString(R.string.idiom));
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(poemFragment);
@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                poemFragment.filter(newText);
+                idiomFragment.filter(newText);
                 return false;
             }
         });

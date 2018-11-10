@@ -16,6 +16,8 @@ public interface MainContract {
     interface Presenter extends MvpContract.MvpPresenter<View> {
         int getCFItemCount();
         void onBindCFItemView(CFItemView viewHolder, int position);
-        void onDisplayItem(int position);
+        void onViewItemDetails(int position);
+        Object performFiltering(String constraint);
+        void updateFilterResults(Object values);
     }
 }
