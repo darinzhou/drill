@@ -113,7 +113,7 @@ public class Poem {
         if (TextUtils.isEmpty(mPeriod)) {
             return mAuthor;
         }
-        return "（" + mPeriod + "）" + mAuthor;
+        return mPeriod + " · " + mAuthor;
     }
 
     public String getMarkString() {

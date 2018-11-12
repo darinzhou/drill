@@ -9,4 +9,6 @@
     <color name="colorDlgTitleBackground">#00eeee</color>
     <color name="colorDlgTitleTextColor">#ee0000</color>
 
+    <color name="colorSearchResultTitle">#0000ff</color>
+
 </resources>

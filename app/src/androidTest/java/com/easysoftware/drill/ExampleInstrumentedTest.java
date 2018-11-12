@@ -38,11 +38,20 @@ public class ExampleInstrumentedTest {
     public void test_poem_db() {
         PoemDbHelper dbHelper = PoemDbHelper.getInstance(
                 InstrumentationRegistry.getTargetContext(), true);
-        List<Poem> poems1 = dbHelper.getPoemsContainSentence("好雨知时节");
 
         List<String> keywords = new ArrayList<>();
         keywords.add("王维");
         keywords.add("明月");
+
+        List<CFItem> idioms = dbHelper.getCFItemsContainKeyword("知己");
+        List<CFItem> idms = dbHelper.getCFItemsContainKeywords(keywords);
+
+
+        List<Poem> poems1 = dbHelper.getPoemsContainSentence("好雨知时节");
+
+//        List<String> keywords = new ArrayList<>();
+//        keywords.add("王维");
+//        keywords.add("明月");
 //        keywords.add("故乡");
         List<Poem> poems2 = dbHelper.getPoemsContainKeywords(keywords);
 

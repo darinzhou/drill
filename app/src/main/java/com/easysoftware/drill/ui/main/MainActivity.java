@@ -27,6 +27,7 @@ import com.easysoftware.drill.ui.recognition.poem7.Poem7RecognitionActivity;
 import com.easysoftware.drill.ui.solitaire.keywordheadandtail.idiom.IdiomSolitaireWithKeywordHeadAndTailActivity;
 import com.easysoftware.drill.ui.solitaire.keywordheadandtail.poem.PoemSolitaireWithKeywordHeadAndTailActivity;
 import com.easysoftware.drill.ui.solitaire.keywordinside.poem.PoemSolitaireWithKeywordInsideActivity;
+import com.easysoftware.drill.ui.util.HelpDlgFragment;
 import com.easysoftware.drill.ui.util.Utils;
 
 import java.util.ArrayList;
@@ -34,11 +35,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static com.easysoftware.drill.util.Constants.HelpType.POEM;
+
 public class MainActivity extends AppCompatActivity implements MainContract.View,
         NavigationView.OnNavigationItemSelectedListener {
 
     @Inject
-    MainIdiomPresenter mPoemPresenter;
+    MainPoemPresenter mPoemPresenter;
 
     @Inject
     MainIdiomPresenter mIdiomPresenter;
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         // progressbar
         mProgressBar = findViewById(R.id.progressBar);
+        mProgressBar.setVisibility(View.GONE);
 
         //
         // sliding menu
@@ -149,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 return false;
             }
         });
+
+        mSearchView.setQuery("知己 知彼", false);
 
     }
 
@@ -263,8 +269,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void displayItem(List<String> texts) {
-
+    public void displayItem(List<String> texts, int type) {
+        HelpDlgFragment ihf  = HelpDlgFragment.newInstance(type, (ArrayList<String>) texts);
+        ihf.show(getSupportFragmentManager(), "Display Details of Search Item");
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MainContract {
     interface View extends MvpContract.MvpView {
-        void displayItem(List<String> texts);
+        void displayItem(List<String> texts, int type);
     }
 
     interface CFItemView {
