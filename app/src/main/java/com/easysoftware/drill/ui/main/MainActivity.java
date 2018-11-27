@@ -1,6 +1,7 @@
 package com.easysoftware.drill.ui.main;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -35,8 +36,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static com.easysoftware.drill.util.Constants.HelpType.POEM;
-
 public class MainActivity extends AppCompatActivity implements MainContract.View,
         NavigationView.OnNavigationItemSelectedListener {
 
@@ -54,8 +53,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Make the activity only in portrait mode
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // DI injection
         ((DrillApp) getApplication()).createActivityComponent().inject(this);
@@ -72,13 +74,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         // sliding menu
         //
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         //
 
         // Find the view pager that will allow the user to swipe between fragments
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        ViewPager viewPager = findViewById(R.id.viewPager);
 
         // Fragments
         final CFItemFragment poemFragment = CFItemFragment.newInstance(mPoemPresenter,
@@ -132,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         viewPager.setAdapter(adapter);
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
         //

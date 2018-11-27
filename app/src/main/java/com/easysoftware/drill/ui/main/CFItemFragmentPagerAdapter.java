@@ -24,7 +24,7 @@ public class CFItemFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return mFragments.size();
     }
 
     // This determines the title for each tab
