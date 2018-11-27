@@ -156,8 +156,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             }
         });
 
-        mSearchView.setQuery("知己 知彼", false);
-
     }
 
     @Override
