@@ -2,6 +2,7 @@ package com.easysoftware.drill.ui.main;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private DrawerLayout mDrawer;
     private SearchView mSearchView;
 
+    private CFItemFragment poemFragment;
+    private CFItemFragment idiomFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setSupportActionBar(toolbar);
 
         // Make the activity only in portrait mode
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // DI injection
         ((DrillApp) getApplication()).createActivityComponent().inject(this);
@@ -115,23 +119,36 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         // content tabs
         //
 
-        // Find the view pager that will allow the user to swipe between fragments
-        ViewPager viewPager = findViewById(R.id.viewPager);
+        // adapter for viewpager
 
-        // Fragments
-        final CFItemFragment poemFragment = CFItemFragment.newInstance(mPoemPresenter,
-                getResources().getString(R.string.poem));
-        final CFItemFragment idiomFragment = CFItemFragment.newInstance(mIdiomPresenter,
-                getResources().getString(R.string.idiom));
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(poemFragment);
-        fragments.add(idiomFragment);
-
+        // titles
+        List<String> titles = new ArrayList<>();
+        titles.add(getResources().getString(R.string.poem));
+        titles.add(getResources().getString(R.string.idiom));
+        // presenters
+        final List<MainBasePresenter> presenters = new ArrayList<>();
+        presenters.add(mPoemPresenter);
+        presenters.add(mIdiomPresenter);
         // Create an adapter that knows which fragment should be shown on each page
-        CFItemFragmentPagerAdapter adapter = new CFItemFragmentPagerAdapter(fragments, getSupportFragmentManager());
+        final CFItemFragmentPagerAdapter adapter = new CFItemFragmentPagerAdapter(
+                getSupportFragmentManager(), presenters, titles);
 
+        // Find the view pager that will allow the user to swipe between fragments
+        final ViewPager viewPager = findViewById(R.id.viewPager);
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
+
+        // if activity was re-created due to rotation, then we need to update fragments in viewpager
+        if (savedInstanceState != null) {
+            // we should post the action here because we have to make sure the viewpager is initialized when the action is taking
+            viewPager.post(new Runnable() {
+                @Override
+                public void run() {
+                    CFItemFragmentPagerAdapter adapter = (CFItemFragmentPagerAdapter) viewPager.getAdapter();
+                    adapter.update(viewPager, presenters);
+                }
+            });
+        }
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = findViewById(R.id.tabLayout);
@@ -150,11 +167,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                poemFragment.filter(newText);
-                idiomFragment.filter(newText);
+                adapter.filter(newText);
                 return false;
             }
         });
+
+        mSearchView.setQuery("知己 知彼", false);
 
     }
 

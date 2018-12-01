@@ -1,20 +1,27 @@
 package com.easysoftware.drill.ui.main;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 
-import com.easysoftware.drill.R;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class CFItemFragmentPagerAdapter extends FragmentPagerAdapter {
-    private List<Fragment> mFragments;
+    private List<MainBasePresenter> mPresenters;
+    private List<CFItemFragment> mFragments;
+    private List<String> mTitles;
 
-    public CFItemFragmentPagerAdapter(List<Fragment> fragments, FragmentManager fm) {
+    public CFItemFragmentPagerAdapter(FragmentManager fm, List<MainBasePresenter> presenters,
+                                      List<String> titles) {
         super(fm);
-        mFragments = fragments;
+        mPresenters = presenters;
+        mTitles = titles;
+        mFragments = new ArrayList<>();
+        for (MainBasePresenter p : presenters) {
+            mFragments.add(CFItemFragment.newInstance(p));
+        }
     }
 
     @Override
@@ -24,16 +31,28 @@ public class CFItemFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return mFragments.size();
+        return mPresenters.size();
     }
 
     // This determines the title for each tab
     @Override
     public CharSequence getPageTitle(int position) {
-        Fragment fragment = mFragments.get(position);
-        if (fragment instanceof CFItemFragment) {
-            return ((CFItemFragment) fragment).getTitle();
+        return mTitles.get(position);
+    }
+
+    public void filter(String text) {
+        for (CFItemFragment fragment : mFragments) {
+            fragment.filter(text);
         }
-        return null;
+    }
+
+    // fragments were re-created by system, we just need to update their presenters
+    public void update(ViewPager viewPager, List<MainBasePresenter> presenters) {
+        mFragments.clear();
+        for (int i = 0; i < presenters.size(); ++i) {
+            CFItemFragment fragment = (CFItemFragment) instantiateItem(viewPager, i);
+            fragment.update(presenters.get(i));
+            mFragments.add(fragment);
+        }
     }
 }

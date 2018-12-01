@@ -7,7 +7,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,8 @@ public class CFItemFragment extends Fragment {
     private final static String TAG = "CFItemFragment";
 
     private MainBasePresenter mPresenter;
-    private String mTitle;
     private CFItemRecyclerViewAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -28,20 +27,21 @@ public class CFItemFragment extends Fragment {
     public CFItemFragment() {
     }
 
-    public static CFItemFragment newInstance(MainBasePresenter presenter, String title) {
+    public static CFItemFragment newInstance(MainBasePresenter presenter) {
         CFItemFragment fragment = new CFItemFragment();
-        fragment.init(presenter, title);
+        fragment.init(presenter);
         return fragment;
     }
 
-    public void init(MainBasePresenter presenter, String title) {
+    public void init(MainBasePresenter presenter) {
         mPresenter = presenter;
-        mTitle = title;
         mAdapter = new CFItemRecyclerViewAdapter(mPresenter);
     }
 
-    public String getTitle() {
-        return mTitle;
+    public void update(MainBasePresenter presenter) {
+        mPresenter = presenter;
+        mAdapter = new CFItemRecyclerViewAdapter(mPresenter);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -51,17 +51,17 @@ public class CFItemFragment extends Fragment {
 
         // Set the adapter
         Context context = view.getContext();
-        RecyclerView recyclerView = (RecyclerView) view;
+        mRecyclerView = (RecyclerView) view;
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,
                 layoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
         return view;
     }
