@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setSupportActionBar(toolbar);
 
         // Make the activity only in portrait mode
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // DI injection
         ((DrillApp) getApplication()).createActivityComponent().inject(this);
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             }
         });
 
-        mSearchView.setQuery("知己 知彼", false);
+//        mSearchView.setQuery("知己 知彼", false);
 
     }
 
